@@ -4,8 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -15,6 +14,8 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+@Entity
+@Table( name = "products")
 public class Product implements Serializable {
 
     @Id
@@ -25,7 +26,7 @@ public class Product implements Serializable {
     @Size(min=3, max=25)
     String productName;
 
-    CategoryAndManufacturer categoryAndManufacturer;
+    //CategoryAndManufacturer categoryAndManufacturer;
 
     @Size(min=3, max=25)
     String type;
@@ -34,7 +35,7 @@ public class Product implements Serializable {
     @Size(min=3, max=50)
     String productDescription;
 
-    Photo photo;
+    //Photo photo;
 
     @Min(value=0)
     @Digits(integer=8, fraction=2)
@@ -66,6 +67,9 @@ public class Product implements Serializable {
     @Digits(integer=8, fraction=2)
     @NotNull
     BigDecimal vatPercentage;
+
+    public Product() {
+    }
 
     public Product(int productId, String productName, BigDecimal baseGrossPrice) {
         this.productId = productId;
