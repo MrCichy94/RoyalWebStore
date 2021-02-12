@@ -87,6 +87,7 @@ public class Product implements Serializable {
         type = "";
         version ="";
         productDescription ="";
+        categoryAndManufacturer = new CategoryAndManufacturer();
     }
 
     //todo
