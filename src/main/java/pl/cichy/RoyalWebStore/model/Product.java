@@ -25,7 +25,8 @@ public class Product implements Serializable {
     @Size(min=1, max=25)
     String productName;
 
-    //CategoryAndManufacturer categoryAndManufacturer;
+    @OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
+    CategoryAndManufacturer categoryAndManufacturer;
 
     @Size(max=25)
     String type;

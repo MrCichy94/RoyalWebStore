@@ -17,10 +17,10 @@ public class CategoryAndManufacturer {
     @GenericGenerator(name = "inc", strategy = "increment")
     int categoriesManufacturerId;
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     Category category;
 
-    @OneToOne
+    @OneToOne(fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     Manufacturer manufacturer;
 
     public CategoryAndManufacturer() {
