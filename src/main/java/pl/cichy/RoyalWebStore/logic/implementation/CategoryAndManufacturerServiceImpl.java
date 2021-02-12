@@ -3,7 +3,6 @@ package pl.cichy.RoyalWebStore.logic.implementation;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.logic.CategoryAndManufacturerService;
-import pl.cichy.RoyalWebStore.logic.ProductService;
 import pl.cichy.RoyalWebStore.model.CategoryAndManufacturer;
 import pl.cichy.RoyalWebStore.model.repository.CategoryAndManufacturerRepository;
 
