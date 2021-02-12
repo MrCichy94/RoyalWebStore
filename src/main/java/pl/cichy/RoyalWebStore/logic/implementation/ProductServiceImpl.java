@@ -5,6 +5,7 @@ import pl.cichy.RoyalWebStore.logic.ProductService;
 import pl.cichy.RoyalWebStore.model.Product;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -19,4 +20,5 @@ public class ProductServiceImpl implements ProductService {
     public List<Product> readAllProducts() {
         return productRepository.readAllProducts();
     }
+
 }

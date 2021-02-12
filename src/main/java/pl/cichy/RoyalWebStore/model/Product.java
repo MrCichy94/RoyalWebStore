@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Getter
 @Setter
@@ -68,12 +69,34 @@ public class Product implements Serializable {
     @NotNull
     BigDecimal vatPercentage;
 
+    @Min(value=0)
+    @Digits(integer=8, fraction=2)
+    @NotNull
+    BigDecimal vatValue;
+
     public Product() {
     }
 
-    public Product(int productId, String productName, BigDecimal baseGrossPrice) {
+    public Product(int productId, String productName, BigDecimal baseGrossPrice, BigDecimal vatPercentage) {
         this.productId = productId;
         this.productName = productName;
         this.baseGrossPrice = baseGrossPrice;
+        this.vatPercentage = vatPercentage;
+
+        BigDecimal point = BigDecimal.valueOf(-1.00);
+        baseNetPrice = (baseGrossPrice.multiply((point.add(vatPercentage))
+                .abs())).setScale(2, RoundingMode.DOWN);
+
+        vatValue = baseGrossPrice.add(baseNetPrice.negate())
+                .setScale(2, RoundingMode.DOWN);
+
+        currentGrossPrice = baseGrossPrice;
+        currentNetPrice = baseNetPrice;
+
+        percentageDiscoutValue = new BigDecimal(0);
+        discoutValue = new BigDecimal(0);
+
+        type = "";
+        version ="";
     }
 }
