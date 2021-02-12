@@ -8,7 +8,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.cichy.RoyalWebStore.logic.CategoryAndManufacturerService;
+import pl.cichy.RoyalWebStore.logic.ManufacturerService;
 import pl.cichy.RoyalWebStore.model.CategoryAndManufacturer;
+import pl.cichy.RoyalWebStore.model.Manufacturer;
 
 import java.util.List;
 
@@ -25,7 +27,7 @@ public class ManufacturerController {
     }
 
     @GetMapping
-    ResponseEntity<List<CategoryAndManufacturer>> readAllCategoriesAndManufacturers(){
+    ResponseEntity<List<Manufacturer>> readAllCategoriesAndManufacturers(){
         logger.info("Read all the products!");
         return ResponseEntity.ok(manufacturerService.findAll());
     }

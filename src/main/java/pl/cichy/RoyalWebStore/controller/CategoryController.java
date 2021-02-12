@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import pl.cichy.RoyalWebStore.logic.CategoryAndManufacturerService;
+import pl.cichy.RoyalWebStore.logic.CategoryService;
 import pl.cichy.RoyalWebStore.model.Category;
 import pl.cichy.RoyalWebStore.model.CategoryAndManufacturer;
 
