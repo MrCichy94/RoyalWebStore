@@ -14,5 +14,4 @@ class CategoryAndManufacturerTest {
 
         assertNotEquals(null, eg1);
     }
-
 }

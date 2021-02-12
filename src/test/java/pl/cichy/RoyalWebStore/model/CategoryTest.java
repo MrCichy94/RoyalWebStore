@@ -22,5 +22,4 @@ class CategoryTest {
 
         assertEquals("First", eg2.categoryName);
     }
-
 }

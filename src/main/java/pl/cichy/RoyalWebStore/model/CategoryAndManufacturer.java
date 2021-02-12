@@ -25,5 +25,4 @@ public class CategoryAndManufacturer {
 
     public CategoryAndManufacturer() {
     }
-
 }
