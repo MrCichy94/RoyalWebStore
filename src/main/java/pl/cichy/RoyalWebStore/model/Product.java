@@ -6,8 +6,6 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -24,54 +22,43 @@ public class Product implements Serializable {
     @GenericGenerator(name = "inc", strategy = "increment")
     int productId;
 
-    @Size(min=3, max=25)
+    @Size(min=1, max=25)
     String productName;
 
     //CategoryAndManufacturer categoryAndManufacturer;
 
-    @Size(min=3, max=25)
+    @Size(max=25)
     String type;
-    @Size(min=3, max=25)
+    @Size(max=25)
     String version;
-    @Size(min=3, max=50)
+    @Size(max=50)
     String productDescription;
 
     //Photo photo;
 
-    @Min(value=0)
     @Digits(integer=8, fraction=2)
-    @NotNull
     BigDecimal currentNetPrice;
 
-    BigDecimal currentGrossPrice;
-    @Min(value=0)
     @Digits(integer=8, fraction=2)
-    @NotNull
+    BigDecimal currentGrossPrice;
+
+    @Digits(integer=8, fraction=2)
     BigDecimal baseNetPrice;
 
-    @Min(value=0)
+
     @Digits(integer=8, fraction=2)
-    @NotNull
     BigDecimal baseGrossPrice;
 
-    @Min(value=0)
     @Digits(integer=8, fraction=2)
-    @NotNull
     BigDecimal percentageDiscoutValue;
 
-    @Min(value=0)
     @Digits(integer=8, fraction=2)
-    @NotNull
     BigDecimal discoutValue;
 
-    @Min(value=0)
     @Digits(integer=8, fraction=2)
-    @NotNull
     BigDecimal vatPercentage;
 
-    @Min(value=0)
     @Digits(integer=8, fraction=2)
-    @NotNull
     BigDecimal vatValue;
 
     public Product() {
@@ -98,5 +85,9 @@ public class Product implements Serializable {
 
         type = "";
         version ="";
+        productDescription ="";
     }
+
+    //todo
+    //setter VAT, DISCOUNT etc must recalculate prices and save (PUT) changes to DB.
 }
