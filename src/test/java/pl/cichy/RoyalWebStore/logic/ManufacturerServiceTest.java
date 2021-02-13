@@ -1,36 +1,35 @@
 package pl.cichy.RoyalWebStore.logic;
 
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.cichy.RoyalWebStore.logic.implementation.CategoryServiceImpl;
-import pl.cichy.RoyalWebStore.model.Category;
-import pl.cichy.RoyalWebStore.model.repository.CategoryRepository;
+import pl.cichy.RoyalWebStore.logic.implementation.ManufacturerServiceImpl;
+import pl.cichy.RoyalWebStore.model.Manufacturer;
+import pl.cichy.RoyalWebStore.model.repository.ManufacturerRepository;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
-
-import org.apache.velocity.exception.ResourceNotFoundException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
-class CategoryServiceTest {
+class ManufacturerServiceTest {
 
     @Test
     @DisplayName("Should throw ResourceNotFoundException when we dont got product with given product ID")
-    void createCategoryForProductById_ThrowResourceNotFoundException(){
+    void createManufacturerForProductById_ThrowResourceNotFoundException(){
         //given
         var mockProductRepository = mock(ProductRepository.class);
         when(mockProductRepository.existsById(1)).thenReturn(false);
         //and
-        var mockCategory = mock(Category.class);
+        var mockManufacturer = mock(Manufacturer.class);
         //and
-        var mockCategoryRepository = mock(CategoryRepository.class);
+        var mockManufacturerRepository = mock(ManufacturerRepository.class);
         //system under test
-        var toTest = new CategoryServiceImpl(mockCategoryRepository, mockProductRepository);
+        var toTest = new ManufacturerServiceImpl(mockManufacturerRepository, mockProductRepository);
         //when
-        var exception = catchThrowable(()->toTest.setCategoryForProduct(1,mockCategory));
+        var exception = catchThrowable(()->toTest.setManufacturerForProduct(1,mockManufacturer));
         //then
         assertThat(exception).isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("No product found");
