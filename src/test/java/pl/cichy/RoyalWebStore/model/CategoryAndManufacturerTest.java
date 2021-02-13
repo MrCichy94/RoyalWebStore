@@ -9,7 +9,7 @@ class CategoryAndManufacturerTest {
 
     @Test
     @DisplayName("should create categoryAndManufacturer object with no-args")
-    void should_create_categoryAndManufacturer_obj(){
+    void shouldCreateCategoryAndManufacturerObj(){
         CategoryAndManufacturer eg1 = new CategoryAndManufacturer();
 
         assertNotEquals(null, eg1);

@@ -9,7 +9,7 @@ class ManufacturerTest {
 
     @Test
     @DisplayName("should create manufacturer object with no-args")
-    void should_create_manufacturer_obj(){
+    void shouldCreateManufacturer_obj(){
         Manufacturer eg1 = new Manufacturer();
 
         assertNotEquals(null, eg1);
@@ -17,7 +17,7 @@ class ManufacturerTest {
 
     @Test
     @DisplayName("should create manufacturer object with args")
-    void should_create_manufacturer_obj_with_args(){
+    void shouldCreateManufacturerObjWithArgs(){
         Manufacturer eg2 = new Manufacturer("First");
 
         assertEquals("First", eg2.manufacturerName);

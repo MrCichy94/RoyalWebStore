@@ -9,7 +9,7 @@ class CategoryTest {
 
     @Test
     @DisplayName("should create category object with no-args")
-    void should_create_category_obj(){
+    void shouldCreateCategoryObj(){
         Category eg1 = new Category();
 
         assertNotEquals(null, eg1);
@@ -17,7 +17,7 @@ class CategoryTest {
 
     @Test
     @DisplayName("should create category object with args")
-    void should_create_category_obj_with_args(){
+    void shouldCreateCategoryObjWithArgs(){
         Category eg2 = new Category("First");
 
         assertEquals("First", eg2.categoryName);
