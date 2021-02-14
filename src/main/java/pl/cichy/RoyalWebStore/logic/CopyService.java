@@ -1,4 +1,4 @@
-package pl.cichy.RoyalWebStore.model.repository;
+package pl.cichy.RoyalWebStore.logic;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,7 +7,7 @@ import pl.cichy.RoyalWebStore.model.Copy;
 import java.util.List;
 import java.util.Optional;
 
-public interface CopyRepository {
+public interface CopyService {
 
     List<Copy> findAll();
 
