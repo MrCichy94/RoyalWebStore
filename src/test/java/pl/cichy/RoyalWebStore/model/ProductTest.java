@@ -11,7 +11,7 @@ class ProductTest {
 
     @Test
     @DisplayName("should create product object with no-args")
-    void shouldCreateProductObj(){
+    void shouldCreateProductObj() {
         Product eg1 = new Product();
 
         assertNotEquals(null, eg1);
@@ -19,24 +19,24 @@ class ProductTest {
 
     @Test
     @DisplayName("should create product object with args")
-    void shouldCreateProductObjWithArgs(){
-        Product eg2 = new Product(1,"First", new BigDecimal("9.99"), new BigDecimal("0.23"));
+    void shouldCreateProductObjWithArgs() {
+        Product eg2 = new Product(1, "First", new BigDecimal("9.99"), new BigDecimal("0.23"));
 
         assertEquals("First", eg2.productName);
     }
 
     @Test
     @DisplayName("should initialize properly product vat")
-    void shouldProperlyCountVatValue(){
-        Product eg3 = new Product(1,"First", new BigDecimal("200.00"), new BigDecimal("0.10"));
+    void shouldProperlyCountVatValue() {
+        Product eg3 = new Product(1, "First", new BigDecimal("200.00"), new BigDecimal("0.10"));
 
         assertEquals(new BigDecimal("20.00"), eg3.vatValue);
     }
 
     @Test
     @DisplayName("should initialize properly product base net price")
-    void shouldProperlyCountBaseNetPrice(){
-        Product eg4 = new Product(1,"First", new BigDecimal("200.00"), new BigDecimal("0.10"));
+    void shouldProperlyCountBaseNetPrice() {
+        Product eg4 = new Product(1, "First", new BigDecimal("200.00"), new BigDecimal("0.10"));
 
         assertEquals(new BigDecimal("180.00"), eg4.baseNetPrice);
     }

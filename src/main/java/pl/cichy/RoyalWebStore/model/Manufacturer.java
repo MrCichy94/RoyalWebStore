@@ -13,7 +13,7 @@ import javax.validation.constraints.Size;
 @Getter
 @Setter
 @Entity
-@Table( name = "manufacturers")
+@Table(name = "manufacturers")
 public class Manufacturer {
 
     @Id
@@ -21,7 +21,7 @@ public class Manufacturer {
     @GenericGenerator(name = "inc", strategy = "increment")
     int manufacturerId;
 
-    @Size(min=1, max=25)
+    @Size(min = 1, max = 25)
     String manufacturerName;
 
     public Manufacturer() {

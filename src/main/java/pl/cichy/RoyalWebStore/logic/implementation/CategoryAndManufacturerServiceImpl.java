@@ -19,17 +19,19 @@ public class CategoryAndManufacturerServiceImpl implements CategoryAndManufactur
     }
 
     @Override
-    public List<CategoryAndManufacturer> findAll(){
+    public List<CategoryAndManufacturer> findAll() {
         return categoryAndManufacturerRepository.findAll();
-    };
+    }
+
 
     @Override
-    public void deleteById(Integer id){
+    public void deleteById(Integer id) {
         categoryAndManufacturerRepository.deleteById(id);
-    };
+    }
+
 
     @Override
-    public CategoryAndManufacturer save(CategoryAndManufacturer entity){
+    public CategoryAndManufacturer save(CategoryAndManufacturer entity) {
         return categoryAndManufacturerRepository.save(entity);
     }
 }

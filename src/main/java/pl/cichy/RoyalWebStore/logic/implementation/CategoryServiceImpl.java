@@ -10,7 +10,6 @@ import pl.cichy.RoyalWebStore.model.repository.CategoryRepository;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequestScope
@@ -25,17 +24,19 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public List<Category> findAll(){
+    public List<Category> findAll() {
         return categoryRepository.findAll();
-    };
+    }
+
 
     @Override
-    public void deleteById(Integer id){
+    public void deleteById(Integer id) {
         categoryRepository.deleteById(id);
-    };
+    }
+
 
     @Override
-    public Category save(Category entity){
+    public Category save(Category entity) {
         return categoryRepository.save(entity);
     }
 

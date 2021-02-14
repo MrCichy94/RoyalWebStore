@@ -7,12 +7,10 @@ import org.springframework.stereotype.Repository;
 import pl.cichy.RoyalWebStore.model.Product;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
 
-import java.util.List;
-
 @Repository
 public interface SqlProductRepository extends ProductRepository, JpaRepository<Product, Integer> {
 
     @Override
-    @Query(nativeQuery = true, value ="SELECT * from PRODUCTS where PRODUCT_ID=:id")
+    @Query(nativeQuery = true, value = "SELECT * from PRODUCTS where PRODUCT_ID=:id")
     Product getById(@Param("id") Integer id);
 }

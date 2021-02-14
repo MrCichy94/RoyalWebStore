@@ -6,11 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import pl.cichy.RoyalWebStore.logic.CategoryAndManufacturerService;
 import pl.cichy.RoyalWebStore.logic.ManufacturerService;
-import pl.cichy.RoyalWebStore.model.CategoryAndManufacturer;
 import pl.cichy.RoyalWebStore.model.Manufacturer;
-import pl.cichy.RoyalWebStore.model.Product;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -29,14 +26,14 @@ public class ManufacturerController {
     }
 
     @GetMapping("/manufacturers")
-    ResponseEntity<List<Manufacturer>> readAllCategoriesAndManufacturers(){
+    ResponseEntity<List<Manufacturer>> readAllCategoriesAndManufacturers() {
         logger.info("Read all the products!");
         return ResponseEntity.ok(manufacturerService.findAll());
     }
 
     @PostMapping("/{productId}/manufacturer/add")
     ResponseEntity<Manufacturer> setNewManufacturerForProduct(@PathVariable("productId") Integer productId,
-                                                              @RequestBody @Valid Manufacturer manufacturerToSet){
+                                                              @RequestBody @Valid Manufacturer manufacturerToSet) {
         manufacturerService.setManufacturerForProduct(productId, manufacturerToSet);
         return ResponseEntity.created(URI.create("/" + manufacturerToSet.getManufacturerId())).body(manufacturerToSet);
     }

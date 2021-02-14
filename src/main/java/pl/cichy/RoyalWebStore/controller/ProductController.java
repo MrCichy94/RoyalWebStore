@@ -29,13 +29,13 @@ public class ProductController {
     }
 
     @GetMapping
-    ResponseEntity<List<Product>> readAllProduct(){
+    ResponseEntity<List<Product>> readAllProduct() {
         logger.info("Read all the products!");
         return ResponseEntity.ok(productService.findAll());
     }
 
     @PostMapping("/newproduct/add")
-    ResponseEntity<Product> createNewProduct(@RequestBody @Valid Product newProductToAdd){
+    ResponseEntity<Product> createNewProduct(@RequestBody @Valid Product newProductToAdd) {
         Product result = new Product(newProductToAdd.getProductId(),
                 newProductToAdd.getProductName(),
                 newProductToAdd.getBaseGrossPrice(),

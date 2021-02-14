@@ -10,7 +10,6 @@ import pl.cichy.RoyalWebStore.model.repository.ManufacturerRepository;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequestScope
@@ -25,17 +24,19 @@ public class ManufacturerServiceImpl implements ManufacturerService {
     }
 
     @Override
-    public List<Manufacturer> findAll(){
+    public List<Manufacturer> findAll() {
         return manufacturerRepository.findAll();
-    };
+    }
 
+    
     @Override
-    public void deleteById(Integer id){
+    public void deleteById(Integer id) {
         manufacturerRepository.deleteById(id);
-    };
+    }
+
 
     @Override
-    public Manufacturer save(Manufacturer entity){
+    public Manufacturer save(Manufacturer entity) {
         return manufacturerRepository.save(entity);
     }
 
