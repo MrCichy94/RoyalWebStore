@@ -38,23 +38,10 @@ public class Product implements Serializable {
     //Photo photo;
 
     @Digits(integer = 8, fraction = 2)
-    BigDecimal currentNetPrice;
+    BigDecimal sellBaseNetPrice;
 
     @Digits(integer = 8, fraction = 2)
-    BigDecimal currentGrossPrice;
-
-    @Digits(integer = 8, fraction = 2)
-    BigDecimal baseNetPrice;
-
-
-    @Digits(integer = 8, fraction = 2)
-    BigDecimal baseGrossPrice;
-
-    @Digits(integer = 8, fraction = 2)
-    BigDecimal percentageDiscoutValue;
-
-    @Digits(integer = 8, fraction = 2)
-    BigDecimal discoutValue;
+    BigDecimal sellBaseGrossPrice;
 
     @Digits(integer = 8, fraction = 2)
     BigDecimal vatPercentage;
@@ -65,24 +52,18 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public Product(int productId, String productName, BigDecimal baseGrossPrice, BigDecimal vatPercentage) {
+    public Product(int productId, String productName, BigDecimal sellBaseGrossPrice, BigDecimal vatPercentage) {
         this.productId = productId;
         this.productName = productName;
-        this.baseGrossPrice = baseGrossPrice;
+        this.sellBaseGrossPrice = sellBaseGrossPrice;
         this.vatPercentage = vatPercentage;
 
         BigDecimal point = BigDecimal.valueOf(-1.00);
-        baseNetPrice = (baseGrossPrice.multiply((point.add(vatPercentage))
+        sellBaseNetPrice = (sellBaseGrossPrice.multiply((point.add(vatPercentage))
                 .abs())).setScale(2, RoundingMode.DOWN);
 
-        vatValue = baseGrossPrice.add(baseNetPrice.negate())
+        vatValue = sellBaseGrossPrice.add(sellBaseNetPrice.negate())
                 .setScale(2, RoundingMode.DOWN);
-
-        currentGrossPrice = baseGrossPrice;
-        currentNetPrice = baseNetPrice;
-
-        percentageDiscoutValue = new BigDecimal(0);
-        discoutValue = new BigDecimal(0);
 
         type = "";
         version = "";

@@ -38,6 +38,6 @@ class ProductTest {
     void shouldProperlyCountBaseNetPrice() {
         Product eg4 = new Product(1, "First", new BigDecimal("200.00"), new BigDecimal("0.10"));
 
-        assertEquals(new BigDecimal("180.00"), eg4.baseNetPrice);
+        assertEquals(new BigDecimal("180.00"), eg4.sellBaseNetPrice);
     }
 }

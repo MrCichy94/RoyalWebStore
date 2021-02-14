@@ -38,7 +38,7 @@ public class ProductController {
     ResponseEntity<Product> createNewProduct(@RequestBody @Valid Product newProductToAdd) {
         Product result = new Product(newProductToAdd.getProductId(),
                 newProductToAdd.getProductName(),
-                newProductToAdd.getBaseGrossPrice(),
+                newProductToAdd.getSellBaseGrossPrice(),
                 newProductToAdd.getVatPercentage());
         productService.save(result);
         logger.info("New product was created!");
