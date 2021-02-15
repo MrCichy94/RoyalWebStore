@@ -3,12 +3,15 @@ package pl.cichy.RoyalWebStore.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import pl.cichy.RoyalWebStore.logic.ProductService;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,9 +23,6 @@ public class Copy {
     @GeneratedValue(generator = "inc")
     @GenericGenerator(name = "inc", strategy = "increment")
     int copyId;
-
-    @ManyToOne
-    Product product;
 
     @Size(min = 1, max = 25)
     String merchandisingCode;
@@ -53,10 +53,18 @@ public class Copy {
 
     boolean isAlreadySold;
 
+    LocalDate buyDate;
+
+    LocalDate sellDate;
+
+    private int product_id;
+
     public Copy() {
     }
 
-    public Copy(Product product, String merchandisingCode, BigDecimal buyGrossPrice, BigDecimal buyVatPercentage) {
+    public Copy(int copyId, Product product, String merchandisingCode,
+                BigDecimal buyGrossPrice, BigDecimal buyVatPercentage) {
+
         this.merchandisingCode = merchandisingCode;
         this.buyGrossPrice = buyGrossPrice;
         this.buyVatPercentage =buyVatPercentage;
@@ -72,7 +80,9 @@ public class Copy {
         percentageDiscoutValue = new BigDecimal(0);
         sellCurrentGrossPrice = product.getSellBaseGrossPrice();
         sellCurrentNetPrice = product.getSellBaseNetPrice();
-    }
 
+        buyDate = LocalDate.now();
+        sellDate = null;
+    }
 
 }

@@ -5,10 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import pl.cichy.RoyalWebStore.logic.ProductService;
 import pl.cichy.RoyalWebStore.model.Product;
 
@@ -32,6 +29,14 @@ public class ProductController {
     ResponseEntity<List<Product>> readAllProduct() {
         logger.info("Read all the products!");
         return ResponseEntity.ok(productService.findAll());
+    }
+
+    @GetMapping("/product/{id}")
+    ResponseEntity<Product> readProductById(@PathVariable int id) {
+        logger.info("Read product with id: " + id + "!");
+        return productService.findById(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/newproduct/add")

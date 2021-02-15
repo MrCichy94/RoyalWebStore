@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 
 @Getter
 @Setter
@@ -48,6 +49,9 @@ public class Product implements Serializable {
 
     @Digits(integer = 8, fraction = 2)
     BigDecimal vatValue;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<Copy> copies;
 
     public Product() {
     }
