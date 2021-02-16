@@ -2,7 +2,6 @@ package pl.cichy.RoyalWebStore.logic;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import pl.cichy.RoyalWebStore.model.Category;
 import pl.cichy.RoyalWebStore.model.Copy;
 
 import java.util.List;

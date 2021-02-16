@@ -58,28 +58,32 @@ public class CopyServiceImpl implements CopyService {
             Product productToActualizeCopy = productRepository.getById(productId);
             List<Copy> listOfCopiesToRefresh = productRepository.getById(productId).getCopies();
 
-            copyToSet.setCopyId(copyToSet.getCopyId());
-            copyToSet.setProduct_id(productId);
-
-            BigDecimal point = BigDecimal.valueOf(-1.00);
-            copyToSet.setBuyNetPrice((copyToSet.getBuyGrossPrice().multiply((point.add(copyToSet.getBuyVatPercentage()))
-                    .abs())).setScale(2, RoundingMode.DOWN));
-            copyToSet.setBuyVatValue(copyToSet.getBuyGrossPrice().add(copyToSet.getBuyNetPrice().negate())
-                    .setScale(2, RoundingMode.DOWN));
-
-            copyToSet.setDiscoutValue(new BigDecimal(0));
-            copyToSet.setPercentageDiscoutValue(new BigDecimal(0));
-            copyToSet.setSellCurrentGrossPrice(productRepository.getById(productId).getSellBaseGrossPrice());
-            copyToSet.setSellCurrentNetPrice(productRepository.getById(productId).getSellBaseNetPrice());
-
-            copyToSet.setBuyDate(LocalDate.now());
-            copyToSet.setSellDate(null);
+            assignDataToCopyObject(productId, copyToSet);
 
             listOfCopiesToRefresh.add(copyToSet);
 
             productToActualizeCopy.setCopies(listOfCopiesToRefresh);
             productRepository.save(productToActualizeCopy);
         }
+    }
+
+    private void assignDataToCopyObject(Integer productId, Copy copyToSet) {
+        copyToSet.setCopyId(copyToSet.getCopyId());
+        copyToSet.setProduct_id(productId);
+
+        BigDecimal point = BigDecimal.valueOf(-1.00);
+        copyToSet.setBuyNetPrice((copyToSet.getBuyGrossPrice().multiply((point.add(copyToSet.getBuyVatPercentage()))
+                .abs())).setScale(2, RoundingMode.DOWN));
+        copyToSet.setBuyVatValue(copyToSet.getBuyGrossPrice().add(copyToSet.getBuyNetPrice().negate())
+                .setScale(2, RoundingMode.DOWN));
+
+        copyToSet.setDiscoutValue(new BigDecimal(0));
+        copyToSet.setPercentageDiscoutValue(new BigDecimal(0));
+        copyToSet.setSellCurrentGrossPrice(productRepository.getById(productId).getSellBaseGrossPrice());
+        copyToSet.setSellCurrentNetPrice(productRepository.getById(productId).getSellBaseNetPrice());
+
+        copyToSet.setBuyDate(LocalDate.now());
+        copyToSet.setSellDate(null);
     }
 
     @Override

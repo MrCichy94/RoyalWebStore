@@ -7,9 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.cichy.RoyalWebStore.logic.CopyService;
-import pl.cichy.RoyalWebStore.logic.ProductService;
 import pl.cichy.RoyalWebStore.model.Copy;
-import pl.cichy.RoyalWebStore.model.Product;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -22,16 +20,13 @@ public class CopyController {
     @Autowired
     private CopyService copyService;
 
-    @Autowired
-    private ProductService productService;
-
     private static final Logger logger = LoggerFactory.getLogger(CopyController.class);
 
     public CopyController() {
     }
 
     @GetMapping("/copies")
-    ResponseEntity<List<Copy>> readAllCopies(){
+    ResponseEntity<List<Copy>> readAllCopies() {
         logger.info("Read all copies!");
         return ResponseEntity.ok(copyService.findAll());
     }
