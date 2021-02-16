@@ -1,9 +1,8 @@
-package pl.cichy.RoyalWebStore.logic;
+package pl.cichy.RoyalWebStore.logic.implementation;
 
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import pl.cichy.RoyalWebStore.logic.implementation.ManufacturerServiceImpl;
 import pl.cichy.RoyalWebStore.model.Manufacturer;
 import pl.cichy.RoyalWebStore.model.repository.ManufacturerRepository;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;

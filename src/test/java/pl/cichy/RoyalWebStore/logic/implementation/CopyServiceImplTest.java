@@ -1,36 +1,33 @@
-package pl.cichy.RoyalWebStore.logic;
-
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
-import pl.cichy.RoyalWebStore.logic.implementation.CategoryServiceImpl;
-import pl.cichy.RoyalWebStore.model.Category;
-import pl.cichy.RoyalWebStore.model.repository.CategoryRepository;
-import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
+package pl.cichy.RoyalWebStore.logic.implementation;
 
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import pl.cichy.RoyalWebStore.model.Copy;
+import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
+import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-
-class CategoryServiceImplTest {
+class CopyServiceImplTest {
 
     @Test
     @DisplayName("Should throw ResourceNotFoundException when we dont got product with given product ID")
-    void setCategoryForProductById_ThrowResourceNotFoundException() {
+    void setCopyForProduct_ThrowResourceNotFoundException() {
         //given
         var mockProductRepository = mock(ProductRepository.class);
         when(mockProductRepository.existsById(1)).thenReturn(false);
         //and
-        var mockCategory = mock(Category.class);
+        var mockCopy = mock(Copy.class);
         //and
-        var mockCategoryRepository = mock(CategoryRepository.class);
+        var mockCopyRepository = mock(CopyRepository.class);
         //system under test
-        var toTest = new CategoryServiceImpl(mockCategoryRepository, mockProductRepository);
+        var toTest = new CopyServiceImpl(mockCopyRepository, mockProductRepository);
         //when
-        var exception = catchThrowable(() -> toTest.setCategoryForProduct(1, mockCategory));
+        var exception = catchThrowable(() -> toTest.setCopyForProduct(1, mockCopy));
         //then
         assertThat(exception).isInstanceOf(ResourceNotFoundException.class)
                 .hasMessageContaining("No product found");
