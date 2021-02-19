@@ -28,6 +28,7 @@ public class Customer {
     @Size(min = 3, max = 25)
     String login;
 
+    @Size(min = 3, max = 25)
     String password;
 
     @Size(max = 25)
@@ -50,4 +51,16 @@ public class Customer {
 
     public Customer() {
     }
+
+    public Customer(int customerId, String login, String password, String firstName, String lastName, String typeOfClient) {
+        this.login = login;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.typeOfClient = typeOfClient;
+
+        address = new Address();
+        contact = new Contact();
+    }
+
 }

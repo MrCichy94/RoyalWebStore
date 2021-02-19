@@ -15,6 +15,8 @@ public interface CustomerService {
 
     Optional<Customer> findById(Integer id);
 
+    Customer getById(Integer id);
+
     void deleteById(Integer id);
 
     boolean existsById(Integer id);

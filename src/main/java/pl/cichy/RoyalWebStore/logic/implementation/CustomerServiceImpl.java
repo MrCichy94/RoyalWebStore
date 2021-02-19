@@ -43,6 +43,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Customer getById(Integer id) {
+        return customerRepository.getById(id);
+    }
+
+    @Override
     public void deleteById(Integer id) {
         customerRepository.deleteById(id);
     }
@@ -58,13 +63,19 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
 
-    public Customer registerNewCustomerAccount(Customer newCustomer) {
+    public void registerNewCustomerAccount(Customer newCustomer) {
         if (!customerRepository.existsById(newCustomer.getCustomerId())) {
             throw new ResourceNotFoundException("There is an account with that email adress:"
                     + newCustomer.getContact().getEmailAddress());
-            //set things here
+        } else {
+            Customer result = new Customer(newCustomer.getCustomerId(),
+                    newCustomer.getLogin(),
+                    newCustomer.getPassword(),
+                    newCustomer.getFirstName(),
+                    newCustomer.getLastName(),
+                    newCustomer.getTypeOfClient());
+            customerRepository.save(result);
         }
-        return customerRepository.save(newCustomer);
     }
 
 }
