@@ -1,15 +1,13 @@
-package pl.cichy.RoyalWebStore.model.repository;
+package pl.cichy.RoyalWebStore.logic;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 import pl.cichy.RoyalWebStore.model.Address;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
-public interface AddressRepository {
+public interface AddressService {
 
     List<Address> findAll();
 

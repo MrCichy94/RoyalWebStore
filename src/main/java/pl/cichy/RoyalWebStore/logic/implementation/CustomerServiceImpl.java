@@ -18,12 +18,14 @@ import java.util.Optional;
 @RequestScope
 public class CustomerServiceImpl implements CustomerService {
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     private final CustomerRepository customerRepository;
 
     public CustomerServiceImpl(final CustomerRepository customerRepository) {
         this.customerRepository = customerRepository;
     }
-
 
     @Override
     public List<Customer> findAll() {
@@ -64,4 +66,5 @@ public class CustomerServiceImpl implements CustomerService {
         }
         return customerRepository.save(newCustomer);
     }
+
 }
