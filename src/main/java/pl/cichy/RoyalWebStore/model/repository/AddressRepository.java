@@ -8,7 +8,6 @@ import pl.cichy.RoyalWebStore.model.Address;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface AddressRepository {
 
     List<Address> findAll();
@@ -16,8 +15,6 @@ public interface AddressRepository {
     Page<Address> findAll(Pageable page);
 
     Optional<Address> findById(Integer id);
-
-    Address getById(Integer id);
 
     void deleteById(Integer id);
 

@@ -2,13 +2,11 @@ package pl.cichy.RoyalWebStore.model.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 import pl.cichy.RoyalWebStore.model.Contact;
 
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface ContactRepository {
 
     List<Contact> findAll();
@@ -17,11 +15,13 @@ public interface ContactRepository {
 
     Optional<Contact> findById(Integer id);
 
-    Contact getById(Integer id);
+    Optional<Contact> findByEmail(String email);
 
     void deleteById(Integer id);
 
     boolean existsById(Integer id);
 
     Contact save(Contact entity);
+
+
 }

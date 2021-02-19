@@ -15,8 +15,6 @@ public interface AddressService {
 
     Optional<Address> findById(Integer id);
 
-    Address getById(Integer id);
-
     void deleteById(Integer id);
 
     boolean existsById(Integer id);
