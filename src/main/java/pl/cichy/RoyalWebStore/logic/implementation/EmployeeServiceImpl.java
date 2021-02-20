@@ -3,6 +3,7 @@ package pl.cichy.RoyalWebStore.logic.implementation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.logic.EmployeeService;
@@ -16,6 +17,8 @@ import java.util.Optional;
 @RequestScope
 public class EmployeeServiceImpl implements EmployeeService {
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private final EmployeeRepository employeeRepository;
 
@@ -56,5 +59,18 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Employee save(Employee entity) {
         return employeeRepository.save(entity);
+    }
+
+    @Override
+    public void registerNewEmployeeAccount(Employee newEmployeeToAdd) {
+
+        Employee result = new Employee(newEmployeeToAdd.getEmployeeId(),
+                newEmployeeToAdd.getLogin(),
+                passwordEncoder.encode(newEmployeeToAdd.getPassword()),
+                newEmployeeToAdd.getFirstName(),
+                newEmployeeToAdd.getLastName(),
+                newEmployeeToAdd.getTypeOfPermissions());
+        employeeRepository.save(result);
+
     }
 }

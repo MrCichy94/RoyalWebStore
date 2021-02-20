@@ -50,7 +50,7 @@ public class Employee {
     }
 
     public Employee(int employeeId, String login, String password, String firstName, String lastName,
-                    boolean accountActive, String typeOfPermissions) {
+                    String typeOfPermissions) {
         this.employeeId = employeeId;
         this.login = login;
         this.password = password;

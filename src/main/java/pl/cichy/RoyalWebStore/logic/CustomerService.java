@@ -23,5 +23,5 @@ public interface CustomerService {
 
     Customer save(Customer entity);
 
-    public void registerNewCustomerAccount(Customer newCustomer);
+    void registerNewCustomerAccount(Customer newCustomer);
 }
