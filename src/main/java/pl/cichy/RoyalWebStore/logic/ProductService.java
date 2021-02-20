@@ -21,6 +21,8 @@ public interface ProductService {
 
     boolean existsById(Integer id);
 
+    void addNewProduct(Product newProductToAdd);
+
     Product save(Product entity);
 
 }

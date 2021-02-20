@@ -41,13 +41,9 @@ public class ProductController {
 
     @PostMapping("/newproduct/add")
     ResponseEntity<Product> createNewProduct(@RequestBody @Valid Product newProductToAdd) {
-        Product result = new Product(newProductToAdd.getProductId(),
-                newProductToAdd.getProductName(),
-                newProductToAdd.getSellBaseGrossPrice(),
-                newProductToAdd.getVatPercentage());
-        productService.save(result);
+        productService.addNewProduct(newProductToAdd);
         logger.info("New product was created!");
-        return ResponseEntity.created(URI.create("/" + result.getProductId())).body(result);
+        return ResponseEntity.created(URI.create("/" + newProductToAdd.getProductId())).body(newProductToAdd);
     }
 
 }

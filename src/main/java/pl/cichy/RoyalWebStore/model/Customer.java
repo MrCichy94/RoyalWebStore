@@ -52,7 +52,9 @@ public class Customer {
     public Customer() {
     }
 
-    public Customer(int customerId, String login, String password, String firstName, String lastName, String typeOfClient) {
+    public Customer(int customerId, String login, String password, String firstName,
+                    String lastName, String typeOfClient) {
+        this.customerId = customerId;
         this.login = login;
         this.password = password;
         this.firstName = firstName;

@@ -52,6 +52,15 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void addNewProduct(Product newProductToAdd) {
+        Product result = new Product(newProductToAdd.getProductId(),
+                newProductToAdd.getProductName(),
+                newProductToAdd.getSellBaseGrossPrice(),
+                newProductToAdd.getVatPercentage());
+        productRepository.save(result);
+    }
+
+    @Override
     public Product save(Product entity) {
         return productRepository.save(entity);
     }
