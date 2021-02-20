@@ -22,4 +22,6 @@ public interface CustomerService {
     boolean existsById(Integer id);
 
     Customer save(Customer entity);
+
+    public void registerNewCustomerAccount(Customer newCustomer);
 }

@@ -28,7 +28,7 @@ public class Customer {
     @Size(min = 3, max = 25)
     String login;
 
-    @Size(min = 3, max = 25)
+    @Size(min = 3, max = 85)
     String password;
 
     @Size(max = 25)

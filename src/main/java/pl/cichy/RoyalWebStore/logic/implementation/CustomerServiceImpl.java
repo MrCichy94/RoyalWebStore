@@ -1,6 +1,5 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -64,18 +63,15 @@ public class CustomerServiceImpl implements CustomerService {
 
 
     public void registerNewCustomerAccount(Customer newCustomer) {
-        if (!customerRepository.existsById(newCustomer.getCustomerId())) {
-            throw new ResourceNotFoundException("There is an account with that email adress:"
-                    + newCustomer.getContact().getEmailAddress());
-        } else {
-            Customer result = new Customer(newCustomer.getCustomerId(),
-                    newCustomer.getLogin(),
-                    newCustomer.getPassword(),
-                    newCustomer.getFirstName(),
-                    newCustomer.getLastName(),
-                    newCustomer.getTypeOfClient());
-            customerRepository.save(result);
-        }
+
+        Customer result = new Customer(newCustomer.getCustomerId(),
+                newCustomer.getLogin(),
+                passwordEncoder.encode(newCustomer.getPassword()),
+                newCustomer.getFirstName(),
+                newCustomer.getLastName(),
+                newCustomer.getTypeOfClient());
+        customerRepository.save(result);
+
     }
 
 }
