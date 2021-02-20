@@ -69,7 +69,7 @@ public class CopyServiceImpl implements CopyService {
 
     private void assignDataToCopyObject(Integer productId, Copy copyToSet) {
         copyToSet.setCopyId(copyToSet.getCopyId());
-        copyToSet.setProduct_id(productId);
+        copyToSet.setProductId(productId);
 
         BigDecimal point = BigDecimal.valueOf(-1.00);
         copyToSet.setBuyNetPrice((copyToSet.getBuyGrossPrice().multiply((point.add(copyToSet.getBuyVatPercentage()))

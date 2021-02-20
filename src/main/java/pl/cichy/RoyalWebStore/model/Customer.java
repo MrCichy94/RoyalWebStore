@@ -7,6 +7,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Getter
 @Setter
@@ -48,6 +49,9 @@ public class Customer {
 
     @Size(min = 1, max = 25)
     String typeOfClient;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<Order> orders;
 
     public Customer() {
     }

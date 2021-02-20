@@ -56,7 +56,6 @@ public class Employee {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.accountActive = accountActive;
         this.typeOfPermissions = typeOfPermissions;
 
         address = new Address();

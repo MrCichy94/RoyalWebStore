@@ -57,7 +57,7 @@ public class Copy {
 
     LocalDate sellDate;
 
-    private int product_id;
+    private int productId;
 
     public Copy() {
     }
