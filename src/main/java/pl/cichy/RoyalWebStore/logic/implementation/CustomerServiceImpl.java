@@ -1,5 +1,6 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.logic.CustomerService;
 import pl.cichy.RoyalWebStore.model.Customer;
+import pl.cichy.RoyalWebStore.model.repository.ContactRepository;
 import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 
 import java.util.List;
@@ -21,9 +23,12 @@ public class CustomerServiceImpl implements CustomerService {
     private PasswordEncoder passwordEncoder;
 
     private final CustomerRepository customerRepository;
+    private final ContactRepository contactRepository;
 
-    public CustomerServiceImpl(final CustomerRepository customerRepository) {
+    public CustomerServiceImpl(final CustomerRepository customerRepository,
+                               final ContactRepository contactRepository) {
         this.customerRepository = customerRepository;
+        this.contactRepository = contactRepository;
     }
 
     @Override
@@ -64,14 +69,17 @@ public class CustomerServiceImpl implements CustomerService {
 
     public void registerNewCustomerAccount(Customer newCustomer) {
 
-        Customer result = new Customer(newCustomer.getCustomerId(),
-                newCustomer.getLogin(),
-                passwordEncoder.encode(newCustomer.getPassword()),
-                newCustomer.getFirstName(),
-                newCustomer.getLastName(),
-                newCustomer.getTypeOfClient());
-        customerRepository.save(result);
-
+        if (contactRepository.findByEmail(newCustomer.getContact().getEmailAddress()).isPresent()) {
+            throw new ResourceNotFoundException("Account with this email already exist!");
+        } else {
+            Customer result = new Customer(newCustomer.getCustomerId(),
+                    newCustomer.getLogin(),
+                    passwordEncoder.encode(newCustomer.getPassword()),
+                    newCustomer.getFirstName(),
+                    newCustomer.getLastName(),
+                    newCustomer.getTypeOfClient());
+            customerRepository.save(result);
+        }
     }
 
 }
