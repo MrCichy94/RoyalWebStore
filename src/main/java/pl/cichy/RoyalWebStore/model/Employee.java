@@ -59,6 +59,9 @@ public class Employee {
         this.accountActive = accountActive;
         this.typeOfPermissions = typeOfPermissions;
 
+        address = new Address();
+        contact = new Contact();
+
         hireDate = LocalDate.now();
         releaseDate = null;
         accountActive = true;

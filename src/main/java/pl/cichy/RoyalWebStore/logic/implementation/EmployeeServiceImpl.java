@@ -78,6 +78,11 @@ public class EmployeeServiceImpl implements EmployeeService {
                     newEmployeeToAdd.getFirstName(),
                     newEmployeeToAdd.getLastName(),
                     newEmployeeToAdd.getTypeOfPermissions());
+
+            result.getContact().setContactId(newEmployeeToAdd.getContact().getContactId());
+            result.getContact().setPhoneNumber1(newEmployeeToAdd.getContact().getPhoneNumber1());
+            result.getContact().setEmailAddress(newEmployeeToAdd.getContact().getEmailAddress());
+
             employeeRepository.save(result);
         }
     }
