@@ -4,12 +4,10 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @Setter
@@ -37,12 +35,17 @@ public class Order {
 
     int customerId;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<Copy> copiesOfGivenProductInOrder;
+
     public Order() {
     }
 
     public Order(int orderId, String paid) {
         this.orderId = orderId;
         this.paid = paid;
+
+        copiesOfGivenProductInOrder = null;
 
         orderAcceptanceDate = LocalDate.now();
         isAccepted = true;

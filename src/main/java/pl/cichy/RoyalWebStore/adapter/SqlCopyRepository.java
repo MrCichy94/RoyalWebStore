@@ -16,4 +16,8 @@ public interface SqlCopyRepository extends CopyRepository, JpaRepository<Copy, I
     @Query(nativeQuery = true, value = "SELECT * from COPIES where PRODUCT_ID=:id")
     List<Copy> getCopiesByProductId(@Param("id") Integer id);
 
+    @Override
+    @Query(nativeQuery = true, value = "SELECT * from COPIES where COPY_ID=:id")
+    Copy getById(@Param("id") Integer id);
+
 }

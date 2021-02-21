@@ -38,11 +38,19 @@ public class OrderContorller {
     }
 
     @PostMapping("/{customerId}")
-    ResponseEntity<Order> createNewCopyOfProduct(@PathVariable int customerId,
+    ResponseEntity<Order> addOrderForCustomerWithGivenId(@PathVariable int customerId,
                                                  @RequestBody @Valid Order customerOrderToAdd) {
         orderService.setOrderForCustomer(customerId, customerOrderToAdd);
         logger.info("New order was created!");
         return ResponseEntity.created(URI.create("/" + customerOrderToAdd.getOrderId())).body(customerOrderToAdd);
+    }
+
+    @PutMapping("/{customerId}")
+    ResponseEntity<Order> addCopyOfGivenProductToOrder(@PathVariable int customerId,
+                                                 @RequestBody @Valid Order customerOrder) {
+        orderService.addToOrder(customerId, customerOrder);
+        logger.info("Copy added to order!");
+        return ResponseEntity.created(URI.create("/" + customerOrder.getOrderId())).body(customerOrder);
     }
 
 

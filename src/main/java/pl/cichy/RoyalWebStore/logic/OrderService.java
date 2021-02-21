@@ -24,4 +24,6 @@ public interface OrderService {
     Order save(Order entity);
 
     void setOrderForCustomer(int customerId, Order customerOrderToAdd);
+
+    void addToOrder(int copyId, Order customerOrder);
 }

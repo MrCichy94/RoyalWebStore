@@ -1,13 +1,16 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.hibernate.validator.constraints.Range;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.logic.OrderService;
+import pl.cichy.RoyalWebStore.model.Copy;
 import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.Order;
+import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
 import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 import pl.cichy.RoyalWebStore.model.repository.OrderRepository;
 
@@ -20,11 +23,14 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
+    private final CopyRepository copyRepository;
 
     public OrderServiceImpl(final OrderRepository orderRepository,
-                            final CustomerRepository customerRepository) {
+                            final CustomerRepository customerRepository,
+                            final CopyRepository copyRepository) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
+        this.copyRepository = copyRepository;
     }
 
 
@@ -79,6 +85,23 @@ public class OrderServiceImpl implements OrderService {
                 customerToActualizeOrder.setOrders(listOfOrdersToRefresh);
                 customerRepository.save(customerToActualizeOrder);
             }
+        }
+    }
+
+    @Override
+    public void addToOrder(int customerId, Order customerOrder) {
+
+        if (!orderRepository.existsById(customerOrder.getOrderId())) {
+            throw new ResourceNotFoundException("No order found with id=" + customerOrder.getOrderId());
+        } else {
+            Order orderToAddCopy = new Order(customerOrder.getOrderId(),
+                    customerOrder.getPaid());
+
+            List<Copy> listOfCopiesToRefresh = customerOrder.getCopiesOfGivenProductInOrder();
+            listOfCopiesToRefresh.add();
+
+            orderToAddCopy.setCopiesOfGivenProductInOrder(listOfCopiesToRefresh);
+            orderRepository.save(orderToAddCopy);
         }
     }
 
