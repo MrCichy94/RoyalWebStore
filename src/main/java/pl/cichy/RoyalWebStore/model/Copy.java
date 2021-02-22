@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 @Setter
 @Entity
 @Table(name = "copies")
-public class Copy {
+public class Copy implements Serializable {
 
     @Id
     @GeneratedValue(generator = "inc")

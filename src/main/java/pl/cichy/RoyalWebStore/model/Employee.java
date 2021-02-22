@@ -6,13 +6,14 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "employees")
-public class Employee {
+public class Employee implements Serializable {
 
     @Id
     @GeneratedValue(generator = "inc")

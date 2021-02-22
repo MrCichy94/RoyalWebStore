@@ -9,12 +9,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "addresses")
-public class Address {
+public class Address implements Serializable {
 
     @Id
     @GeneratedValue(generator = "inc")

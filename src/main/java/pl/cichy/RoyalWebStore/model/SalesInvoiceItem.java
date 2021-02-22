@@ -1,4 +1,6 @@
 package pl.cichy.RoyalWebStore.model;
 
-public class SalesInvoiceItem {
+import java.io.Serializable;
+
+public class SalesInvoiceItem implements Serializable {
 }

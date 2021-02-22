@@ -1,4 +1,4 @@
-package pl.cichy.RoyalWebStore.model.repository;
+package pl.cichy.RoyalWebStore.logic;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -7,7 +7,7 @@ import pl.cichy.RoyalWebStore.model.SalesInvoice;
 import java.util.List;
 import java.util.Optional;
 
-public interface SalesInvoiceRepository {
+public interface SalesInvoiceService {
 
     List<SalesInvoice> findAll();
 
@@ -22,4 +22,6 @@ public interface SalesInvoiceRepository {
     boolean existsById(Integer id);
 
     SalesInvoice save(SalesInvoice entity);
+
+    void createNewSalesInvoice(int customerId, SalesInvoice salesInvoiceToAdd);
 }
