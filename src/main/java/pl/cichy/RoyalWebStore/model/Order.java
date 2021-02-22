@@ -36,7 +36,7 @@ public class Order {
     int customerId;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<Copy> copiesOfGivenProductInOrder;
+    List<Copy> copies;
 
     public Order() {
     }
@@ -45,7 +45,7 @@ public class Order {
         this.orderId = orderId;
         this.paid = paid;
 
-        copiesOfGivenProductInOrder = null;
+        copies = null;
 
         orderAcceptanceDate = LocalDate.now();
         isAccepted = true;

@@ -89,19 +89,21 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void addToOrder(int customerId, Order customerOrder) {
+    public void addToOrder(int orderId, int copyId, Copy copyToAddToThisOrder) {
 
-        if (!orderRepository.existsById(customerOrder.getOrderId())) {
-            throw new ResourceNotFoundException("No order found with id=" + customerOrder.getOrderId());
+        if (!orderRepository.existsById(orderId)) {
+            throw new ResourceNotFoundException("No order found with id=" + orderId);
         } else {
-            Order orderToAddCopy = new Order(customerOrder.getOrderId(),
-                    customerOrder.getPaid());
+            {
+                Order orderToAddThisCopy = orderRepository.getById(orderId);
+                List<Copy> copies = orderToAddThisCopy.getCopies();
 
-            List<Copy> listOfCopiesToRefresh = customerOrder.getCopiesOfGivenProductInOrder();
-            listOfCopiesToRefresh.add();
+                copies.add(copyRepository.getById(copyId));
+                orderToAddThisCopy.setCopies(copies);
 
-            orderToAddCopy.setCopiesOfGivenProductInOrder(listOfCopiesToRefresh);
-            orderRepository.save(orderToAddCopy);
+                orderRepository.save(orderToAddThisCopy);
+                customerRepository.save(customerRepository.getById(orderRepository.getById(orderId).getCustomerId()));
+            }
         }
     }
 

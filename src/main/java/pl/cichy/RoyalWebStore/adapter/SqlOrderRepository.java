@@ -14,7 +14,11 @@ import java.util.List;
 public interface SqlOrderRepository extends OrderRepository, JpaRepository<Order, Integer> {
 
     @Override
-    @Query(nativeQuery = true, value = "SELECT * from ORDERS where ORDER_ID=:id")
+    @Query(nativeQuery = true, value = "SELECT * from ORDERS where CUSTOMER_ID=:id")
     List<Order> getOrdersByClientId(@Param("id") Integer id);
+
+    @Override
+    @Query(nativeQuery = true, value = "SELECT * from ORDERS where ORDER_ID=:id")
+    Order getById(@Param("id") Integer id);
 
 }

@@ -2,6 +2,7 @@ package pl.cichy.RoyalWebStore.model.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import pl.cichy.RoyalWebStore.model.Copy;
 import pl.cichy.RoyalWebStore.model.Order;
 
 import java.util.List;
@@ -14,6 +15,8 @@ public interface OrderRepository {
     Page<Order> findAll(Pageable page);
 
     Optional<Order> findById(Integer id);
+
+    Order getById(Integer id);
 
     List<Order> getOrdersByClientId(Integer id);
 

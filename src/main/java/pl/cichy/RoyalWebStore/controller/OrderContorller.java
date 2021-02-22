@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.cichy.RoyalWebStore.logic.OrderService;
+import pl.cichy.RoyalWebStore.model.Copy;
 import pl.cichy.RoyalWebStore.model.Order;
 
 import javax.validation.Valid;
@@ -45,12 +46,12 @@ public class OrderContorller {
         return ResponseEntity.created(URI.create("/" + customerOrderToAdd.getOrderId())).body(customerOrderToAdd);
     }
 
-    @PutMapping("/{customerId}")
-    ResponseEntity<Order> addCopyOfGivenProductToOrder(@PathVariable int customerId,
-                                                 @RequestBody @Valid Order customerOrder) {
-        orderService.addToOrder(customerId, customerOrder);
+    @PutMapping("/{orderId}/{copyId}")
+    ResponseEntity<Copy> addCopyOfGivenProductToOrder(@PathVariable int orderId, @PathVariable int copyId,
+                                                 @RequestBody @Valid Copy copyToAddToThisOrder) {
+        orderService.addToOrder(orderId, copyId, copyToAddToThisOrder);
         logger.info("Copy added to order!");
-        return ResponseEntity.created(URI.create("/" + customerOrder.getOrderId())).body(customerOrder);
+        return ResponseEntity.created(URI.create("/" + copyId)).body(copyToAddToThisOrder);
     }
 
 
