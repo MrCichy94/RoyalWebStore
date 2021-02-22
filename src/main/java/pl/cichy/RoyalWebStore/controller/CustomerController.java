@@ -32,11 +32,9 @@ public class CustomerController {
     }
 
     @GetMapping("/customer/{id}")
-    ResponseEntity<Customer> readProductById(@PathVariable int id) {
+    ResponseEntity<Customer> readCustomerById(@PathVariable int id) {
         logger.info("Read customer with id: " + id + "!");
-        return customerService.findById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.ok(customerService.getById(id));
     }
 
 

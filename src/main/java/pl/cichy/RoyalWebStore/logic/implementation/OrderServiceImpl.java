@@ -14,6 +14,8 @@ import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
 import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 import pl.cichy.RoyalWebStore.model.repository.OrderRepository;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -89,7 +91,7 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public void addToOrder(int orderId, int copyId, Copy copyToAddToThisOrder) {
+    public void addToOrder(int orderId, int copyId) {
 
         if (!orderRepository.existsById(orderId)) {
             throw new ResourceNotFoundException("No order found with id=" + orderId);
@@ -99,10 +101,9 @@ public class OrderServiceImpl implements OrderService {
                 List<Copy> copies = orderToAddThisCopy.getCopies();
 
                 copies.add(copyRepository.getById(copyId));
-                orderToAddThisCopy.setCopies(copies);
 
+                orderToAddThisCopy.setCopies(copies);
                 orderRepository.save(orderToAddThisCopy);
-                customerRepository.save(customerRepository.getById(orderRepository.getById(orderId).getCustomerId()));
             }
         }
     }

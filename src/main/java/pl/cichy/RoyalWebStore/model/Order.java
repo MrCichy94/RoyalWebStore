@@ -20,9 +20,12 @@ public class Order {
     @GenericGenerator(name = "inc", strategy = "increment")
     int orderId;
 
-    LocalDate orderAcceptanceDate;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<Copy> copies;
 
-    boolean isAccepted;
+    int customerId;
+
+    LocalDate orderAcceptanceDate;
 
     LocalDate shippingDate;
 
@@ -31,12 +34,9 @@ public class Order {
     @Size(min = 1, max = 25)
     String paid;
 
+    boolean isAccepted;
+
     boolean isFulfill;
-
-    int customerId;
-
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<Copy> copies;
 
     public Order() {
     }
@@ -45,9 +45,6 @@ public class Order {
         this.orderId = orderId;
         this.paid = paid;
 
-        copies = null;
-
-        orderAcceptanceDate = LocalDate.now();
         isAccepted = true;
         isFulfill = false;
     }

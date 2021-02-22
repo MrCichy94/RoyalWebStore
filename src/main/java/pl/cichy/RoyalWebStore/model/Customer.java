@@ -20,6 +20,9 @@ public class Customer {
     @GenericGenerator(name = "inc", strategy = "increment")
     int customerId;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<Order> orders;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     Address address;
 
@@ -32,15 +35,6 @@ public class Customer {
     @Size(min = 3, max = 85)
     String password;
 
-    @Size(max = 25)
-    String companyName;
-
-    @Pattern(regexp="(^$|[0-9]{9})")
-    String REGON;
-
-    @Pattern(regexp="(^$|[0-9]{10})")
-    String NIP;
-
     @Size(min = 2, max = 25)
     String lastName;
 
@@ -50,8 +44,14 @@ public class Customer {
     @Size(min = 1, max = 25)
     String typeOfClient;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<Order> orders;
+    @Size(max = 25)
+    String companyName;
+
+    @Pattern(regexp="(^$|[0-9]{9})")
+    String REGON;
+
+    @Pattern(regexp="(^$|[0-9]{10})")
+    String NIP;
 
     public Customer() {
     }

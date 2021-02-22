@@ -25,14 +25,14 @@ public class Contact {
     @Pattern(regexp="(^$|[0-9]{9})")
     String phoneNumber1;
 
+    @Size(max = 50)
+    String emailAddress;
+
     @Pattern(regexp="(^$|[0-9]{9})")
     String phoneNumber2;
 
     @Size(max = 50)
     String faxAddress;
-
-    @Size(max = 50)
-    String emailAddress;
 
     @Size(max = 50)
     String wwwDomain;

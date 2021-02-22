@@ -24,6 +24,8 @@ public class Copy {
     @GenericGenerator(name = "inc", strategy = "increment")
     int copyId;
 
+    private int productId;
+
     @Size(min = 1, max = 25)
     String merchandisingCode;
 
@@ -56,8 +58,6 @@ public class Copy {
     LocalDate buyDate;
 
     LocalDate sellDate;
-
-    private int productId;
 
     public Copy() {
     }

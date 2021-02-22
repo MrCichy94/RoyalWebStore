@@ -23,11 +23,14 @@ public class Product implements Serializable {
     @GenericGenerator(name = "inc", strategy = "increment")
     int productId;
 
-    @Size(min = 1, max = 25)
-    String productName;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    List<Copy> copies;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     CategoryAndManufacturer categoryAndManufacturer;
+
+    @Size(min = 1, max = 25)
+    String productName;
 
     @Size(max = 25)
     String type;
@@ -49,9 +52,6 @@ public class Product implements Serializable {
 
     @Digits(integer = 8, fraction = 2)
     BigDecimal vatValue;
-
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<Copy> copies;
 
     public Product() {
     }

@@ -26,5 +26,5 @@ public interface OrderService {
 
     void setOrderForCustomer(int customerId, Order customerOrderToAdd);
 
-    void addToOrder(int orderId, int copyId, Copy copyToAddToThisOrder);
+    void addToOrder(int orderId, int copyId);
 }

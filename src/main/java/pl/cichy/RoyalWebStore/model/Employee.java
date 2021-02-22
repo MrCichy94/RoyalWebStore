@@ -40,11 +40,11 @@ public class Employee {
     @Size(min = 1, max = 25)
     String typeOfPermissions;
 
-    boolean accountActive;
-
     LocalDate hireDate;
 
     LocalDate releaseDate;
+
+    boolean accountActive;
 
     public Employee() {
     }

@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.cichy.RoyalWebStore.logic.OrderService;
 import pl.cichy.RoyalWebStore.model.Copy;
@@ -32,7 +33,7 @@ public class OrderContorller {
         return ResponseEntity.ok(orderService.findAll());
     }
 
-    @GetMapping("/{id}/copies")
+    @GetMapping("/{id}/orders")
     ResponseEntity<List<Order>> readAllCopiesForProductId(@PathVariable int id) {
         logger.info("Read all of the orders of this customer!");
         return ResponseEntity.ok(orderService.getOrdersByClientId(id));
@@ -46,12 +47,11 @@ public class OrderContorller {
         return ResponseEntity.created(URI.create("/" + customerOrderToAdd.getOrderId())).body(customerOrderToAdd);
     }
 
-    @PutMapping("/{orderId}/{copyId}")
-    ResponseEntity<Copy> addCopyOfGivenProductToOrder(@PathVariable int orderId, @PathVariable int copyId,
-                                                 @RequestBody @Valid Copy copyToAddToThisOrder) {
-        orderService.addToOrder(orderId, copyId, copyToAddToThisOrder);
+    @PatchMapping("/{orderId}/{copyId}")
+    ResponseEntity<Order> addCopyOfGivenProductToOrder(@PathVariable int orderId, @PathVariable int copyId) {
+        orderService.addToOrder(orderId, copyId);
         logger.info("Copy added to order!");
-        return ResponseEntity.created(URI.create("/" + copyId)).body(copyToAddToThisOrder);
+        return ResponseEntity.created(URI.create("/" + copyId)).build();
     }
 
 
