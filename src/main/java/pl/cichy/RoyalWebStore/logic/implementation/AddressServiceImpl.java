@@ -39,49 +39,19 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public void deleteById(Integer id) {
-        addressRepository.deleteById(id);
-    }
-
-    @Override
-    public boolean existsById(Integer id) {
-        return addressRepository.existsById(id);
-    }
-
-    @Override
-    public Address save(Address entity) {
-        return addressRepository.save(entity);
-    }
-
-    @Override
-    public Optional<Address> findByCity(String city) {
-        return addressRepository.findByCity(city);
-    }
-
-    @Override
-    public Optional<Address> findByStreetName(String streetName) {
-        return addressRepository.findByStreetName(streetName);
-    }
-
-    @Override
-    public Optional<Address> findByDoorNumber(String doorNumber) {
-        return addressRepository.findByDoorNumber(doorNumber);
-    }
-
-    @Override
     public void createNewAddressIfPossible(Address newAddressToAdd) {
 
-        if(addressRepository.findByCity(newAddressToAdd.getCity()).isPresent() &&
+        if (addressRepository.findByCity(newAddressToAdd.getCity()).isPresent() &&
                 addressRepository.findByStreetName(newAddressToAdd.getStreetName()).isPresent() &&
                 addressRepository.findByDoorNumber(newAddressToAdd.getDoorNumber()).isPresent()) {
             throw new ResourceNotFoundException("Account with this email already exist!");
         } else {
             Address result = new Address(newAddressToAdd.getAddressId(),
-            newAddressToAdd.getCity(),
-            newAddressToAdd.getVoivodeship(),
-            newAddressToAdd.getZipCode(),
-            newAddressToAdd.getStreetName(),
-            newAddressToAdd.getDoorNumber());
+                    newAddressToAdd.getCity(),
+                    newAddressToAdd.getVoivodeship(),
+                    newAddressToAdd.getZipCode(),
+                    newAddressToAdd.getStreetName(),
+                    newAddressToAdd.getDoorNumber());
 
             addressRepository.save(result);
         }

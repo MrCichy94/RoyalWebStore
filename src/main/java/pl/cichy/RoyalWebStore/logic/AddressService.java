@@ -15,17 +15,5 @@ public interface AddressService {
 
     Optional<Address> findById(Integer id);
 
-    void deleteById(Integer id);
-
-    boolean existsById(Integer id);
-
-    Address save(Address entity);
-
-    Optional<Address> findByCity(String city);
-
-    Optional<Address> findByStreetName(String streetName);
-
-    Optional<Address> findByDoorNumber(String doorNumber);
-
     void createNewAddressIfPossible(Address newAddressToAdd);
 }

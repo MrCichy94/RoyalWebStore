@@ -15,10 +15,6 @@ public interface AddressRepository {
 
     Optional<Address> findById(Integer id);
 
-    void deleteById(Integer id);
-
-    boolean existsById(Integer id);
-
     Address save(Address entity);
 
     Optional<Address> findByCity(String city);
