@@ -45,5 +45,19 @@ public class CustomerController {
         return ResponseEntity.created(URI.create("/" + newCustomerToAdd.getCustomerId())).body(newCustomerToAdd);
     }
 
+    @DeleteMapping("/customer/{id}")
+    ResponseEntity<Customer> deleteCustomer(@PathVariable int id) {
+        customerService.deleteById(id);
+        logger.info("Customer was deleted!");
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/customer/{customerId}/orders/{orderId}")
+    ResponseEntity<Customer> deleteCustomersOrder(@PathVariable int customerId, @PathVariable int orderId) {
+        customerService.deleteCustomersOrder(customerId, orderId);
+        logger.info("Customer's order with id: " + orderId + " was deleted!");
+        return ResponseEntity.ok().build();
+    }
+
 
 }

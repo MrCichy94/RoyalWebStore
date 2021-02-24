@@ -24,4 +24,6 @@ public interface CustomerService {
     Customer save(Customer entity);
 
     void registerNewCustomerAccount(Customer newCustomer);
+
+    void deleteCustomersOrder(int customerId, int orderId);
 }

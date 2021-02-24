@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.cichy.RoyalWebStore.logic.ProductService;
+import pl.cichy.RoyalWebStore.model.Order;
 import pl.cichy.RoyalWebStore.model.Product;
 
 import javax.validation.Valid;
@@ -44,6 +45,13 @@ public class ProductController {
         productService.addNewProduct(newProductToAdd);
         logger.info("New product was created!");
         return ResponseEntity.created(URI.create("/" + newProductToAdd.getProductId())).body(newProductToAdd);
+    }
+
+    @DeleteMapping("/product/{id}")
+    ResponseEntity<Order> deleteOrder(@PathVariable int id) {
+        productService.deleteById(id);
+        logger.info("Product was deleted!");
+        return ResponseEntity.ok().build();
     }
 
 }

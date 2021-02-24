@@ -11,6 +11,7 @@ import pl.cichy.RoyalWebStore.logic.CustomerService;
 import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.repository.ContactRepository;
 import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
+import pl.cichy.RoyalWebStore.model.repository.OrderRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,11 +25,14 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
     private final ContactRepository contactRepository;
+    private final OrderRepository orderRepository;
 
     public CustomerServiceImpl(final CustomerRepository customerRepository,
-                               final ContactRepository contactRepository) {
+                               final ContactRepository contactRepository,
+                               final OrderRepository orderRepository) {
         this.customerRepository = customerRepository;
         this.contactRepository = contactRepository;
+        this.orderRepository = orderRepository;
     }
 
     @Override
@@ -85,6 +89,14 @@ public class CustomerServiceImpl implements CustomerService {
 
             customerRepository.save(result);
         }
+    }
+
+    @Override
+    public void deleteCustomersOrder(int customerId, int orderId) {
+        customerRepository.getById(customerId).getOrders().remove(orderId-1);
+        customerRepository.save(customerRepository.getById(customerId));
+
+        orderRepository.deleteById(orderId);
     }
 
 }

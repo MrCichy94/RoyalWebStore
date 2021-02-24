@@ -45,4 +45,10 @@ public class CopyController {
         return ResponseEntity.created(URI.create("/" + copyOfProductToAdd.getCopyId())).body(copyOfProductToAdd);
     }
 
+    @DeleteMapping("/copies/{id}")
+    ResponseEntity<Copy> deleteCopy(@PathVariable int id){
+        copyService.deleteById(id);
+        logger.info("Copy was deleted!");
+        return ResponseEntity.ok().build();
+    }
 }

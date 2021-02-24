@@ -47,4 +47,11 @@ public class EmployeeController {
         logger.info("New employee was created!");
         return ResponseEntity.created(URI.create("/" + newEmployeeToAdd.getEmployeeId())).body(newEmployeeToAdd);
     }
+
+    @DeleteMapping("/employee/{id}")
+    ResponseEntity<Customer> deleteCustomer(@PathVariable int id) {
+        employeeService.deleteById(id);
+        logger.info("Employee was deleted!");
+        return ResponseEntity.ok().build();
+    }
 }
