@@ -8,8 +8,4 @@ public interface CategoryAndManufacturerService {
 
     List<CategoryAndManufacturer> findAll();
 
-    void deleteById(Integer id);
-
-    CategoryAndManufacturer save(CategoryAndManufacturer entity);
-
 }

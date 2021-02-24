@@ -8,8 +8,4 @@ public interface CategoryRepository {
 
     List<Category> findAll();
 
-    void deleteById(Integer id);
-
-    Category save(Category entity);
-
 }

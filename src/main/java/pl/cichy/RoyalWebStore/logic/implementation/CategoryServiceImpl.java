@@ -28,18 +28,6 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryRepository.findAll();
     }
 
-
-    @Override
-    public void deleteById(Integer id) {
-        categoryRepository.deleteById(id);
-    }
-
-
-    @Override
-    public Category save(Category entity) {
-        return categoryRepository.save(entity);
-    }
-
     @Override
     public void setCategoryForProduct(Integer productId, Category categoryToSet) {
 

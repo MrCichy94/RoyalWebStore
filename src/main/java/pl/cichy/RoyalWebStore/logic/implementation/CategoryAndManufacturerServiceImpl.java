@@ -23,15 +23,4 @@ public class CategoryAndManufacturerServiceImpl implements CategoryAndManufactur
         return categoryAndManufacturerRepository.findAll();
     }
 
-
-    @Override
-    public void deleteById(Integer id) {
-        categoryAndManufacturerRepository.deleteById(id);
-    }
-
-
-    @Override
-    public CategoryAndManufacturer save(CategoryAndManufacturer entity) {
-        return categoryAndManufacturerRepository.save(entity);
-    }
 }

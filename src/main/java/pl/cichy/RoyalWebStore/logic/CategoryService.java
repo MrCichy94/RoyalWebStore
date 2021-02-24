@@ -8,9 +8,5 @@ public interface CategoryService {
 
     List<Category> findAll();
 
-    void deleteById(Integer id);
-
-    Category save(Category entity);
-
     void setCategoryForProduct(Integer productId, Category categoryToSet);
 }
