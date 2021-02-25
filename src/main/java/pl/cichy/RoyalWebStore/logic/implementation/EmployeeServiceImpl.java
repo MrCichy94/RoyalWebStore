@@ -47,23 +47,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee getById(Integer id) {
-        return employeeRepository.getById(id);
-    }
-
-    @Override
     public void deleteById(Integer id) {
         employeeRepository.deleteById(id);
-    }
-
-    @Override
-    public boolean existsById(Integer id) {
-        return employeeRepository.existsById(id);
-    }
-
-    @Override
-    public Employee save(Employee entity) {
-        return employeeRepository.save(entity);
     }
 
     @Override

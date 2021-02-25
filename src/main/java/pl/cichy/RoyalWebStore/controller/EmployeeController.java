@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import pl.cichy.RoyalWebStore.logic.EmployeeService;
 import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.Employee;
-import pl.cichy.RoyalWebStore.model.Product;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -29,13 +28,13 @@ public class EmployeeController {
 
     @GetMapping
     ResponseEntity<List<Employee>> readAllProduct() {
-        logger.info("Read all the products!");
+        logger.info("Read all the employees!");
         return ResponseEntity.ok(employeeService.findAll());
     }
 
     @GetMapping("/employee/{id}")
     ResponseEntity<Employee> readEmployeeById(@PathVariable int id) {
-        logger.info("Read product with id: " + id + "!");
+        logger.info("Read employee with id: " + id + "!");
         return employeeService.findById(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());

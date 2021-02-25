@@ -15,13 +15,7 @@ public interface EmployeeService {
 
     Optional<Employee> findById(Integer id);
 
-    Employee getById(Integer id);
-
     void deleteById(Integer id);
-
-    boolean existsById(Integer id);
-
-    Employee save(Employee entity);
 
     void registerNewEmployeeAccount(Employee newEmployeeToAdd);
 }
