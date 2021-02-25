@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import pl.cichy.RoyalWebStore.model.Customer;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface CustomerService {
 
@@ -13,15 +12,9 @@ public interface CustomerService {
 
     Page<Customer> findAll(Pageable page);
 
-    Optional<Customer> findById(Integer id);
-
     Customer getById(Integer id);
 
     void deleteById(Integer id);
-
-    boolean existsById(Integer id);
-
-    Customer save(Customer entity);
 
     void registerNewCustomerAccount(Customer newCustomer);
 

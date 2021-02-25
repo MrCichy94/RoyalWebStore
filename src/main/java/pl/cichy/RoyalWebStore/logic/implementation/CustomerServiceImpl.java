@@ -14,7 +14,6 @@ import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 import pl.cichy.RoyalWebStore.model.repository.OrderRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequestScope
@@ -46,11 +45,6 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Optional<Customer> findById(Integer id) {
-        return customerRepository.findById(id);
-    }
-
-    @Override
     public Customer getById(Integer id) {
         return customerRepository.getById(id);
     }
@@ -59,17 +53,6 @@ public class CustomerServiceImpl implements CustomerService {
     public void deleteById(Integer id) {
         customerRepository.deleteById(id);
     }
-
-    @Override
-    public boolean existsById(Integer id) {
-        return customerRepository.existsById(id);
-    }
-
-    @Override
-    public Customer save(Customer entity) {
-        return customerRepository.save(entity);
-    }
-
 
     public void registerNewCustomerAccount(Customer newCustomer) {
 
@@ -93,7 +76,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void deleteCustomersOrder(int customerId, int orderId) {
-        customerRepository.getById(customerId).getOrders().remove(orderId-1);
+        customerRepository.getById(customerId).getOrders().remove(orderId - 1);
         customerRepository.save(customerRepository.getById(customerId));
 
         orderRepository.deleteById(orderId);

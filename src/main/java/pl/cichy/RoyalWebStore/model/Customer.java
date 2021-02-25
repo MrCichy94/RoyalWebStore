@@ -48,10 +48,10 @@ public class Customer implements Serializable {
     @Size(max = 25)
     String companyName;
 
-    @Pattern(regexp="(^$|[0-9]{9})")
+    @Pattern(regexp = "(^$|[0-9]{9})")
     String REGON;
 
-    @Pattern(regexp="(^$|[0-9]{10})")
+    @Pattern(regexp = "(^$|[0-9]{10})")
     String NIP;
 
     public Customer() {
