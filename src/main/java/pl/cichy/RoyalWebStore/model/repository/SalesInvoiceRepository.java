@@ -5,7 +5,6 @@ import org.springframework.data.domain.Pageable;
 import pl.cichy.RoyalWebStore.model.SalesInvoice;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface SalesInvoiceRepository {
 
@@ -13,13 +12,7 @@ public interface SalesInvoiceRepository {
 
     Page<SalesInvoice> findAll(Pageable page);
 
-    Optional<SalesInvoice> findById(Integer id);
-
     SalesInvoice getById(Integer id);
-
-    void deleteById(Integer id);
-
-    boolean existsById(Integer id);
 
     SalesInvoice save(SalesInvoice entity);
 }

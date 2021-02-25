@@ -5,7 +5,6 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -57,7 +56,7 @@ public class SalesInvoice implements Serializable {
     private String numberGenerator(int length) {
         Random random = new Random();
         String number = "1";
-        for (int i = 0; i < length-1; i++) {
+        for (int i = 0; i < length - 1; i++) {
             number += random.nextInt(10);
         }
         return number;
