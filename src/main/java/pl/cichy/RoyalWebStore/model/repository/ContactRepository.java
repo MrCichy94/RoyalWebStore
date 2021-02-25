@@ -17,11 +17,6 @@ public interface ContactRepository {
 
     Optional<Contact> findByEmail(String email);
 
-    void deleteById(Integer id);
-
-    boolean existsById(Integer id);
-
     Contact save(Contact entity);
-
 
 }

@@ -39,28 +39,8 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public Optional<Contact> findByEmail(String email) {
-        return contactRepository.findByEmail(email);
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        contactRepository.deleteById(id);
-    }
-
-    @Override
-    public boolean existsById(Integer id) {
-        return contactRepository.existsById(id);
-    }
-
-    @Override
-    public Contact save(Contact entity) {
-        return contactRepository.save(entity);
-    }
-
-    @Override
     public void createNewContactIfEmailIsFree(Contact newContactToAdd) {
-        if(contactRepository.findByEmail(newContactToAdd.getEmailAddress()).isPresent()) {
+        if (contactRepository.findByEmail(newContactToAdd.getEmailAddress()).isPresent()) {
             throw new ResourceNotFoundException("Account with this email already exist!");
         } else {
             Contact result = new Contact(newContactToAdd.getContactId(),

@@ -15,13 +15,5 @@ public interface ContactService {
 
     Optional<Contact> findById(Integer id);
 
-    Optional<Contact> findByEmail(String email);
-
-    void deleteById(Integer id);
-
-    boolean existsById(Integer id);
-
-    Contact save(Contact entity);
-
     void createNewContactIfEmailIsFree(Contact newContactToAdd);
 }

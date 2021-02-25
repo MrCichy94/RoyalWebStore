@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.cichy.RoyalWebStore.logic.ContactService;
 import pl.cichy.RoyalWebStore.model.Contact;
-import pl.cichy.RoyalWebStore.model.Product;
 
 import javax.validation.Valid;
 import java.net.URI;
@@ -41,7 +40,7 @@ public class ContactController {
     }
 
     @PostMapping("/add")
-    ResponseEntity<Contact> addNewContact(@RequestBody  @Valid Contact newContactToAdd) {
+    ResponseEntity<Contact> addNewContact(@RequestBody @Valid Contact newContactToAdd) {
         contactService.createNewContactIfEmailIsFree(newContactToAdd);
         logger.info("New contact was created!");
         return ResponseEntity.created(URI.create("/" + newContactToAdd.getContactId())).body(newContactToAdd);
