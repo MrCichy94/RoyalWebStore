@@ -1,7 +1,6 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
 import org.apache.velocity.exception.ResourceNotFoundException;
-import org.hibernate.validator.constraints.Range;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,10 +13,7 @@ import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
 import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 import pl.cichy.RoyalWebStore.model.repository.OrderRepository;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequestScope
@@ -46,29 +42,10 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAll(page);
     }
 
-    @Override
-    public Optional<Order> findById(Integer id) {
-        return orderRepository.findById(id);
-    }
 
     @Override
     public List<Order> getOrdersByClientId(Integer id) {
         return orderRepository.getOrdersByClientId(id);
-    }
-
-    @Override
-    public void deleteById(Integer id) {
-        orderRepository.deleteById(id);
-    }
-
-    @Override
-    public boolean existsById(Integer id) {
-        return orderRepository.existsById(id);
-    }
-
-    @Override
-    public Order save(Order entity) {
-        return orderRepository.save(entity);
     }
 
     @Override
