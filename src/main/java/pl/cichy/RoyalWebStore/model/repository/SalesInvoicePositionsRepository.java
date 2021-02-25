@@ -17,9 +17,4 @@ public interface SalesInvoicePositionsRepository {
 
     SalesInvoicePositions getById(Integer id);
 
-    void deleteById(Integer id);
-
-    boolean existsById(Integer id);
-
-    SalesInvoicePositions save(SalesInvoicePositions entity);
 }

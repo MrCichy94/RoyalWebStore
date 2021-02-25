@@ -10,7 +10,6 @@ import pl.cichy.RoyalWebStore.model.SalesInvoicePositions;
 import pl.cichy.RoyalWebStore.model.repository.SalesInvoicePositionsRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequestScope
@@ -23,7 +22,6 @@ public class SalesInvoicePositionsServiceImpl implements SalesInvoicePositionsSe
         this.salesInvoicePositionsRepository = salesInvoicePositionsRepository;
     }
 
-
     @Override
     public List<SalesInvoicePositions> findAll() {
         return salesInvoicePositionsRepository.findAll();
@@ -35,27 +33,8 @@ public class SalesInvoicePositionsServiceImpl implements SalesInvoicePositionsSe
     }
 
     @Override
-    public Optional<SalesInvoicePositions> findById(Integer id) {
-        return salesInvoicePositionsRepository.findById(id);
-    }
-
-    @Override
     public SalesInvoicePositions getById(Integer id) {
         return salesInvoicePositionsRepository.getById(id);
     }
 
-    @Override
-    public void deleteById(Integer id) {
-        salesInvoicePositionsRepository.deleteById(id);
-    }
-
-    @Override
-    public boolean existsById(Integer id) {
-        return salesInvoicePositionsRepository.existsById(id);
-    }
-
-    @Override
-    public SalesInvoicePositions save(SalesInvoicePositions entity) {
-        return salesInvoicePositionsRepository.save(entity);
-    }
 }
