@@ -28,18 +28,6 @@ public class ManufacturerServiceImpl implements ManufacturerService {
         return manufacturerRepository.findAll();
     }
 
-    
-    @Override
-    public void deleteById(Integer id) {
-        manufacturerRepository.deleteById(id);
-    }
-
-
-    @Override
-    public Manufacturer save(Manufacturer entity) {
-        return manufacturerRepository.save(entity);
-    }
-
     @Override
     public void setManufacturerForProduct(Integer productId, Manufacturer manufacturerToSet) {
         if (!productRepository.existsById(productId)) {

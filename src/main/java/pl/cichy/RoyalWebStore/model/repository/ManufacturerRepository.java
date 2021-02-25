@@ -8,8 +8,4 @@ public interface ManufacturerRepository {
 
     List<Manufacturer> findAll();
 
-    void deleteById(Integer id);
-
-    Manufacturer save(Manufacturer entity);
-
 }

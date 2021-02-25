@@ -8,9 +8,5 @@ public interface ManufacturerService {
 
     List<Manufacturer> findAll();
 
-    void deleteById(Integer id);
-
-    Manufacturer save(Manufacturer entity);
-
     void setManufacturerForProduct(Integer productId, Manufacturer manufacturerToSet);
 }

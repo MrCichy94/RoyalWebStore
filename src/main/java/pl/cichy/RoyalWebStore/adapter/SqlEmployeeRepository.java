@@ -10,8 +10,4 @@ import pl.cichy.RoyalWebStore.model.repository.EmployeeRepository;
 @Repository
 public interface SqlEmployeeRepository extends EmployeeRepository, JpaRepository<Employee, Integer> {
 
-    @Override
-    @Query(nativeQuery = true, value = "SELECT * from EMPLOYEES where EMPLOYEE_ID=:id")
-    Employee getById(@Param("id") Integer id);
-
 }
