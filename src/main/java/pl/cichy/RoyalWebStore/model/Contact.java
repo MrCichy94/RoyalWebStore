@@ -23,13 +23,13 @@ public class Contact implements Serializable {
     @GenericGenerator(name = "inc", strategy = "increment")
     int contactId;
 
-    @Pattern(regexp="(^$|[0-9]{9})")
+    @Pattern(regexp = "(^$|[0-9]{9})")
     String phoneNumber1;
 
     @Size(max = 50)
     String emailAddress;
 
-    @Pattern(regexp="(^$|[0-9]{9})")
+    @Pattern(regexp = "(^$|[0-9]{9})")
     String phoneNumber2;
 
     @Size(max = 50)

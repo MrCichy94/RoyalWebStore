@@ -46,7 +46,7 @@ public class CopyController {
     }
 
     @DeleteMapping("/copies/{id}")
-    ResponseEntity<Copy> deleteCopy(@PathVariable int id){
+    ResponseEntity<Copy> deleteCopy(@PathVariable int id) {
         copyService.deleteById(id);
         logger.info("Copy was deleted!");
         return ResponseEntity.ok().build();

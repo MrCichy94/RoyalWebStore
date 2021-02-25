@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequestScope
@@ -37,11 +36,6 @@ public class CopyServiceImpl implements CopyService {
     @Override
     public Page<Copy> findAll(Pageable page) {
         return copyRepository.findAll(page);
-    }
-
-    @Override
-    public Optional<Copy> findById(Integer id) {
-        return copyRepository.findById(id);
     }
 
     @Override
@@ -89,11 +83,6 @@ public class CopyServiceImpl implements CopyService {
     @Override
     public void deleteById(Integer id) {
         copyRepository.deleteById(id);
-    }
-
-    @Override
-    public boolean existsById(Integer id) {
-        return copyRepository.existsById(id);
     }
 
     @Override
