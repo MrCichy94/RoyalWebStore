@@ -37,18 +37,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Product getById(Integer id) {
-        return productRepository.getById(id);
-    }
-
-    @Override
     public void deleteById(Integer id) {
         productRepository.deleteById(id);
-    }
-
-    @Override
-    public boolean existsById(Integer id) {
-        return productRepository.existsById(id);
     }
 
     @Override
@@ -60,8 +50,4 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(result);
     }
 
-    @Override
-    public Product save(Product entity) {
-        return productRepository.save(entity);
-    }
 }

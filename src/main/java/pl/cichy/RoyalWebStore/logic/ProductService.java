@@ -15,14 +15,8 @@ public interface ProductService {
 
     Optional<Product> findById(Integer id);
 
-    Product getById(Integer id);
-
     void deleteById(Integer id);
 
-    boolean existsById(Integer id);
-
     void addNewProduct(Product newProductToAdd);
-
-    Product save(Product entity);
 
 }
