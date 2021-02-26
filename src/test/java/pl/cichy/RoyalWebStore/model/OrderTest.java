@@ -15,4 +15,12 @@ class OrderTest {
         assertNotEquals(null, eg1);
     }
 
+    @Test
+    @DisplayName("should create order object with args")
+    void shouldCreateOrderObjWithArg() {
+        Order eg2 = new Order(1, "NO");
+
+        assertEquals("NO", eg2.getPaid());
+    }
+
 }
