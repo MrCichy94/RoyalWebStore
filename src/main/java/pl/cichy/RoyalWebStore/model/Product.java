@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -26,6 +27,9 @@ public class Product implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<Copy> copies;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    Set<Photo> photos;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     CategoryAndManufacturer categoryAndManufacturer;
 
@@ -38,8 +42,6 @@ public class Product implements Serializable {
     String version;
     @Size(max = 50)
     String productDescription;
-
-    //Photo photo;
 
     @Digits(integer = 8, fraction = 2)
     BigDecimal sellBaseNetPrice;
@@ -73,6 +75,12 @@ public class Product implements Serializable {
         version = "";
         productDescription = "";
         categoryAndManufacturer = new CategoryAndManufacturer();
+    }
+
+    @Transient
+    public String getPhotosImagePath() {
+        if (photos.isEmpty()) return null;
+        return "/productPhotos/" + productId + "/" + photos;
     }
 
     //todo

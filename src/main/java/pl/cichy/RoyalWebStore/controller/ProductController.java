@@ -48,6 +48,24 @@ public class ProductController {
         return ResponseEntity.created(URI.create("/" + newProductToAdd.getProductId())).body(newProductToAdd);
     }
 
+    /* TODO: MERGE WITH POST METHOD WHEN YOU GOT FRONTEND FORM FOR ADDING PHOTOS, WITH RESPONSEENTITY.
+    @PostMapping("/newproduct/add")
+    public RedirectView saveUser(Product newProductToAdd,
+                                 @RequestParam("image") MultipartFile multipartFile) throws IOException {
+
+        String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        newProductToAdd.setPhotos(fileName);
+
+        Product productToSave = productService.save(newProductToAdd);
+
+        String uploadDir = "productsPhotos/" + productToSave.getProductId();
+
+        FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
+
+        return new RedirectView("/users", true);
+    }
+    */
+
     @DeleteMapping("/product/{id}")
     ResponseEntity<Order> deleteOrder(@PathVariable int id) {
         productService.deleteById(id);
