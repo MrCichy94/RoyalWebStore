@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.cichy.RoyalWebStore.logic.ProductService;
+import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.Order;
 import pl.cichy.RoyalWebStore.model.Product;
 
@@ -51,6 +52,13 @@ public class ProductController {
     ResponseEntity<Order> deleteOrder(@PathVariable int id) {
         productService.deleteById(id);
         logger.info("Product was deleted!");
+        return ResponseEntity.ok().build();
+    }
+
+    @DeleteMapping("/product/{productId}/copies/{copyId}")
+    ResponseEntity<Customer> deleteProductsCopy(@PathVariable int productId, @PathVariable int copyId) {
+        productService.deleteProductsCopy(productId, copyId);
+        logger.info("Product's copy with id: " + copyId + " was deleted!");
         return ResponseEntity.ok().build();
     }
 

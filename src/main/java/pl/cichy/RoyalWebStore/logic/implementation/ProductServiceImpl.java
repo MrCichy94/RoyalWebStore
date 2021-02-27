@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.logic.ProductService;
 import pl.cichy.RoyalWebStore.model.Product;
+import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
 
 import java.util.List;
@@ -16,9 +17,12 @@ import java.util.Optional;
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final CopyRepository copyRepository;
 
-    public ProductServiceImpl(final ProductRepository productRepository) {
+    public ProductServiceImpl(final ProductRepository productRepository,
+                              final CopyRepository copyRepository) {
         this.productRepository = productRepository;
+        this.copyRepository = copyRepository;
     }
 
     @Override
@@ -48,6 +52,14 @@ public class ProductServiceImpl implements ProductService {
                 newProductToAdd.getSellBaseGrossPrice(),
                 newProductToAdd.getVatPercentage());
         productRepository.save(result);
+    }
+
+    @Override
+    public void deleteProductsCopy(int productId, int copyId) {
+        productRepository.getById(productId).getCopies().remove(copyId - 1);
+        productRepository.save(productRepository.getById(productId));
+
+        copyRepository.deleteById(copyId);
     }
 
 }

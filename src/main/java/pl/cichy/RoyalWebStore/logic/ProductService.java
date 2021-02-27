@@ -17,6 +17,8 @@ public interface ProductService {
 
     void deleteById(Integer id);
 
+    void deleteProductsCopy(int productId, int copyId);
+
     void addNewProduct(Product newProductToAdd);
 
 }
