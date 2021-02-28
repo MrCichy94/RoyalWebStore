@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @Controller
-@RequestMapping("/customers/customer")
+@RequestMapping("/customers")
 public class OrderContorller {
 
     @Autowired

@@ -32,7 +32,7 @@ public class EmployeeController {
         return ResponseEntity.ok(employeeService.findAll());
     }
 
-    @GetMapping("/employee/{id}")
+    @GetMapping("/{id}")
     ResponseEntity<Employee> readEmployeeById(@PathVariable int id) {
         logger.info("Read employee with id: " + id + "!");
         return employeeService.findById(id)
@@ -47,7 +47,7 @@ public class EmployeeController {
         return ResponseEntity.created(URI.create("/" + newEmployeeToAdd.getEmployeeId())).body(newEmployeeToAdd);
     }
 
-    @DeleteMapping("/employee/{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<Customer> deleteCustomer(@PathVariable int id) {
         employeeService.deleteById(id);
         logger.info("Employee was deleted!");

@@ -33,7 +33,7 @@ public class ProductController {
         return ResponseEntity.ok(productService.findAll());
     }
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/{id}")
     ResponseEntity<Product> readProductById(@PathVariable int id) {
         logger.info("Read product with id: " + id + "!");
         return productService.findById(id)
@@ -48,7 +48,7 @@ public class ProductController {
         return ResponseEntity.created(URI.create("/" + newProductToAdd.getProductId())).body(newProductToAdd);
     }
 
-    /* TODO: MERGE WITH POST METHOD WHEN YOU GOT FRONTEND FORM FOR ADDING PHOTOS, WITH RESPONSEENTITY.
+    /* TODO: MERGE WITH POST METHOD, MAYBE IN SERVICE_IMPL METHOD, THINK ABOUT IT WHEN CREATE FRONTEND FORM
     @PostMapping("/newproduct/add")
     public RedirectView saveUser(Product newProductToAdd,
                                  @RequestParam("image") MultipartFile multipartFile) throws IOException {
@@ -66,14 +66,14 @@ public class ProductController {
     }
     */
 
-    @DeleteMapping("/product/{id}")
+    @DeleteMapping("/{id}")
     ResponseEntity<Order> deleteOrder(@PathVariable int id) {
         productService.deleteById(id);
         logger.info("Product was deleted!");
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/product/{productId}/copies/{copyId}")
+    @DeleteMapping("/{productId}/copies/{copyId}")
     ResponseEntity<Customer> deleteProductsCopy(@PathVariable int productId, @PathVariable int copyId) {
         productService.deleteProductsCopy(productId, copyId);
         logger.info("Product's copy with id: " + copyId + " was deleted!");

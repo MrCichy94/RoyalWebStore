@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @Controller
-@RequestMapping("/products/product")
+@RequestMapping("/products")
 public class CopyController {
 
     @Autowired

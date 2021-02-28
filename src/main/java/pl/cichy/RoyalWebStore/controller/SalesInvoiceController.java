@@ -14,7 +14,7 @@ import java.net.URI;
 import java.util.List;
 
 @Controller
-@RequestMapping("/salesinvoice")
+@RequestMapping("/salesinvoices")
 public class SalesInvoiceController {
 
     @Autowired
