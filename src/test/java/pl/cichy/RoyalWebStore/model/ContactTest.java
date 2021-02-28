@@ -20,7 +20,7 @@ class ContactTest {
     void shouldCreateContactObjWithArgs() {
         Contact eg2 = new Contact(1, "111555999", "email@gmail.com");
 
-        assertEquals("email@gmail.com", eg2.emailAddress);
+        assertEquals("email@gmail.com", eg2.getEmailAddress());
     }
 
 }

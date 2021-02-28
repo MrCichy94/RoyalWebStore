@@ -20,6 +20,6 @@ class ManufacturerTest {
     void shouldCreateManufacturerObjWithArgs() {
         Manufacturer eg2 = new Manufacturer("First");
 
-        assertEquals("First", eg2.manufacturerName);
+        assertEquals("First", eg2.getManufacturerName());
     }
 }

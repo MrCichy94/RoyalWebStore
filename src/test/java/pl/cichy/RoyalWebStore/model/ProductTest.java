@@ -22,7 +22,7 @@ class ProductTest {
     void shouldCreateProductObjWithArgs() {
         Product eg2 = new Product(1, "First", new BigDecimal("9.99"), new BigDecimal("0.23"));
 
-        assertEquals("First", eg2.productName);
+        assertEquals("First", eg2.getProductName());
     }
 
     @Test
@@ -30,7 +30,7 @@ class ProductTest {
     void shouldProperlyCountVatValue() {
         Product eg3 = new Product(1, "First", new BigDecimal("200.00"), new BigDecimal("0.10"));
 
-        assertEquals(new BigDecimal("20.00"), eg3.vatValue);
+        assertEquals(new BigDecimal("20.00"), eg3.getVatValue());
     }
 
     @Test
@@ -38,6 +38,6 @@ class ProductTest {
     void shouldProperlyCountBaseNetPrice() {
         Product eg4 = new Product(1, "First", new BigDecimal("200.00"), new BigDecimal("0.10"));
 
-        assertEquals(new BigDecimal("180.00"), eg4.sellBaseNetPrice);
+        assertEquals(new BigDecimal("180.00"), eg4.getSellBaseNetPrice());
     }
 }

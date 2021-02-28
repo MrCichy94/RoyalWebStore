@@ -20,6 +20,6 @@ class CategoryTest {
     void shouldCreateCategoryObjWithArgs() {
         Category eg2 = new Category("First");
 
-        assertEquals("First", eg2.categoryName);
+        assertEquals("First", eg2.getCategoryName());
     }
 }
