@@ -25,6 +25,7 @@ class OrderServiceImplTest {
         when(mockCustomerRepository.existsById(1)).thenReturn(false);
         //and
         var mockCustomer = mock(Customer.class);
+        //and
         var mockOrder = mock(Order.class);
         //and
         var mockOrderRepository = mock(OrderRepository.class);
@@ -45,6 +46,7 @@ class OrderServiceImplTest {
         when(mockOrderRepository.existsById(1)).thenReturn(false);
         //and
         var mockCopy = mock(Copy.class);
+        //and
         var mockOrder = mock(Order.class);
         //and
         var mockCopyRepository = mock(CopyRepository.class);

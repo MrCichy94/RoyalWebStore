@@ -3,8 +3,10 @@ package pl.cichy.RoyalWebStore.logic.implementation;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
+import pl.cichy.RoyalWebStore.exception.ProductNotFoundException;
 import pl.cichy.RoyalWebStore.logic.CopyService;
 import pl.cichy.RoyalWebStore.model.Copy;
 import pl.cichy.RoyalWebStore.model.Product;
@@ -47,7 +49,8 @@ public class CopyServiceImpl implements CopyService {
     public void setCopyForProduct(Integer productId, Copy copyToSet) {
 
         if (!productRepository.existsById(productId)) {
-            throw new ResourceNotFoundException("No product found with id=" + productId);
+            throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
+                    "No product found with id: " + productId, productId);
         } else {
             Product productToActualizeCopy = productRepository.getById(productId);
             List<Copy> listOfCopiesToRefresh = productRepository.getById(productId).getCopies();

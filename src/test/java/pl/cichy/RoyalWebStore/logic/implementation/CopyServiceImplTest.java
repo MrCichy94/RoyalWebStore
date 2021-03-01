@@ -1,8 +1,8 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pl.cichy.RoyalWebStore.exception.ProductNotFoundException;
 import pl.cichy.RoyalWebStore.model.Copy;
 import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
@@ -29,7 +29,7 @@ class CopyServiceImplTest {
         //when
         var exception = catchThrowable(() -> toTest.setCopyForProduct(1, mockCopy));
         //then
-        assertThat(exception).isInstanceOf(ResourceNotFoundException.class)
+        assertThat(exception).isInstanceOf(ProductNotFoundException.class)
                 .hasMessageContaining("No product found");
     }
 
