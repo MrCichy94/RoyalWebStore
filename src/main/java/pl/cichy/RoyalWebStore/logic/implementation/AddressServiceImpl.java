@@ -1,6 +1,5 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -46,7 +45,7 @@ public class AddressServiceImpl implements AddressService {
         if (addressRepository.findByCity(newAddressToAdd.getCity()).isPresent() &&
                 addressRepository.findByStreetName(newAddressToAdd.getStreetName()).isPresent() &&
                 addressRepository.findByDoorNumber(newAddressToAdd.getDoorNumber()).isPresent()) {
-            throw new AccountAlreadyExistException(HttpStatus.NOT_FOUND,
+            throw new AccountAlreadyExistException(HttpStatus.BAD_REQUEST,
                     "Account with this address already exist!");
         } else {
             Address result = new Address(newAddressToAdd.getAddressId(),

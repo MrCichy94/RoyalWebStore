@@ -1,10 +1,12 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
+import pl.cichy.RoyalWebStore.exception.CustomerNotFoundException;
+import pl.cichy.RoyalWebStore.exception.OrderNotFoundException;
 import pl.cichy.RoyalWebStore.logic.OrderService;
 import pl.cichy.RoyalWebStore.model.Copy;
 import pl.cichy.RoyalWebStore.model.Customer;
@@ -51,7 +53,8 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public void setOrderForCustomer(int customerId, Order customerOrderToAdd) {
         if (!customerRepository.existsById(customerId)) {
-            throw new ResourceNotFoundException("No customer found with id=" + customerId);
+            throw new CustomerNotFoundException(HttpStatus.NOT_FOUND,
+                    "No customer found with id: " + customerId, customerId);
         } else {
             {
                 Customer customerToActualizeOrder = customerRepository.getById(customerId);
@@ -71,7 +74,8 @@ public class OrderServiceImpl implements OrderService {
     public void addToOrder(int orderId, int copyId) {
 
         if (!orderRepository.existsById(orderId)) {
-            throw new ResourceNotFoundException("No order found with id=" + orderId);
+            throw new OrderNotFoundException(HttpStatus.NOT_FOUND,
+                    "No order found with id: " + orderId, orderId);
         } else {
             {
                 Order orderToAddThisCopy = orderRepository.getById(orderId);

@@ -3,6 +3,7 @@ package pl.cichy.RoyalWebStore.logic.implementation;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pl.cichy.RoyalWebStore.exception.ProductNotFoundException;
 import pl.cichy.RoyalWebStore.model.Manufacturer;
 import pl.cichy.RoyalWebStore.model.repository.ManufacturerRepository;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
@@ -29,7 +30,7 @@ class ManufacturerServiceImplTest {
         //when
         var exception = catchThrowable(() -> toTest.setManufacturerForProduct(1, mockManufacturer));
         //then
-        assertThat(exception).isInstanceOf(ResourceNotFoundException.class)
+        assertThat(exception).isInstanceOf(ProductNotFoundException.class)
                 .hasMessageContaining("No product found");
     }
 

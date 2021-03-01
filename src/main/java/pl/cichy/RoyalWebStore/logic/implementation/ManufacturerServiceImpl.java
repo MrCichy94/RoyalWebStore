@@ -1,8 +1,10 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
 import org.apache.velocity.exception.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
+import pl.cichy.RoyalWebStore.exception.ProductNotFoundException;
 import pl.cichy.RoyalWebStore.logic.ManufacturerService;
 import pl.cichy.RoyalWebStore.model.Manufacturer;
 import pl.cichy.RoyalWebStore.model.Product;
@@ -31,7 +33,8 @@ public class ManufacturerServiceImpl implements ManufacturerService {
     @Override
     public void setManufacturerForProduct(Integer productId, Manufacturer manufacturerToSet) {
         if (!productRepository.existsById(productId)) {
-            throw new ResourceNotFoundException("No product found with id=" + productId);
+            throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
+                    "No product found with id: " + productId, productId);
         } else {
             Product productToActualizeManufacturer = productRepository.getById(productId);
             productToActualizeManufacturer.getCategoryAndManufacturer().setManufacturer(manufacturerToSet);

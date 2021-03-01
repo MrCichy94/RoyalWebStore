@@ -1,8 +1,8 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pl.cichy.RoyalWebStore.exception.AccountAlreadyExistException;
 import pl.cichy.RoyalWebStore.model.Contact;
 import pl.cichy.RoyalWebStore.model.repository.ContactRepository;
 
@@ -29,7 +29,7 @@ class ContactServiceImplTest {
         //when
         var exception = catchThrowable(() -> toTest.createNewContactIfEmailIsFree(mockContact));
         //then
-        assertThat(exception).isInstanceOf(ResourceNotFoundException.class)
+        assertThat(exception).isInstanceOf(AccountAlreadyExistException.class)
                 .hasMessageContaining("Account with this email");
     }
 }

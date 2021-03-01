@@ -1,10 +1,11 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
+import pl.cichy.RoyalWebStore.exception.AccountAlreadyExistException;
 import pl.cichy.RoyalWebStore.logic.ContactService;
 import pl.cichy.RoyalWebStore.model.Contact;
 import pl.cichy.RoyalWebStore.model.repository.ContactRepository;
@@ -21,7 +22,6 @@ public class ContactServiceImpl implements ContactService {
     public ContactServiceImpl(final ContactRepository contactRepository) {
         this.contactRepository = contactRepository;
     }
-
 
     @Override
     public List<Contact> findAll() {
@@ -41,7 +41,8 @@ public class ContactServiceImpl implements ContactService {
     @Override
     public void createNewContactIfEmailIsFree(Contact newContactToAdd) {
         if (contactRepository.findByEmail(newContactToAdd.getEmailAddress()).isPresent()) {
-            throw new ResourceNotFoundException("Account with this email already exist!");
+            throw new AccountAlreadyExistException(HttpStatus.BAD_REQUEST,
+                    "Account with this email already exist!");
         } else {
             Contact result = new Contact(newContactToAdd.getContactId(),
                     newContactToAdd.getPhoneNumber1(),

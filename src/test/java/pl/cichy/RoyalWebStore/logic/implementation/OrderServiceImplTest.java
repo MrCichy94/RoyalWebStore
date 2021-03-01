@@ -3,6 +3,8 @@ package pl.cichy.RoyalWebStore.logic.implementation;
 import org.apache.velocity.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pl.cichy.RoyalWebStore.exception.CustomerNotFoundException;
+import pl.cichy.RoyalWebStore.exception.OrderNotFoundException;
 import pl.cichy.RoyalWebStore.model.Copy;
 import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.Order;
@@ -34,7 +36,7 @@ class OrderServiceImplTest {
         //when
         var exception = catchThrowable(() -> toTest.setOrderForCustomer(mockCustomer.getCustomerId(), mockOrder));
         //then
-        assertThat(exception).isInstanceOf(ResourceNotFoundException.class)
+        assertThat(exception).isInstanceOf(CustomerNotFoundException.class)
                 .hasMessageContaining("No customer found");
     }
 
@@ -55,7 +57,7 @@ class OrderServiceImplTest {
         //when
         var exception = catchThrowable(() -> toTest.addToOrder(mockOrder.getOrderId(), mockCopy.getCopyId()));
         //then
-        assertThat(exception).isInstanceOf(ResourceNotFoundException.class)
+        assertThat(exception).isInstanceOf(OrderNotFoundException.class)
                 .hasMessageContaining("No order found");
     }
 
