@@ -1,8 +1,9 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
-import org.apache.velocity.exception.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
+import pl.cichy.RoyalWebStore.exception.ProductNotFoundException;
 import pl.cichy.RoyalWebStore.logic.CategoryService;
 import pl.cichy.RoyalWebStore.model.Category;
 import pl.cichy.RoyalWebStore.model.Product;
@@ -32,7 +33,8 @@ public class CategoryServiceImpl implements CategoryService {
     public void setCategoryForProduct(Integer productId, Category categoryToSet) {
 
         if (!productRepository.existsById(productId)) {
-            throw new ResourceNotFoundException("No product found with id=" + productId);
+            throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
+                    "No product found with id: " + productId, productId);
         } else {
             Product productToActualizeCategory = productRepository.getById(productId);
             productToActualizeCategory.getCategoryAndManufacturer().setCategory(categoryToSet);

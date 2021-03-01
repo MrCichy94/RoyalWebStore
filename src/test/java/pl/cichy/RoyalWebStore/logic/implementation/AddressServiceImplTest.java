@@ -1,9 +1,9 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pl.cichy.RoyalWebStore.exception.AccountAlreadyExistException;
 import pl.cichy.RoyalWebStore.model.Address;
 import pl.cichy.RoyalWebStore.model.repository.AddressRepository;
 
@@ -38,7 +38,7 @@ class AddressServiceImplTest {
         //when
         var exception = catchThrowable(() -> toTest.createNewAddressIfPossible(mockAddress));
         //then
-        assertThat(exception).isInstanceOf(ResourceNotFoundException.class)
+        assertThat(exception).isInstanceOf(AccountAlreadyExistException.class)
                 .hasMessageContaining("Account with this");
     }
 

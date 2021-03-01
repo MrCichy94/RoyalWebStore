@@ -1,8 +1,8 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import pl.cichy.RoyalWebStore.exception.ProductNotFoundException;
 import pl.cichy.RoyalWebStore.model.Category;
 import pl.cichy.RoyalWebStore.model.repository.CategoryRepository;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
@@ -30,7 +30,7 @@ class CategoryServiceImplTest {
         //when
         var exception = catchThrowable(() -> toTest.setCategoryForProduct(1, mockCategory));
         //then
-        assertThat(exception).isInstanceOf(ResourceNotFoundException.class)
+        assertThat(exception).isInstanceOf(ProductNotFoundException.class)
                 .hasMessageContaining("No product found");
     }
 
