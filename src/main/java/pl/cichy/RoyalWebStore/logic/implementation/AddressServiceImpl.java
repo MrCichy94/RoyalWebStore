@@ -46,7 +46,8 @@ public class AddressServiceImpl implements AddressService {
                 addressRepository.findByStreetName(newAddressToAdd.getStreetName()).isPresent() &&
                 addressRepository.findByDoorNumber(newAddressToAdd.getDoorNumber()).isPresent()) {
             throw new AccountAlreadyExistException(HttpStatus.BAD_REQUEST,
-                    "Account with this address already exist!");
+                    "Account with this address already exist!",
+                    new RuntimeException());
         } else {
             Address result = new Address(newAddressToAdd.getAddressId(),
                     newAddressToAdd.getCity(),

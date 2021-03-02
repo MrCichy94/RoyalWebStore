@@ -7,8 +7,8 @@ import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
 public class ProductNotFoundException extends ResponseStatusException {
 
-    public ProductNotFoundException(HttpStatus status, String reason, int productId) {
-        super(status, reason);
+    public ProductNotFoundException(HttpStatus status, String reason, Throwable cause, int productId) {
+        super(status, reason, cause);
         LOGGER.warn("No product found with id: " + productId);
     }
 }

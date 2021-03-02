@@ -4,9 +4,11 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
+import pl.cichy.RoyalWebStore.exception.AccountAlreadyExistException;
 import pl.cichy.RoyalWebStore.logic.CustomerService;
 import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.repository.ContactRepository;
@@ -57,7 +59,9 @@ public class CustomerServiceImpl implements CustomerService {
     public void registerNewCustomerAccount(Customer newCustomer) {
 
         if (contactRepository.findByEmail(newCustomer.getContact().getEmailAddress()).isPresent()) {
-            throw new ResourceNotFoundException("Account with this email already exist!");
+            throw new AccountAlreadyExistException(HttpStatus.BAD_REQUEST,
+                    "Account with this email already exist!",
+                    new RuntimeException());
         } else {
             Customer result = new Customer(newCustomer.getCustomerId(),
                     newCustomer.getLogin(),

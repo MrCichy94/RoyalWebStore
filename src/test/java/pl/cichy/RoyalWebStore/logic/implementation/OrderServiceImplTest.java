@@ -20,8 +20,8 @@ import static org.mockito.Mockito.when;
 class OrderServiceImplTest {
 
     @Test
-    @DisplayName("Should throw ResourceNotFoundException when we dont got customer with given customer's ID")
-    void setOrderForCustomer_ThrowResourceNotFoundException() {
+    @DisplayName("Should throw CustomerNotFoundException when we dont got customer with given customer's ID")
+    void setOrderForCustomer_ThrowCustomerNotFoundException() {
         //given
         var mockCustomerRepository = mock(CustomerRepository.class);
         when(mockCustomerRepository.existsById(1)).thenReturn(false);
@@ -41,8 +41,8 @@ class OrderServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should throw ResourceNotFoundException when we dont got order with given order's ID")
-    void addToOrder_ThrowResourceNotFoundException() {
+    @DisplayName("Should throw OrderNotFoundException when we dont got order with given order's ID")
+    void addToOrder_ThrowOrderNotFoundException() {
         //given
         var mockOrderRepository = mock(OrderRepository.class);
         when(mockOrderRepository.existsById(1)).thenReturn(false);

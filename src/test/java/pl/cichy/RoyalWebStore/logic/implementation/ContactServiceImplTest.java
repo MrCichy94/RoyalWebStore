@@ -16,8 +16,8 @@ import static org.mockito.Mockito.when;
 class ContactServiceImplTest {
 
     @Test
-    @DisplayName("Should throw ResourceNotFoundException when we got already existing object with email")
-    void createNewContactIfEmailIsFree_ThrowResourceNotFoundException() {
+    @DisplayName("Should throw AccountAlreadyExistException when we got already existing object with email")
+    void createNewContactIfEmailIsFree_ThrowAccountAlreadyExistException() {
         //given
         var mockContact = mock(Contact.class);
         //and

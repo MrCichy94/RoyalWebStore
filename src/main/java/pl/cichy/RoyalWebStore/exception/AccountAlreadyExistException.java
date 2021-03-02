@@ -7,10 +7,9 @@ import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
 public class AccountAlreadyExistException extends ResponseStatusException {
 
-    public AccountAlreadyExistException(HttpStatus status, String reason) {
-        super(status, reason);
+    public AccountAlreadyExistException(HttpStatus status, String reason, Throwable cause) {
+        super(status, reason, cause);
         LOGGER.warn("Account with this address already exist!");
-
     }
 }
 

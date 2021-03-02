@@ -17,9 +17,9 @@ import static org.mockito.Mockito.when;
 class AddressServiceImplTest {
 
     @Test
-    @DisplayName("Should throw ResourceNotFoundException when we got address with already existing the same city" +
+    @DisplayName("Should throw AccountAlreadyExistException when we got address with already existing the same city" +
             "and street name and door number")
-    void createNewAddressIfPossible_ThrowResourceNotFoundException() {
+    void createNewAddressIfPossible_ThrowAccountAlreadyExistException() {
         //given
         var mockAddress = mock(Address.class);
         //and
@@ -43,7 +43,7 @@ class AddressServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should create a new address if door number is diffrent")
+    @DisplayName("Should create a new address if door number is diffrent without throwing exceptions")
     void createNewAddressIfPossible_work_properly_cif_door_number_is_diffrent() {
         //given
         var mockAddress = mock(Address.class);
@@ -67,7 +67,7 @@ class AddressServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should create a new address if street name is diffrent")
+    @DisplayName("Should create a new address if street name is diffrent without throwing exceptions")
     void createNewAddressIfPossible_work_properly_if_street_name_is_diffrent() {
         //given
         var mockAddress = mock(Address.class);
@@ -91,7 +91,7 @@ class AddressServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should create a new address if city is diffrent")
+    @DisplayName("Should create a new address if city is diffrent without throwing exceptions")
     void createNewAddressIfPossible_work_properly_if_city_is_diffrent() {
         //given
         var mockAddress = mock(Address.class);

@@ -15,8 +15,8 @@ import static org.mockito.Mockito.when;
 class CopyServiceImplTest {
 
     @Test
-    @DisplayName("Should throw ResourceNotFoundException when we dont got product with given product ID")
-    void setCopyForProduct_ThrowResourceNotFoundException() {
+    @DisplayName("Should throw ProductNotFoundException when we dont got product with given product ID")
+    void setCopyForProduct_ThrowProductNotFoundException() {
         //given
         var mockProductRepository = mock(ProductRepository.class);
         when(mockProductRepository.existsById(1)).thenReturn(false);

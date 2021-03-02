@@ -4,9 +4,11 @@ import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
+import pl.cichy.RoyalWebStore.exception.AccountAlreadyExistException;
 import pl.cichy.RoyalWebStore.logic.EmployeeService;
 import pl.cichy.RoyalWebStore.model.Employee;
 import pl.cichy.RoyalWebStore.model.repository.ContactRepository;
@@ -55,7 +57,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void registerNewEmployeeAccount(Employee newEmployeeToAdd) {
 
         if (contactRepository.findByEmail(newEmployeeToAdd.getContact().getEmailAddress()).isPresent()) {
-            throw new ResourceNotFoundException("Account with this email already exist!");
+            throw new AccountAlreadyExistException(HttpStatus.BAD_REQUEST,
+                    "Account with this email already exist!",
+                    new RuntimeException());
         } else {
             Employee result = new Employee(newEmployeeToAdd.getEmployeeId(),
                     newEmployeeToAdd.getLogin(),

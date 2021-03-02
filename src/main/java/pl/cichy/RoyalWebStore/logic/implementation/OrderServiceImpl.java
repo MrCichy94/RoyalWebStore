@@ -54,7 +54,9 @@ public class OrderServiceImpl implements OrderService {
     public void setOrderForCustomer(int customerId, Order customerOrderToAdd) {
         if (!customerRepository.existsById(customerId)) {
             throw new CustomerNotFoundException(HttpStatus.NOT_FOUND,
-                    "No customer found with id: " + customerId, customerId);
+                    "No customer found with id: " + customerId,
+                    new RuntimeException(),
+                    customerId);
         } else {
             {
                 Customer customerToActualizeOrder = customerRepository.getById(customerId);
@@ -75,7 +77,9 @@ public class OrderServiceImpl implements OrderService {
 
         if (!orderRepository.existsById(orderId)) {
             throw new OrderNotFoundException(HttpStatus.NOT_FOUND,
-                    "No order found with id: " + orderId, orderId);
+                    "No order found with id: " + orderId,
+                    new RuntimeException(),
+                    orderId);
         } else {
             {
                 Order orderToAddThisCopy = orderRepository.getById(orderId);

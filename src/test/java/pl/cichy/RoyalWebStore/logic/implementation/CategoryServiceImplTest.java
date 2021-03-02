@@ -16,8 +16,8 @@ import static org.mockito.Mockito.when;
 class CategoryServiceImplTest {
 
     @Test
-    @DisplayName("Should throw ResourceNotFoundException when we dont got product with given product ID")
-    void setCategoryForProductById_ThrowResourceNotFoundException() {
+    @DisplayName("Should throw ProductNotFoundException when we dont got product with given product ID")
+    void setCategoryForProductById_ThrowProductNotFoundException() {
         //given
         var mockProductRepository = mock(ProductRepository.class);
         when(mockProductRepository.existsById(1)).thenReturn(false);

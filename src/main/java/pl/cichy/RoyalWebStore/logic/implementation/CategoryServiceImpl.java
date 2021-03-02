@@ -34,7 +34,9 @@ public class CategoryServiceImpl implements CategoryService {
 
         if (!productRepository.existsById(productId)) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
-                    "No product found with id: " + productId, productId);
+                    "No product found with id: " + productId,
+                    new RuntimeException(),
+                    productId);
         } else {
             Product productToActualizeCategory = productRepository.getById(productId);
             productToActualizeCategory.getCategoryAndManufacturer().setCategory(categoryToSet);

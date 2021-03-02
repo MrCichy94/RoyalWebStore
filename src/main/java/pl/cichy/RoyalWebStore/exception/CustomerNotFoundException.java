@@ -7,8 +7,8 @@ import static org.hibernate.tool.schema.SchemaToolingLogging.LOGGER;
 
 public class CustomerNotFoundException extends ResponseStatusException {
 
-    public CustomerNotFoundException(HttpStatus status, String reason, int customerId) {
-        super(status, reason);
+    public CustomerNotFoundException(HttpStatus status, String reason, Throwable cause, int customerId) {
+        super(status, reason, cause);
         LOGGER.warn("No customer found with id: " + customerId);
     }
 }

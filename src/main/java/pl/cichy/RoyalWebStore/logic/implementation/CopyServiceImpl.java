@@ -1,5 +1,6 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
+import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -49,7 +50,9 @@ public class CopyServiceImpl implements CopyService {
 
         if (!productRepository.existsById(productId)) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
-                    "No product found with id: " + productId, productId);
+                    "No product found with id: " + productId,
+                    new RuntimeException(),
+                    productId);
         } else {
             Product productToActualizeCopy = productRepository.getById(productId);
             List<Copy> listOfCopiesToRefresh = productRepository.getById(productId).getCopies();

@@ -34,7 +34,9 @@ public class ManufacturerServiceImpl implements ManufacturerService {
     public void setManufacturerForProduct(Integer productId, Manufacturer manufacturerToSet) {
         if (!productRepository.existsById(productId)) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
-                    "No product found with id: " + productId, productId);
+                    "No product found with id: " + productId,
+                    new RuntimeException(),
+                    productId);
         } else {
             Product productToActualizeManufacturer = productRepository.getById(productId);
             productToActualizeManufacturer.getCategoryAndManufacturer().setManufacturer(manufacturerToSet);
