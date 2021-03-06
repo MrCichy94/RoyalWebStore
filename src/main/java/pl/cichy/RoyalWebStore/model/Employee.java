@@ -18,34 +18,36 @@ public class Employee implements Serializable {
     @Id
     @GeneratedValue(generator = "inc")
     @GenericGenerator(name = "inc", strategy = "increment")
-    int employeeId;
+    private int employeeId;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    Address address;
+    private Address address;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    Contact contact;
+    private Contact contact;
 
     @Size(min = 3, max = 25)
-    String login;
+    private String login;
 
     @Size(min = 3, max = 85)
-    String password;
+    private String password;
 
     @Size(min = 2, max = 25)
-    String lastName;
+    private String lastName;
 
     @Size(min = 2, max = 25)
-    String firstName;
+    private String firstName;
 
     @Size(min = 1, max = 25)
-    String typeOfPermissions;
+    private String typeOfPermissions;
 
-    LocalDate hireDate;
+    private String roles;
 
-    LocalDate releaseDate;
+    private boolean accountActive;
 
-    boolean accountActive;
+    private LocalDate hireDate;
+
+    private LocalDate releaseDate;
 
     public Employee() {
     }

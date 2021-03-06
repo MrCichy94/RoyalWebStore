@@ -1,8 +1,10 @@
 package pl.cichy.RoyalWebStore.configuration;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import pl.cichy.RoyalWebStore.model.repository.EmployeeRepository;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;

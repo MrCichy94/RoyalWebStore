@@ -27,7 +27,7 @@ public class EmployeeController {
     }
 
     @GetMapping
-    ResponseEntity<List<Employee>> readAllProduct() {
+    ResponseEntity<List<Employee>> readAllEmployees() {
         logger.info("Read all the employees!");
         return ResponseEntity.ok(employeeService.findAll());
     }
