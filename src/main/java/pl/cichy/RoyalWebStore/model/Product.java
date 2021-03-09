@@ -27,8 +27,10 @@ public class Product implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<Copy> copies;
 
+    /*
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     Set<Photo> photos;
+    */
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     CategoryAndManufacturer categoryAndManufacturer;
@@ -77,11 +79,13 @@ public class Product implements Serializable {
         categoryAndManufacturer = new CategoryAndManufacturer();
     }
 
+    /*
     @Transient
     public String getPhotosImagePath() {
         if (photos.isEmpty()) return null;
         return "/productPhotos/" + productId + "/" + photos;
     }
+    */
 
     //todo
     //setter VAT, DISCOUNT etc must recalculate prices and save (PUT) changes to DB.

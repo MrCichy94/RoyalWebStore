@@ -31,17 +31,18 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     public void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
-                .authorizeRequests()
+                .authorizeRequests().anyRequest().permitAll();
+        /*
                 .antMatchers("/").authenticated()
                 .anyRequest().authenticated()
                 .and().logout().logoutSuccessUrl("/login").permitAll()
                 .and()
                 .oauth2Login();
-
         http
                 .formLogin()
                 .defaultSuccessUrl("/products", true);
-        ;
+
+         */
     }
 
 

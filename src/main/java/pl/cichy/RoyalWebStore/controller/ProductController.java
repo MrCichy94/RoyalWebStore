@@ -12,6 +12,7 @@ import pl.cichy.RoyalWebStore.model.Order;
 import pl.cichy.RoyalWebStore.model.Product;
 
 import javax.validation.Valid;
+import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
@@ -65,6 +66,22 @@ public class ProductController {
         return new RedirectView("/users", true);
     }
     */
+
+    @PatchMapping("/{productId}/set/price")
+    ResponseEntity<Product> manualChangeProductPriceByValue(@PathVariable int productId,
+                                                            @RequestBody BigDecimal priceToSet) {
+        productService.changeProductPriceByValue(productId, priceToSet);
+        logger.info("Product price was changed!");
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{productId}/set/discount")
+    ResponseEntity<Product> changeDiscountValueByPercentage(@PathVariable int productId,
+                                                            @RequestBody BigDecimal discountPercentageValue) {
+        productService.changeDiscountValueOfGivenProduct(productId, discountPercentageValue);
+        logger.info("Product discount was changed!");
+        return ResponseEntity.ok().build();
+    }
 
     @DeleteMapping("/{id}")
     ResponseEntity<Order> deleteOrder(@PathVariable int id) {

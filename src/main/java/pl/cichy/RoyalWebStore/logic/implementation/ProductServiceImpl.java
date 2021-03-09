@@ -2,13 +2,18 @@ package pl.cichy.RoyalWebStore.logic.implementation;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
+import pl.cichy.RoyalWebStore.exception.ProductNotFoundException;
 import pl.cichy.RoyalWebStore.logic.ProductService;
+import pl.cichy.RoyalWebStore.model.Copy;
 import pl.cichy.RoyalWebStore.model.Product;
 import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,6 +57,37 @@ public class ProductServiceImpl implements ProductService {
                 newProductToAdd.getSellBaseGrossPrice(),
                 newProductToAdd.getVatPercentage());
         productRepository.save(result);
+    }
+
+    @Override
+    public void changeProductPriceByValue(int productId, BigDecimal priceToSet) {
+        if (!productRepository.existsById(productId)) {
+            throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
+                    "No product found with id: " + productId,
+                    new RuntimeException(),
+                    productId);
+        } else {
+            Product result = productRepository.getById(productId);
+            result.setSellBaseGrossPrice(priceToSet);
+
+            BigDecimal point = BigDecimal.valueOf(-1.00);
+            result.setSellBaseNetPrice((priceToSet.multiply((point.add(result.getVatPercentage()))
+                    .abs())).setScale(2, RoundingMode.DOWN));
+
+            List<Copy> items = result.getCopies();
+            for (Copy it : items) {
+                it.setSellCurrentGrossPrice(priceToSet);
+                it.setSellCurrentNetPrice(result.getSellBaseNetPrice());
+            }
+            result.setCopies(items);
+
+            productRepository.save(result);
+        }
+    }
+
+    @Override
+    public void changeDiscountValueOfGivenProduct(int productId, BigDecimal discountPercentageValue) {
+
     }
 
     @Override
