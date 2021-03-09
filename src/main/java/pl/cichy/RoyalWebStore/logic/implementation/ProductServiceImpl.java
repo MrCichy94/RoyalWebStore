@@ -69,10 +69,12 @@ public class ProductServiceImpl implements ProductService {
         } else {
             Product result = productRepository.getById(productId);
             result.setSellBaseGrossPrice(priceToSet);
-
             BigDecimal point = BigDecimal.valueOf(-1.00);
-            result.setSellBaseNetPrice((priceToSet.multiply((point.add(result.getVatPercentage()))
-                    .abs())).setScale(2, RoundingMode.DOWN));
+            BigDecimal newNetPrice = (priceToSet.multiply((point.add(result.getVatPercentage()))
+                    .abs())).setScale(2, RoundingMode.DOWN);
+            result.setSellBaseNetPrice(newNetPrice);
+            result.setVatValue(priceToSet.add(newNetPrice.negate())
+                    .setScale(2, RoundingMode.DOWN));
 
             List<Copy> items = result.getCopies();
             for (Copy it : items) {
@@ -87,7 +89,38 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void changeDiscountValueOfGivenProduct(int productId, BigDecimal discountPercentageValue) {
+        if (!productRepository.existsById(productId)) {
+            throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
+                    "No product found with id: " + productId,
+                    new RuntimeException(),
+                    productId);
+        } else {
+            Product result = productRepository.getById(productId);
 
+            BigDecimal point = BigDecimal.valueOf(-1.00);
+            BigDecimal oldGrossPrice = result.getSellBaseGrossPrice();
+            BigDecimal newGrossPrice = (oldGrossPrice.multiply((point.add(discountPercentageValue))
+                    .abs())).setScale(2, RoundingMode.DOWN);
+            BigDecimal newNetPrice = ((newGrossPrice.multiply((point.add(result.getVatPercentage()))
+                            .abs())).setScale(2, RoundingMode.DOWN));
+            BigDecimal newVatValue = newGrossPrice.add(newNetPrice.negate())
+                    .setScale(2, RoundingMode.DOWN);
+
+            List<Copy> items = result.getCopies();
+
+            for (Copy it : items) {
+                it.setDiscoutValue(discountPercentageValue);
+                it.setSellCurrentGrossPrice(newGrossPrice);
+                it.setSellCurrentNetPrice(newNetPrice);
+            }
+
+            result.setCopies(items);
+            result.setSellBaseGrossPrice(newGrossPrice);
+            result.setSellBaseNetPrice(newNetPrice);
+            result.setVatValue(newVatValue);
+
+            productRepository.save(result);
+        }
     }
 
     @Override
