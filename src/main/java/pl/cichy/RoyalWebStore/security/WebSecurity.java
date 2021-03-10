@@ -1,49 +1,123 @@
 package pl.cichy.RoyalWebStore.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
+import org.springframework.security.provisioning.UserDetailsManager;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+import pl.cichy.RoyalWebStore.security.authentication.JsonObjectAuthenticationFilter;
+import pl.cichy.RoyalWebStore.security.authentication.JwtAuthorizationFilter;
+import pl.cichy.RoyalWebStore.security.handlers.RestAuthenticationFailureHandler;
+import pl.cichy.RoyalWebStore.security.handlers.RestAuthenticationSuccessHandler;
+
+import javax.sql.DataSource;
 
 @Configuration
-@EnableWebSecurity
+//@EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter {
 
+    /*
+        @Bean
+        public PasswordEncoder passwordEncoder() {
+            return new BCryptPasswordEncoder();
+        }
 
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.inMemoryAuthentication()
+                    .withUser("admin")
+                    .password(passwordEncoder().encode("admin"))
+                    .roles("ADMIN");
+        }
+
+        @Override
+        public void configure(HttpSecurity http) throws Exception {
+            http.csrf().disable();
+            http
+                    .authorizeRequests().anyRequest().permitAll()
+                    .and().headers().frameOptions().disable();
+            //WITHOUT IT IN TESTS
+                    .antMatchers("/").authenticated()
+                    .anyRequest().authenticated()
+                    .and().logout().logoutSuccessUrl("/login").permitAll()
+                    .and()
+                    .oauth2Login();
+            http
+                    .formLogin()
+                    .defaultSuccessUrl("/products", true);
+            //STOP HERE
+
+        }
+    */
+    private final DataSource dataSource;
+    private final ObjectMapper objectMapper;
+    private final RestAuthenticationSuccessHandler successHandler;
+    private final RestAuthenticationFailureHandler failureHandler;
+    private final String secret;
+
+    public WebSecurity(DataSource dataSource, ObjectMapper objectMapper, RestAuthenticationSuccessHandler successHandler,
+                       RestAuthenticationFailureHandler failureHandler,
+                       @Value("${jwt.secret}") String secret) {
+        this.dataSource = dataSource;
+        this.objectMapper = objectMapper;
+        this.successHandler = successHandler;
+        this.failureHandler = failureHandler;
+        this.secret = secret;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-                .withUser("admin")
-                .password(passwordEncoder().encode("admin"))
-                .roles("ADMIN");
+        auth.jdbcAuthentication();
+                //TODO HIDDEN FOR TESTS AND DEV-PROCESS. AFTER THAT, CHANGE TO GET FROM DB, NOT CREATE HERE.
+                //.withDefaultSchema()
+                //.dataSource(dataSource)
+                //.withUser("admin")
+                //.password("{bcrypt}" + new BCryptPasswordEncoder().encode("admin"))
+                //.roles("USER");
     }
 
     @Override
-    public void configure(HttpSecurity http) throws Exception {
+    protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http
-                .csrf().disable()
-                .authorizeRequests().anyRequest().permitAll();
-        /*
-                .antMatchers("/").authenticated()
+                .authorizeRequests()
+                .antMatchers("/swagger-ui.html").permitAll()
+                .antMatchers("/v2/api-docs").permitAll()
+                .antMatchers("/webjars/**").permitAll()
+                .antMatchers("/swagger-resources/**").permitAll()
+                .antMatchers("/h2-console/**").permitAll()
                 .anyRequest().authenticated()
-                .and().logout().logoutSuccessUrl("/login").permitAll()
                 .and()
-                .oauth2Login();
-        http
-                .formLogin()
-                .defaultSuccessUrl("/products", true);
-
-         */
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilter(authenticationFilter())
+                .addFilter(new JwtAuthorizationFilter(authenticationManager(), userDetailsManager(), secret))
+                .exceptionHandling()
+                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .and()
+                .headers().frameOptions().disable();
     }
 
+    public JsonObjectAuthenticationFilter authenticationFilter() throws Exception {
+        JsonObjectAuthenticationFilter authenticationFilter = new JsonObjectAuthenticationFilter(objectMapper);
+        authenticationFilter.setAuthenticationSuccessHandler(successHandler);
+        authenticationFilter.setAuthenticationFailureHandler(failureHandler);
+        authenticationFilter.setAuthenticationManager(super.authenticationManager());
+        return authenticationFilter;
+    }
 
+    @Bean
+    public UserDetailsManager userDetailsManager() {
+        return new JdbcUserDetailsManager(dataSource);
+    }
 }
+
