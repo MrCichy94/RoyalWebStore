@@ -61,11 +61,11 @@ public class EmployeeServiceImpl implements EmployeeService {
                     new RuntimeException());
         } else {
             Employee result = new Employee(newEmployeeToAdd.getEmployeeId(),
-                    newEmployeeToAdd.getLogin(),
+                    newEmployeeToAdd.getUsername(),
                     passwordEncoder.encode(newEmployeeToAdd.getPassword()),
                     newEmployeeToAdd.getFirstName(),
                     newEmployeeToAdd.getLastName(),
-                    newEmployeeToAdd.getTypeOfPermissions());
+                    newEmployeeToAdd.getRole());
 
             result.getContact().setContactId(newEmployeeToAdd.getContact().getContactId());
             result.getContact().setPhoneNumber1(newEmployeeToAdd.getContact().getPhoneNumber1());

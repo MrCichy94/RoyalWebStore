@@ -3,17 +3,22 @@ package pl.cichy.RoyalWebStore.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.Collections;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "employees")
-public class Employee implements Serializable {
+public class Employee implements Serializable, UserDetails {
 
     @Id
     @GeneratedValue(generator = "inc")
@@ -27,7 +32,7 @@ public class Employee implements Serializable {
     private Contact contact;
 
     @Size(min = 3, max = 25)
-    private String login;
+    private String username;
 
     @Size(min = 3, max = 85)
     private String password;
@@ -39,9 +44,7 @@ public class Employee implements Serializable {
     private String firstName;
 
     @Size(min = 1, max = 25)
-    private String typeOfPermissions;
-
-    private String roles;
+    private String role;
 
     private boolean accountActive;
 
@@ -52,14 +55,14 @@ public class Employee implements Serializable {
     public Employee() {
     }
 
-    public Employee(int employeeId, String login, String password, String firstName, String lastName,
-                    String typeOfPermissions) {
+    public Employee(int employeeId, String username, String password, String firstName, String lastName,
+                    String role) {
         this.employeeId = employeeId;
-        this.login = login;
+        this.username = username;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.typeOfPermissions = typeOfPermissions;
+        this.role = "ROLE_" + role;
 
         address = new Address();
         contact = new Contact();
@@ -67,5 +70,35 @@ public class Employee implements Serializable {
         hireDate = LocalDate.now();
         releaseDate = null;
         accountActive = true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return Collections.singleton(new SimpleGrantedAuthority(role));
+    }
+
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return accountActive;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

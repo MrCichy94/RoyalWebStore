@@ -2,6 +2,8 @@ package pl.cichy.RoyalWebStore.model.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import pl.cichy.RoyalWebStore.model.Employee;
 
 import java.util.List;
@@ -18,4 +20,6 @@ public interface EmployeeRepository {
     void deleteById(Integer id);
 
     Employee save(Employee entity);
+
+    Optional<Employee> findByUsername(String username);
 }

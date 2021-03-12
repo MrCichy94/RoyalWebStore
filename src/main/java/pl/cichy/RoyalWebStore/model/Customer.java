@@ -54,6 +54,8 @@ public class Customer implements Serializable {
     @Pattern(regexp = "(^$|[0-9]{10})")
     String NIP;
 
+    private boolean accountActive;
+
     public Customer() {
     }
 
@@ -68,6 +70,8 @@ public class Customer implements Serializable {
 
         address = new Address();
         contact = new Contact();
+
+        accountActive = true;
     }
 
 }
