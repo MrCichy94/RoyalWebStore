@@ -1,6 +1,5 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
-import org.apache.velocity.exception.ResourceNotFoundException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -70,7 +69,7 @@ public class CopyServiceImpl implements CopyService {
         copyToSet.setCopyId(copyToSet.getCopyId());
         copyToSet.setProductId(productId);
 
-        BigDecimal point = BigDecimal.valueOf(-1.00);
+        BigDecimal point = (BigDecimal.ONE).negate();
         copyToSet.setBuyNetPrice((copyToSet.getBuyGrossPrice().multiply((point.add(copyToSet.getBuyVatPercentage()))
                 .abs())).setScale(2, RoundingMode.DOWN));
         copyToSet.setBuyVatValue(copyToSet.getBuyGrossPrice().add(copyToSet.getBuyNetPrice().negate())

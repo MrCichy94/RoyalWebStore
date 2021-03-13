@@ -65,7 +65,7 @@ public class Product implements Serializable {
         this.sellBaseGrossPrice = sellBaseGrossPrice;
         this.vatPercentage = vatPercentage;
 
-        BigDecimal point = BigDecimal.valueOf(-1.00);
+        BigDecimal point = (BigDecimal.ONE).negate();
         sellBaseNetPrice = (sellBaseGrossPrice.multiply((point.add(vatPercentage))
                 .abs())).setScale(2, RoundingMode.DOWN);
 

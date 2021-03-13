@@ -69,7 +69,7 @@ public class ProductServiceImpl implements ProductService {
         } else {
             Product result = productRepository.getById(productId);
             result.setSellBaseGrossPrice(priceToSet);
-            BigDecimal point = BigDecimal.valueOf(-1.00);
+            BigDecimal point = (BigDecimal.ONE).negate();
             BigDecimal newNetPrice = (priceToSet.multiply((point.add(result.getVatPercentage()))
                     .abs())).setScale(2, RoundingMode.DOWN);
             result.setSellBaseNetPrice(newNetPrice);
@@ -97,7 +97,7 @@ public class ProductServiceImpl implements ProductService {
         } else {
             Product result = productRepository.getById(productId);
 
-            BigDecimal point = BigDecimal.valueOf(-1.00);
+            BigDecimal point = (BigDecimal.ONE).negate();
             BigDecimal oldGrossPrice = result.getSellBaseGrossPrice();
             BigDecimal newGrossPrice = (oldGrossPrice.multiply((point.add(discountPercentageValue))
                     .abs())).setScale(2, RoundingMode.DOWN);
