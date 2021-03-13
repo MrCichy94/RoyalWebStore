@@ -12,9 +12,6 @@ import pl.cichy.RoyalWebStore.model.Product;
 import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -56,32 +53,24 @@ public class CopyServiceImpl implements CopyService {
             Product productToActualizeCopy = productRepository.getById(productId);
             List<Copy> listOfCopiesToRefresh = productRepository.getById(productId).getCopies();
 
-            assignDataToCopyObject(productId, copyToSet);
+            Copy newCopyToAdd = assignDataForCopy(productId, copyToSet);
 
-            listOfCopiesToRefresh.add(copyToSet);
+            listOfCopiesToRefresh.add(newCopyToAdd);
 
             productToActualizeCopy.setCopies(listOfCopiesToRefresh);
             productRepository.save(productToActualizeCopy);
         }
     }
 
-    private void assignDataToCopyObject(Integer productId, Copy copyToSet) {
-        copyToSet.setCopyId(copyToSet.getCopyId());
-        copyToSet.setProductId(productId);
+    private Copy assignDataForCopy(Integer productId, Copy copyToSet) {
+        Copy newCopyToAdd = new Copy(copyToSet.getMerchandisingCode(),
+                copyToSet.getBuyGrossPrice(),
+                copyToSet.getBuyVatPercentage());
 
-        BigDecimal point = (BigDecimal.ONE).negate();
-        copyToSet.setBuyNetPrice((copyToSet.getBuyGrossPrice().multiply((point.add(copyToSet.getBuyVatPercentage()))
-                .abs())).setScale(2, RoundingMode.DOWN));
-        copyToSet.setBuyVatValue(copyToSet.getBuyGrossPrice().add(copyToSet.getBuyNetPrice().negate())
-                .setScale(2, RoundingMode.DOWN));
-
-        copyToSet.setDiscoutValue(new BigDecimal(0));
-        copyToSet.setPercentageDiscoutValue(new BigDecimal(0));
-        copyToSet.setSellCurrentGrossPrice(productRepository.getById(productId).getSellBaseGrossPrice());
-        copyToSet.setSellCurrentNetPrice(productRepository.getById(productId).getSellBaseNetPrice());
-
-        copyToSet.setBuyDate(LocalDate.now());
-        copyToSet.setSellDate(null);
+        newCopyToAdd.setProductId(productId);
+        newCopyToAdd.setSellCurrentGrossPrice(productRepository.getById(productId).getSellBaseGrossPrice());
+        newCopyToAdd.setSellCurrentNetPrice(productRepository.getById(productId).getSellBaseNetPrice());
+        return newCopyToAdd;
     }
 
     @Override

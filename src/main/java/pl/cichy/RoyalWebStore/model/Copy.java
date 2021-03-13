@@ -12,6 +12,7 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 
 @Getter
@@ -62,4 +63,33 @@ public class Copy implements Serializable {
 
     public Copy() {
     }
+
+
+    public Copy(String merchandisingCode, BigDecimal buyGrossPrice, BigDecimal buyVatPercentage) {
+        this.merchandisingCode = merchandisingCode;
+        this.buyGrossPrice = buyGrossPrice;
+        this.buyVatPercentage = buyVatPercentage;
+
+        BigDecimal point = (BigDecimal.ONE).negate();
+        buyNetPrice = countBuyNetPrice(buyGrossPrice, buyVatPercentage, point);
+        buyVatValue = countBuyVatValue(buyGrossPrice);
+
+        discoutValue = BigDecimal.ZERO;
+        percentageDiscoutValue = BigDecimal.ZERO;
+
+        buyDate = LocalDate.now();
+        sellDate = null;
+    }
+
+    private BigDecimal countBuyVatValue(BigDecimal buyGrossPrice) {
+        return buyGrossPrice.add(buyNetPrice.negate())
+                .setScale(2, RoundingMode.DOWN);
+    }
+
+    private BigDecimal countBuyNetPrice(BigDecimal buyGrossPrice, BigDecimal buyVatPercentage, BigDecimal point) {
+        return (buyGrossPrice.multiply((point.add(buyVatPercentage))
+                .abs())).setScale(2, RoundingMode.DOWN);
+    }
+
+
 }

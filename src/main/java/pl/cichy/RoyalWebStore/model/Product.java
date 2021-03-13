@@ -66,16 +66,24 @@ public class Product implements Serializable {
         this.vatPercentage = vatPercentage;
 
         BigDecimal point = (BigDecimal.ONE).negate();
-        sellBaseNetPrice = (sellBaseGrossPrice.multiply((point.add(vatPercentage))
-                .abs())).setScale(2, RoundingMode.DOWN);
-
-        vatValue = sellBaseGrossPrice.add(sellBaseNetPrice.negate())
-                .setScale(2, RoundingMode.DOWN);
+        sellBaseNetPrice = countSellBaseNetPrice(sellBaseGrossPrice, vatPercentage, point);
+        vatValue = countVatValue(sellBaseGrossPrice);
 
         type = "";
         version = "";
         productDescription = "";
         categoryAndManufacturer = new CategoryAndManufacturer();
+    }
+
+    private BigDecimal countVatValue(BigDecimal sellBaseGrossPrice) {
+        return sellBaseGrossPrice.add(sellBaseNetPrice.negate())
+                .setScale(2, RoundingMode.DOWN);
+    }
+
+    private BigDecimal countSellBaseNetPrice(BigDecimal sellBaseGrossPrice,
+                                             BigDecimal vatPercentage, BigDecimal point) {
+        return (sellBaseGrossPrice.multiply((point.add(vatPercentage))
+                .abs())).setScale(2, RoundingMode.DOWN);
     }
 
     /*
