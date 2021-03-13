@@ -10,8 +10,10 @@ import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.exception.AccountAlreadyExistException;
 import pl.cichy.RoyalWebStore.logic.EmployeeService;
 import pl.cichy.RoyalWebStore.model.Employee;
+import pl.cichy.RoyalWebStore.model.User;
 import pl.cichy.RoyalWebStore.model.repository.ContactRepository;
 import pl.cichy.RoyalWebStore.model.repository.EmployeeRepository;
+import pl.cichy.RoyalWebStore.model.repository.UserRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,11 +27,14 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private final EmployeeRepository employeeRepository;
     private final ContactRepository contactRepository;
+    private final UserRepository userRepository;
 
     public EmployeeServiceImpl(final EmployeeRepository employeeRepository,
-                               final ContactRepository contactRepository) {
+                               final ContactRepository contactRepository,
+                               final UserRepository userRepository) {
         this.employeeRepository = employeeRepository;
         this.contactRepository = contactRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -61,7 +66,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     new RuntimeException());
         } else {
             Employee result = new Employee(newEmployeeToAdd.getEmployeeId(),
-                    newEmployeeToAdd.getUsername(),
+                    newEmployeeToAdd.getLogin(),
                     passwordEncoder.encode(newEmployeeToAdd.getPassword()),
                     newEmployeeToAdd.getFirstName(),
                     newEmployeeToAdd.getLastName(),
@@ -70,6 +75,12 @@ public class EmployeeServiceImpl implements EmployeeService {
             result.getContact().setContactId(newEmployeeToAdd.getContact().getContactId());
             result.getContact().setPhoneNumber1(newEmployeeToAdd.getContact().getPhoneNumber1());
             result.getContact().setEmailAddress(newEmployeeToAdd.getContact().getEmailAddress());
+
+            User u = new User(newEmployeeToAdd.getLogin(),
+                    passwordEncoder.encode(newEmployeeToAdd.getPassword()),
+                    newEmployeeToAdd.getRole());
+
+            userRepository.save(u);
 
             employeeRepository.save(result);
         }

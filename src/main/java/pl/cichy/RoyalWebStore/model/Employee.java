@@ -18,7 +18,7 @@ import java.util.Collections;
 @Setter
 @Entity
 @Table(name = "employees")
-public class Employee implements Serializable, UserDetails {
+public class Employee implements Serializable {
 
     @Id
     @GeneratedValue(generator = "inc")
@@ -32,7 +32,7 @@ public class Employee implements Serializable, UserDetails {
     private Contact contact;
 
     @Size(min = 3, max = 25)
-    private String username;
+    private String login;
 
     @Size(min = 3, max = 85)
     private String password;
@@ -55,10 +55,10 @@ public class Employee implements Serializable, UserDetails {
     public Employee() {
     }
 
-    public Employee(int employeeId, String username, String password, String firstName, String lastName,
+    public Employee(int employeeId, String login, String password, String firstName, String lastName,
                     String role) {
         this.employeeId = employeeId;
-        this.username = username;
+        this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -70,35 +70,5 @@ public class Employee implements Serializable, UserDetails {
         hireDate = LocalDate.now();
         releaseDate = null;
         accountActive = true;
-    }
-
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singleton(new SimpleGrantedAuthority(role));
-    }
-
-    @Override
-    public String getUsername() {
-        return username;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return accountActive;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return true;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return true;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return true;
     }
 }

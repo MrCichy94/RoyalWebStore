@@ -3,11 +3,16 @@ package pl.cichy.RoyalWebStore.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Getter
@@ -45,6 +50,9 @@ public class Customer implements Serializable {
     @Size(min = 1, max = 25)
     String typeOfClient;
 
+    @Size(min = 1, max = 25)
+    private String role;
+
     @Size(max = 25)
     String companyName;
 
@@ -60,13 +68,14 @@ public class Customer implements Serializable {
     }
 
     public Customer(int customerId, String login, String password, String firstName,
-                    String lastName, String typeOfClient) {
+                    String lastName, String typeOfClient, String role) {
         this.customerId = customerId;
         this.login = login;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
         this.typeOfClient = typeOfClient;
+        this.role = "ROLE_" + role;
 
         address = new Address();
         contact = new Contact();

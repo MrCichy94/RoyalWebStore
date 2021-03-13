@@ -13,7 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import pl.cichy.RoyalWebStore.logic.implementation.UserDetailsServiceImpl;
+import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 import pl.cichy.RoyalWebStore.model.repository.EmployeeRepository;
+import pl.cichy.RoyalWebStore.model.repository.UserRepository;
 import pl.cichy.RoyalWebStore.security.authentication.JsonObjectAuthenticationFilter;
 import pl.cichy.RoyalWebStore.security.authentication.JwtAuthorizationFilter;
 import pl.cichy.RoyalWebStore.security.handlers.RestAuthenticationFailureHandler;
@@ -31,18 +33,19 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     }
 
     private final DataSource dataSource;
-    private final EmployeeRepository employeeRepository;
+    private final UserRepository userRepository;
     private final ObjectMapper objectMapper;
     private final RestAuthenticationSuccessHandler successHandler;
     private final RestAuthenticationFailureHandler failureHandler;
     private final String secret;
 
-    public WebSecurity(DataSource dataSource, EmployeeRepository employeeRepository, ObjectMapper objectMapper,
+    public WebSecurity(DataSource dataSource,
+                       UserRepository userRepository, ObjectMapper objectMapper,
                        RestAuthenticationSuccessHandler successHandler,
                        RestAuthenticationFailureHandler failureHandler,
                        @Value("${jwt.secret}") String secret) {
         this.dataSource = dataSource;
-        this.employeeRepository = employeeRepository;
+        this.userRepository = userRepository;
         this.objectMapper = objectMapper;
         this.successHandler = successHandler;
         this.failureHandler = failureHandler;
@@ -53,12 +56,13 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .usersByUsernameQuery("select username,password,account_active "
-                        + "from employees "
-                        + "where username = ?")
-                .authoritiesByUsernameQuery("select username,role "
-                        + "from employees "
+                .usersByUsernameQuery("select username, password, account_active "
+                        + "from users "
+                        + "where username = ? ")
+                .authoritiesByUsernameQuery("select username, role "
+                        + "from users "
                         + "where username = ?");
+
     }
 
     @Override
@@ -71,7 +75,9 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
                 .antMatchers("/webjars/**").permitAll()
                 .antMatchers("/swagger-resources/**").permitAll()
                 .antMatchers("/h2-console/**").permitAll()
+                .antMatchers("/console").permitAll()
                 .antMatchers("/employees/add").permitAll()
+                .antMatchers("/customers/add").permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -94,7 +100,8 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
 
     @Bean
     public UserDetailsServiceImpl userDetailsManager() {
-        return new UserDetailsServiceImpl(employeeRepository);
+        return new UserDetailsServiceImpl(userRepository);
     }
+
 }
 

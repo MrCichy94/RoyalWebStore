@@ -20,7 +20,7 @@ class CustomerTest {
     @DisplayName("should create customer object with args")
     void shouldCreateCustomerObjWithArgs() {
         Customer eg2 = new Customer(1, "sky", "labamba", "Przemek",
-                "C", "buisness");
+                "C", "buisness", "USER");
 
         assertEquals("sky", eg2.getLogin());
     }

@@ -10,9 +10,11 @@ import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.exception.AccountAlreadyExistException;
 import pl.cichy.RoyalWebStore.logic.CustomerService;
 import pl.cichy.RoyalWebStore.model.Customer;
+import pl.cichy.RoyalWebStore.model.User;
 import pl.cichy.RoyalWebStore.model.repository.ContactRepository;
 import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 import pl.cichy.RoyalWebStore.model.repository.OrderRepository;
+import pl.cichy.RoyalWebStore.model.repository.UserRepository;
 
 import java.util.List;
 
@@ -26,13 +28,16 @@ public class CustomerServiceImpl implements CustomerService {
     private final CustomerRepository customerRepository;
     private final ContactRepository contactRepository;
     private final OrderRepository orderRepository;
+    private final UserRepository userRepository;
 
     public CustomerServiceImpl(final CustomerRepository customerRepository,
                                final ContactRepository contactRepository,
-                               final OrderRepository orderRepository) {
+                               final OrderRepository orderRepository,
+                               final UserRepository userRepository) {
         this.customerRepository = customerRepository;
         this.contactRepository = contactRepository;
         this.orderRepository = orderRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -67,12 +72,18 @@ public class CustomerServiceImpl implements CustomerService {
                     passwordEncoder.encode(newCustomer.getPassword()),
                     newCustomer.getFirstName(),
                     newCustomer.getLastName(),
-                    newCustomer.getTypeOfClient());
+                    newCustomer.getTypeOfClient(),
+                    newCustomer.getRole());
 
             result.getContact().setContactId(newCustomer.getContact().getContactId());
             result.getContact().setPhoneNumber1(newCustomer.getContact().getPhoneNumber1());
             result.getContact().setEmailAddress(newCustomer.getContact().getEmailAddress());
 
+            User u = new User(newCustomer.getLogin(),
+                    passwordEncoder.encode(newCustomer.getPassword()),
+                    newCustomer.getRole());
+
+            userRepository.save(u);
             customerRepository.save(result);
         }
     }

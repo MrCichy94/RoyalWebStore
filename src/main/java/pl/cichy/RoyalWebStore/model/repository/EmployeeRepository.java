@@ -21,5 +21,4 @@ public interface EmployeeRepository {
 
     Employee save(Employee entity);
 
-    Optional<Employee> findByUsername(String username);
 }
