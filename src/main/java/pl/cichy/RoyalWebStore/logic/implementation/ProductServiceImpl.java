@@ -88,6 +88,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void changeProductName(int productId, String newProductName) {
+        if (!productRepository.existsById(productId)) {
+            throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
+                    "No product found with id: " + productId,
+                    new RuntimeException(),
+                    productId);
+        } else {
+            Product result = productRepository.getById(productId);
+            result.setProductName(newProductName);
+            productRepository.save(result);
+        }
+
+    }
+
+    @Override
     public void changeDiscountValueOfGivenProduct(int productId, BigDecimal discountPercentageValue) {
         if (!productRepository.existsById(productId)) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
@@ -102,7 +117,7 @@ public class ProductServiceImpl implements ProductService {
             BigDecimal newGrossPrice = (oldGrossPrice.multiply((point.add(discountPercentageValue))
                     .abs())).setScale(2, RoundingMode.DOWN);
             BigDecimal newNetPrice = ((newGrossPrice.multiply((point.add(result.getVatPercentage()))
-                            .abs())).setScale(2, RoundingMode.DOWN));
+                    .abs())).setScale(2, RoundingMode.DOWN));
             BigDecimal newVatValue = newGrossPrice.add(newNetPrice.negate())
                     .setScale(2, RoundingMode.DOWN);
 

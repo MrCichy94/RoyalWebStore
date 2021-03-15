@@ -93,7 +93,4 @@ public class Product implements Serializable {
         return "/productPhotos/" + productId + "/" + photos;
     }
     */
-
-    //todo
-    //setter VAT, DISCOUNT etc must recalculate prices and save (PUT) changes to DB.
 }

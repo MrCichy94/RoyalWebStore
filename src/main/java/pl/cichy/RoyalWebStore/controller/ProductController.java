@@ -83,6 +83,14 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/{productId}/set/name")
+    ResponseEntity<Product> changeProductName(@PathVariable int productId,
+                                              @RequestBody String newProductName) {
+        productService.changeProductName(productId, newProductName);
+        logger.info("Product name was changed!");
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     ResponseEntity<Order> deleteOrder(@PathVariable int id) {
         productService.deleteById(id);
