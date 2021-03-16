@@ -27,4 +27,6 @@ public interface ProductService {
     void changeDiscountValueOfGivenProduct(int productId, BigDecimal discountPercentageValue);
 
     void changeProductName(int productId, String newProductName);
+
+    void setTypeOfGivenProduct(int productId, String newProductType);
 }

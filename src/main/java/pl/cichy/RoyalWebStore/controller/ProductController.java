@@ -51,7 +51,7 @@ public class ProductController {
 
     /* TODO: MERGE WITH POST METHOD, MAYBE IN SERVICE_IMPL METHOD, THINK ABOUT IT WHEN CREATE FRONTEND FORM
     @PostMapping("/newproduct/add")
-    public RedirectView saveUser(Product newProductToAdd,
+    public RedirectView saveProduct(Product newProductToAdd,
                                  @RequestParam("image") MultipartFile multipartFile) throws IOException {
 
         String fileName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
@@ -63,7 +63,7 @@ public class ProductController {
 
         FileUploadUtil.saveFile(uploadDir, fileName, multipartFile);
 
-        return new RedirectView("/users", true);
+        return new RedirectView("/products", true);
     }
     */
 
@@ -88,6 +88,14 @@ public class ProductController {
                                               @RequestBody String newProductName) {
         productService.changeProductName(productId, newProductName);
         logger.info("Product name was changed!");
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{productId}/set/type")
+    ResponseEntity<Product> setTypeOfGivenProduct(@PathVariable int productId,
+                                                  @RequestBody String newProductType) {
+        productService.setTypeOfGivenProduct(productId, newProductType);
+        logger.info("Product type was changed!");
         return ResponseEntity.ok().build();
     }
 
