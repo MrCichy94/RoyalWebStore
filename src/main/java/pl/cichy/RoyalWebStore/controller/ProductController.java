@@ -99,6 +99,14 @@ public class ProductController {
         return ResponseEntity.ok().build();
     }
 
+    @PatchMapping("/{productId}/set/version")
+    ResponseEntity<Product> setVersionOfGivenProduct(@PathVariable int productId,
+                                                  @RequestBody String newProductVersion) {
+        productService.setVersionOfGivenProduct(productId, newProductVersion);
+        logger.info("Product version was changed!");
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/{id}")
     ResponseEntity<Order> deleteOrder(@PathVariable int id) {
         productService.deleteById(id);

@@ -117,6 +117,20 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public void setVersionOfGivenProduct(int productId, String newProductVersion) {
+        if (!productRepository.existsById(productId)) {
+            throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
+                    "No product found with id: " + productId,
+                    new RuntimeException(),
+                    productId);
+        } else {
+            Product result = productRepository.getById(productId);
+            result.setVersion(newProductVersion);
+            productRepository.save(result);
+        }
+    }
+
+    @Override
     public void changeDiscountValueOfGivenProduct(int productId, BigDecimal discountPercentageValue) {
         if (!productRepository.existsById(productId)) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,

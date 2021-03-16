@@ -29,4 +29,6 @@ public interface ProductService {
     void changeProductName(int productId, String newProductName);
 
     void setTypeOfGivenProduct(int productId, String newProductType);
+
+    void setVersionOfGivenProduct(int productId, String newProductVersion);
 }
