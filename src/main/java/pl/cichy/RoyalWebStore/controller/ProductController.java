@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.cichy.RoyalWebStore.logic.ProductService;
-import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.Order;
 import pl.cichy.RoyalWebStore.model.Product;
 
@@ -68,8 +67,8 @@ public class ProductController {
     */
 
     @PatchMapping("/{productId}/set/price")
-    ResponseEntity<Product> manualChangeProductPriceByValue(@PathVariable int productId,
-                                                            @RequestBody BigDecimal priceToSet) {
+    ResponseEntity<Product> changeProductPriceByValue(@PathVariable int productId,
+                                                      @RequestBody BigDecimal priceToSet) {
         productService.changeProductPriceByValue(productId, priceToSet);
         logger.info("Product price was changed!");
         return ResponseEntity.ok().build();
@@ -101,7 +100,7 @@ public class ProductController {
 
     @PatchMapping("/{productId}/set/version")
     ResponseEntity<Product> setVersionOfGivenProduct(@PathVariable int productId,
-                                                  @RequestBody String newProductVersion) {
+                                                     @RequestBody String newProductVersion) {
         productService.setVersionOfGivenProduct(productId, newProductVersion);
         logger.info("Product version was changed!");
         return ResponseEntity.ok().build();
@@ -109,7 +108,7 @@ public class ProductController {
 
     @PatchMapping("/{productId}/set/description")
     ResponseEntity<Product> setDescriptionOfGivenProduct(@PathVariable int productId,
-                                                     @RequestBody String newProductDescription) {
+                                                         @RequestBody String newProductDescription) {
         productService.setDescriptionOfGivenProduct(productId, newProductDescription);
         logger.info("Product description was changed!");
         return ResponseEntity.ok().build();
@@ -123,7 +122,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{productId}/copies/{copyId}")
-    ResponseEntity<Customer> deleteProductsCopy(@PathVariable int productId, @PathVariable int copyId) {
+    ResponseEntity<Product> deleteProductsCopy(@PathVariable int productId, @PathVariable int copyId) {
         productService.deleteProductsCopy(productId, copyId);
         logger.info("Product's copy with id: " + copyId + " was deleted!");
         return ResponseEntity.ok().build();

@@ -1,5 +1,10 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.exception.AccountAlreadyExistException;
+import pl.cichy.RoyalWebStore.exception.CustomerNotFoundException;
 import pl.cichy.RoyalWebStore.logic.CustomerService;
 import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.User;
@@ -29,15 +35,18 @@ public class CustomerServiceImpl implements CustomerService {
     private final ContactRepository contactRepository;
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
+    private final ObjectMapper objectMapper;
 
     public CustomerServiceImpl(final CustomerRepository customerRepository,
                                final ContactRepository contactRepository,
                                final OrderRepository orderRepository,
-                               final UserRepository userRepository) {
+                               final UserRepository userRepository,
+                               final ObjectMapper objectMapper) {
         this.customerRepository = customerRepository;
         this.contactRepository = contactRepository;
         this.orderRepository = orderRepository;
         this.userRepository = userRepository;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -94,6 +103,28 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.save(customerRepository.getById(customerId));
 
         orderRepository.deleteById(orderId);
+    }
+
+    @Override
+    public void updateCustomersData(int customerId, JsonPatch customerToUpdate)
+            throws JsonPatchException, JsonProcessingException {
+
+        if (!customerRepository.existsById(customerId)) {
+            throw new CustomerNotFoundException(HttpStatus.NOT_FOUND,
+                    "No customer found with id: " + customerId,
+                    new RuntimeException(),
+                    customerId);
+        } else {
+            Customer customer = customerRepository.getById(customerId);
+            Customer customerPatched = applyPatchToCustomer(customerToUpdate, customer);
+            customerRepository.save(customerPatched);
+        }
+    }
+
+    private Customer applyPatchToCustomer(
+            JsonPatch patch, Customer targetCustomer) throws JsonPatchException, JsonProcessingException {
+        JsonNode patched = patch.apply(objectMapper.convertValue(targetCustomer, JsonNode.class));
+        return objectMapper.treeToValue(patched, Customer.class);
     }
 
 }
