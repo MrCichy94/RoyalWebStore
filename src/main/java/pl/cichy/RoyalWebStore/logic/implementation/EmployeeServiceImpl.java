@@ -1,5 +1,10 @@
 package pl.cichy.RoyalWebStore.logic.implementation;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,7 +13,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.exception.AccountAlreadyExistException;
+import pl.cichy.RoyalWebStore.exception.CustomerNotFoundException;
 import pl.cichy.RoyalWebStore.logic.EmployeeService;
+import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.Employee;
 import pl.cichy.RoyalWebStore.model.User;
 import pl.cichy.RoyalWebStore.model.repository.ContactRepository;
@@ -28,13 +35,16 @@ public class EmployeeServiceImpl implements EmployeeService {
     private final EmployeeRepository employeeRepository;
     private final ContactRepository contactRepository;
     private final UserRepository userRepository;
+    private final ObjectMapper objectMapper;
 
     public EmployeeServiceImpl(final EmployeeRepository employeeRepository,
                                final ContactRepository contactRepository,
-                               final UserRepository userRepository) {
+                               final UserRepository userRepository,
+                               final ObjectMapper objectMapper) {
         this.employeeRepository = employeeRepository;
         this.contactRepository = contactRepository;
         this.userRepository = userRepository;
+        this.objectMapper = objectMapper;
     }
 
     @Override
@@ -50,6 +60,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public Optional<Employee> findById(Integer id) {
         return employeeRepository.findById(id);
+    }
+
+    @Override
+    public Employee getById(int employeeId) {
+        return employeeRepository.getById(employeeId);
     }
 
     @Override
@@ -83,5 +98,28 @@ public class EmployeeServiceImpl implements EmployeeService {
                     "Account with this email already exist!",
                     new RuntimeException());
         }
+    }
+
+    @Override
+    public void updateEmployeesData(int employeeId, JsonPatch employeeToUpdate)
+            throws JsonPatchException, JsonProcessingException{
+
+        try {
+            Employee employee = employeeRepository.getById(employeeId);
+            Employee emlpoyeePatched = applyPatchToEmployee(employeeToUpdate, employee);
+            employeeRepository.save(emlpoyeePatched);
+        } catch (RuntimeException noCustomer) {
+            throw new CustomerNotFoundException(HttpStatus.NOT_FOUND,
+                    "No customer found with id: " + employeeId,
+                    new RuntimeException(),
+                    employeeId);
+        }
+
+    }
+
+    private Employee applyPatchToEmployee(
+            JsonPatch patch, Employee targetEmployee) throws JsonPatchException, JsonProcessingException {
+        JsonNode patched = patch.apply(objectMapper.convertValue(targetEmployee, JsonNode.class));
+        return objectMapper.treeToValue(patched, Employee.class);
     }
 }

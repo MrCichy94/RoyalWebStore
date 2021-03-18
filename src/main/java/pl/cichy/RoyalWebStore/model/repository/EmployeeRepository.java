@@ -15,6 +15,8 @@ public interface EmployeeRepository {
 
     Optional<Employee> findById(Integer id);
 
+    Employee getById(Integer id);
+
     void deleteById(Integer id);
 
     Employee save(Employee entity);

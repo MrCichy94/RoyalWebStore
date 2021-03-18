@@ -1,11 +1,16 @@
 package pl.cichy.RoyalWebStore.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import pl.cichy.RoyalWebStore.exception.CustomerNotFoundException;
 import pl.cichy.RoyalWebStore.logic.EmployeeService;
 import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.Employee;
@@ -52,5 +57,19 @@ public class EmployeeController {
         employeeService.deleteById(id);
         logger.info("Employee was deleted!");
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{employeeId}")
+    ResponseEntity<Customer> updateCustomer(@PathVariable int employeeId,
+                                            @RequestBody JsonPatch employeeToUpdate) {
+        try {
+            employeeService.updateEmployeesData(employeeId, employeeToUpdate);
+            logger.info("Customer was successfully updated!");
+            return ResponseEntity.ok().build();
+        } catch (JsonPatchException | JsonProcessingException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        } catch (CustomerNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 }
