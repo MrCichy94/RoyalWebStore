@@ -80,7 +80,7 @@ public class ProductServiceImpl implements ProductService {
             result.setCopies(items);
 
             productRepository.save(result);
-        } catch(RuntimeException noProduct) {
+        } catch (RuntimeException noProduct) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
                     "No product found with id: " + productId,
                     new RuntimeException(),
@@ -96,7 +96,7 @@ public class ProductServiceImpl implements ProductService {
             Product result = productRepository.getById(productId);
             result.setProductName(newProductName);
             productRepository.save(result);
-        } catch(RuntimeException noProduct) {
+        } catch (RuntimeException noProduct) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
                     "No product found with id: " + productId,
                     new RuntimeException(),
@@ -112,7 +112,7 @@ public class ProductServiceImpl implements ProductService {
             Product result = productRepository.getById(productId);
             result.setType(newProductType);
             productRepository.save(result);
-        } catch(RuntimeException noProduct) {
+        } catch (RuntimeException noProduct) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
                     "No product found with id: " + productId,
                     new RuntimeException(),
@@ -128,7 +128,7 @@ public class ProductServiceImpl implements ProductService {
             Product result = productRepository.getById(productId);
             result.setVersion(newProductVersion);
             productRepository.save(result);
-        } catch(RuntimeException noProduct) {
+        } catch (RuntimeException noProduct) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
                     "No product found with id: " + productId,
                     new RuntimeException(),
@@ -144,7 +144,7 @@ public class ProductServiceImpl implements ProductService {
             Product result = productRepository.getById(productId);
             result.setProductDescription(newProductDescription);
             productRepository.save(result);
-        } catch(RuntimeException noProduct) {
+        } catch (RuntimeException noProduct) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
                     "No product found with id: " + productId,
                     new RuntimeException(),
@@ -182,7 +182,7 @@ public class ProductServiceImpl implements ProductService {
             result.setVatValue(newVatValue);
 
             productRepository.save(result);
-        } catch(RuntimeException noProduct) {
+        } catch (RuntimeException noProduct) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
                     "No product found with id: " + productId,
                     new RuntimeException(),

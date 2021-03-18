@@ -52,44 +52,43 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public void setOrderForCustomer(int customerId, Order customerOrderToAdd) {
-        if (!customerRepository.existsById(customerId)) {
+
+        try {
+            Customer customerToActualizeOrder = customerRepository.getById(customerId);
+            List<Order> listOfOrdersToRefresh = customerRepository.getById(customerId).getOrders();
+
+            assignDataToOrderObject(customerId, customerOrderToAdd);
+
+            listOfOrdersToRefresh.add(customerOrderToAdd);
+
+            customerToActualizeOrder.setOrders(listOfOrdersToRefresh);
+            customerRepository.save(customerToActualizeOrder);
+        } catch (RuntimeException noCustomer) {
             throw new CustomerNotFoundException(HttpStatus.NOT_FOUND,
                     "No customer found with id: " + customerId,
                     new RuntimeException(),
                     customerId);
-        } else {
-            {
-                Customer customerToActualizeOrder = customerRepository.getById(customerId);
-                List<Order> listOfOrdersToRefresh = customerRepository.getById(customerId).getOrders();
-
-                assignDataToOrderObject(customerId, customerOrderToAdd);
-
-                listOfOrdersToRefresh.add(customerOrderToAdd);
-
-                customerToActualizeOrder.setOrders(listOfOrdersToRefresh);
-                customerRepository.save(customerToActualizeOrder);
-            }
         }
+
     }
 
     @Override
     public void addToOrder(int orderId, int copyId) {
 
-        if (!orderRepository.existsById(orderId)) {
+        try {
+
+            Order orderToAddThisCopy = orderRepository.getById(orderId);
+            List<Copy> copies = orderToAddThisCopy.getCopies();
+
+            copies.add(copyRepository.getById(copyId));
+
+            orderToAddThisCopy.setCopies(copies);
+            orderRepository.save(orderToAddThisCopy);
+        } catch (RuntimeException noOrder) {
             throw new OrderNotFoundException(HttpStatus.NOT_FOUND,
                     "No order found with id: " + orderId,
                     new RuntimeException(),
                     orderId);
-        } else {
-            {
-                Order orderToAddThisCopy = orderRepository.getById(orderId);
-                List<Copy> copies = orderToAddThisCopy.getCopies();
-
-                copies.add(copyRepository.getById(copyId));
-
-                orderToAddThisCopy.setCopies(copies);
-                orderRepository.save(orderToAddThisCopy);
-            }
         }
     }
 

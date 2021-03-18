@@ -44,12 +44,7 @@ public class CopyServiceImpl implements CopyService {
     @Override
     public void setCopyForProduct(Integer productId, Copy copyToSet) {
 
-        if (!productRepository.existsById(productId)) {
-            throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
-                    "No product found with id: " + productId,
-                    new RuntimeException(),
-                    productId);
-        } else {
+        try {
             Product productToActualizeCopy = productRepository.getById(productId);
             List<Copy> listOfCopiesToRefresh = productRepository.getById(productId).getCopies();
 
@@ -59,7 +54,13 @@ public class CopyServiceImpl implements CopyService {
 
             productToActualizeCopy.setCopies(listOfCopiesToRefresh);
             productRepository.save(productToActualizeCopy);
+        } catch (RuntimeException noProduct) {
+            throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
+                    "No product found with id: " + productId,
+                    new RuntimeException(),
+                    productId);
         }
+
     }
 
     private Copy assignDataForCopy(Integer productId, Copy copyToSet) {

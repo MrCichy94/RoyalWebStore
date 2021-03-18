@@ -40,15 +40,16 @@ public class ContactServiceImpl implements ContactService {
 
     @Override
     public void createNewContactIfEmailIsFree(Contact newContactToAdd) {
-        if (contactRepository.findByEmail(newContactToAdd.getEmailAddress()).isPresent()) {
-            throw new AccountAlreadyExistException(HttpStatus.BAD_REQUEST,
-                    "Account with this email already exist!",
-                    new RuntimeException());
-        } else {
+
+        try {
             Contact result = new Contact(newContactToAdd.getContactId(),
                     newContactToAdd.getPhoneNumber1(),
                     newContactToAdd.getEmailAddress());
             contactRepository.save(result);
+        } catch (RuntimeException noAccount) {
+            throw new AccountAlreadyExistException(HttpStatus.BAD_REQUEST,
+                    "Account with this email already exist!",
+                    new RuntimeException());
         }
     }
 }

@@ -71,11 +71,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     public void registerNewCustomerAccount(Customer newCustomer) {
 
-        if (contactRepository.findByEmail(newCustomer.getContact().getEmailAddress()).isPresent()) {
-            throw new AccountAlreadyExistException(HttpStatus.BAD_REQUEST,
-                    "Account with this email already exist!",
-                    new RuntimeException());
-        } else {
+        try {
             Customer result = new Customer(newCustomer.getCustomerId(),
                     newCustomer.getLogin(),
                     passwordEncoder.encode(newCustomer.getPassword()),
@@ -94,7 +90,12 @@ public class CustomerServiceImpl implements CustomerService {
 
             userRepository.save(u);
             customerRepository.save(result);
+        } catch (RuntimeException noCustomer) {
+            throw new AccountAlreadyExistException(HttpStatus.BAD_REQUEST,
+                    "Account with this email already exist!",
+                    new RuntimeException());
         }
+
     }
 
     @Override
@@ -109,16 +110,17 @@ public class CustomerServiceImpl implements CustomerService {
     public void updateCustomersData(int customerId, JsonPatch customerToUpdate)
             throws JsonPatchException, JsonProcessingException {
 
-        if (!customerRepository.existsById(customerId)) {
+        try {
+            Customer customer = customerRepository.getById(customerId);
+            Customer customerPatched = applyPatchToCustomer(customerToUpdate, customer);
+            customerRepository.save(customerPatched);
+        } catch (RuntimeException noCustomer) {
             throw new CustomerNotFoundException(HttpStatus.NOT_FOUND,
                     "No customer found with id: " + customerId,
                     new RuntimeException(),
                     customerId);
-        } else {
-            Customer customer = customerRepository.getById(customerId);
-            Customer customerPatched = applyPatchToCustomer(customerToUpdate, customer);
-            customerRepository.save(customerPatched);
         }
+
     }
 
     private Customer applyPatchToCustomer(

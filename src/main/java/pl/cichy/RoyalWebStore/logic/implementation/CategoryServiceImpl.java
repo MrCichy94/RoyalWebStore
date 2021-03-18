@@ -32,15 +32,15 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void setCategoryForProduct(Integer productId, Category categoryToSet) {
 
-        if (!productRepository.existsById(productId)) {
+        try {
+            Product productToActualizeCategory = productRepository.getById(productId);
+            productToActualizeCategory.getCategoryAndManufacturer().setCategory(categoryToSet);
+            productRepository.save(productToActualizeCategory);
+        } catch (RuntimeException noProduct) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
                     "No product found with id: " + productId,
                     new RuntimeException(),
                     productId);
-        } else {
-            Product productToActualizeCategory = productRepository.getById(productId);
-            productToActualizeCategory.getCategoryAndManufacturer().setCategory(categoryToSet);
-            productRepository.save(productToActualizeCategory);
         }
     }
 

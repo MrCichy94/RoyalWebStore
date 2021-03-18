@@ -60,11 +60,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public void registerNewEmployeeAccount(Employee newEmployeeToAdd) {
 
-        if (contactRepository.findByEmail(newEmployeeToAdd.getContact().getEmailAddress()).isPresent()) {
-            throw new AccountAlreadyExistException(HttpStatus.BAD_REQUEST,
-                    "Account with this email already exist!",
-                    new RuntimeException());
-        } else {
+        try {
             Employee result = new Employee(newEmployeeToAdd.getEmployeeId(),
                     newEmployeeToAdd.getLogin(),
                     passwordEncoder.encode(newEmployeeToAdd.getPassword()),
@@ -81,8 +77,11 @@ public class EmployeeServiceImpl implements EmployeeService {
                     newEmployeeToAdd.getRole());
 
             userRepository.save(u);
-
             employeeRepository.save(result);
+        } catch (RuntimeException noAccount) {
+            throw new AccountAlreadyExistException(HttpStatus.BAD_REQUEST,
+                    "Account with this email already exist!",
+                    new RuntimeException());
         }
     }
 }
