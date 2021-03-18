@@ -61,12 +61,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void changeProductPriceByValue(int productId, BigDecimal priceToSet) {
-        if (!productRepository.existsById(productId)) {
-            throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
-                    "No product found with id: " + productId,
-                    new RuntimeException(),
-                    productId);
-        } else {
+
+        try {
             Product result = productRepository.getById(productId);
             result.setSellBaseGrossPrice(priceToSet);
             BigDecimal point = (BigDecimal.ONE).negate();
@@ -84,74 +80,83 @@ public class ProductServiceImpl implements ProductService {
             result.setCopies(items);
 
             productRepository.save(result);
-        }
-    }
-
-    @Override
-    public void changeProductName(int productId, String newProductName) {
-        if (!productRepository.existsById(productId)) {
+        } catch(RuntimeException noProduct) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
                     "No product found with id: " + productId,
                     new RuntimeException(),
                     productId);
-        } else {
+        }
+
+    }
+
+    @Override
+    public void changeProductName(int productId, String newProductName) {
+
+        try {
             Product result = productRepository.getById(productId);
             result.setProductName(newProductName);
             productRepository.save(result);
+        } catch(RuntimeException noProduct) {
+            throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
+                    "No product found with id: " + productId,
+                    new RuntimeException(),
+                    productId);
         }
 
     }
 
     @Override
     public void setTypeOfGivenProduct(int productId, String newProductType) {
-        if (!productRepository.existsById(productId)) {
+
+        try {
+            Product result = productRepository.getById(productId);
+            result.setType(newProductType);
+            productRepository.save(result);
+        } catch(RuntimeException noProduct) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
                     "No product found with id: " + productId,
                     new RuntimeException(),
                     productId);
-        } else {
-            Product result = productRepository.getById(productId);
-            result.setType(newProductType);
-            productRepository.save(result);
         }
+
     }
 
     @Override
     public void setVersionOfGivenProduct(int productId, String newProductVersion) {
-        if (!productRepository.existsById(productId)) {
+
+        try {
+            Product result = productRepository.getById(productId);
+            result.setVersion(newProductVersion);
+            productRepository.save(result);
+        } catch(RuntimeException noProduct) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
                     "No product found with id: " + productId,
                     new RuntimeException(),
                     productId);
-        } else {
-            Product result = productRepository.getById(productId);
-            result.setVersion(newProductVersion);
-            productRepository.save(result);
         }
+
     }
 
     @Override
     public void setDescriptionOfGivenProduct(int productId, String newProductDescription) {
-        if (!productRepository.existsById(productId)) {
+
+        try {
+            Product result = productRepository.getById(productId);
+            result.setProductDescription(newProductDescription);
+            productRepository.save(result);
+        } catch(RuntimeException noProduct) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
                     "No product found with id: " + productId,
                     new RuntimeException(),
                     productId);
-        } else {
-            Product result = productRepository.getById(productId);
-            result.setProductDescription(newProductDescription);
-            productRepository.save(result);
         }
+
     }
 
     @Override
     public void changeDiscountValueOfGivenProduct(int productId, BigDecimal discountPercentageValue) {
-        if (!productRepository.existsById(productId)) {
-            throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
-                    "No product found with id: " + productId,
-                    new RuntimeException(),
-                    productId);
-        } else {
+
+        try {
             Product result = productRepository.getById(productId);
 
             BigDecimal point = (BigDecimal.ONE).negate();
@@ -177,7 +182,13 @@ public class ProductServiceImpl implements ProductService {
             result.setVatValue(newVatValue);
 
             productRepository.save(result);
+        } catch(RuntimeException noProduct) {
+            throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
+                    "No product found with id: " + productId,
+                    new RuntimeException(),
+                    productId);
         }
+
     }
 
     @Override
