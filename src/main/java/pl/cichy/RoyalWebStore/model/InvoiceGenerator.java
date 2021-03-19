@@ -52,17 +52,12 @@ public class InvoiceGenerator {
         layoutDocument.add(new Paragraph("FAKTURA DETALICZNA")
                 .setBold().setUnderline()
                 .setTextAlignment(TextAlignment.CENTER));
-        layoutDocument.add(new Paragraph());
-        layoutDocument.add(new Paragraph());
-        layoutDocument.add(new Paragraph());
-        layoutDocument.add(new Paragraph());
-        layoutDocument.add(new Paragraph());
-        layoutDocument.add(new Paragraph());
+        separate(layoutDocument, 5);
     }
 
     public static void addInvoiceDetails(Document layoutDocument) {
 
-        Table table = new Table(2, true);
+        Table table = new Table(2, true).setFontSize(10);
 
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Sprzedawca").setBold()));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Nabywca").setBold()));
@@ -78,12 +73,13 @@ public class InvoiceGenerator {
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
 
         layoutDocument.add(table);
-        layoutDocument.add(new Paragraph());
+        separate(layoutDocument, 2);
 
     }
 
     public static void addPositionsTable(Document layoutDocument, List<Article> articleList) {
-        Table table = new Table(UnitValue.createPointArray(new float[]{30f, 150f, 30f, 40f, 65f, 40f, 80f, 85f}));
+        Table table = new Table(UnitValue.createPointArray(new float[]{30f, 145f, 30f, 40f, 65f, 45f, 80f, 85f}))
+                .setFontSize(10);
 
         // headers
         table.addCell(new Paragraph("Lp").setBold().setTextAlignment(TextAlignment.LEFT));
@@ -100,9 +96,9 @@ public class InvoiceGenerator {
             table.addCell(new Paragraph(a.LP + ".").setTextAlignment(TextAlignment.RIGHT));
             table.addCell(new Paragraph(a.productName).setTextAlignment(TextAlignment.LEFT));
             table.addCell(new Paragraph("szt.").setTextAlignment(TextAlignment.CENTER));
-            table.addCell(new Paragraph(a.quantity + "").setTextAlignment(TextAlignment.RIGHT));
+            table.addCell(new Paragraph(a.quantity + "").setTextAlignment(TextAlignment.CENTER));
             table.addCell(new Paragraph(a.unitPriceGross + " zl").setTextAlignment(TextAlignment.RIGHT));
-            table.addCell(new Paragraph(a.vat + "%").setTextAlignment(TextAlignment.RIGHT));
+            table.addCell(new Paragraph((a.vat.multiply(BigDecimal.TEN.multiply(BigDecimal.TEN))) + "%").setTextAlignment(TextAlignment.RIGHT));
             table.addCell(new Paragraph((a.quantity.multiply(a.unitPriceNet)) + " zl").setTextAlignment(TextAlignment.RIGHT));
             table.addCell(new Paragraph((a.quantity.multiply(a.unitPriceGross)) + " zl").setTextAlignment(TextAlignment.RIGHT));
         }
@@ -120,9 +116,8 @@ public class InvoiceGenerator {
     }
 
     public static void addSummTable(Document layoutDocument) {
-        layoutDocument.add(new Paragraph());
-        layoutDocument.add(new Paragraph());
-        Table table = new Table(5, true);
+        separate(layoutDocument, 1);
+        Table table = new Table(5, true).setFontSize(10);
 
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
@@ -147,10 +142,7 @@ public class InvoiceGenerator {
 
     public static void addSign(Document layoutDocument) {
 
-        layoutDocument.add(new Paragraph());
-        layoutDocument.add(new Paragraph());
-        layoutDocument.add(new Paragraph());
-        layoutDocument.add(new Paragraph());
+        separate(layoutDocument, 6);
 
         Table table = new Table(3, true);
 
@@ -178,6 +170,12 @@ public class InvoiceGenerator {
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("_________________________")));
 
         layoutDocument.add(table);
+    }
+
+    public static void separate(Document layoutDocument, int line){
+        for (int i=0; i<=line; i++) {
+            layoutDocument.add(new Paragraph());
+        }
     }
 
 }
