@@ -26,3 +26,10 @@
 + Managed by Maven. 
 + Stored in Tomcat.
 + Documented in GitHub.
+
+
+### About key functionalities:
+
+#### Sales invoice generator based template (data binding in progress...). 
+##### Ultimately, the user will be able to generate an invoice for a given order and open it in a web browser.
+![SalesInvoice](./projectsPresentationImages/invoice.png)

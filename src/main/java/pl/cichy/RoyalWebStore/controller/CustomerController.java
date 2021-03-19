@@ -12,9 +12,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pl.cichy.RoyalWebStore.exception.CustomerNotFoundException;
 import pl.cichy.RoyalWebStore.logic.CustomerService;
+import pl.cichy.RoyalWebStore.logic.InvoiceGeneratorService;
 import pl.cichy.RoyalWebStore.model.Customer;
 
 import javax.validation.Valid;
+import java.io.FileNotFoundException;
 import java.net.URI;
 import java.util.List;
 
@@ -24,6 +26,9 @@ public class CustomerController {
 
     @Autowired
     private CustomerService customerService;
+
+    @Autowired
+    private InvoiceGeneratorService invoiceGeneratorService;
 
     private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
 
@@ -60,6 +65,14 @@ public class CustomerController {
     ResponseEntity<Customer> deleteCustomersOrder(@PathVariable int customerId, @PathVariable int orderId) {
         customerService.deleteCustomersOrder(customerId, orderId);
         logger.info("Customer's order with id: " + orderId + " was deleted!");
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{customerId}/orders/{orderId}")
+    ResponseEntity<Customer> createPDFInvoiceForCustomersOrder(@PathVariable int customerId,
+                                                               @PathVariable int orderId) throws FileNotFoundException {
+        invoiceGeneratorService.createCustomersOrderPDFInvoice(customerId, orderId);
+        logger.info("Customer's order with id: " + " invoice in PDF created!");
         return ResponseEntity.ok().build();
     }
 

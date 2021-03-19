@@ -44,4 +44,5 @@ public class SalesInvoiceController {
         logger.info("New sales invoice was created!");
         return ResponseEntity.created(URI.create("/" + salesInvoiceToAdd.getSalesInvoiceId())).body(salesInvoiceToAdd);
     }
+
 }
