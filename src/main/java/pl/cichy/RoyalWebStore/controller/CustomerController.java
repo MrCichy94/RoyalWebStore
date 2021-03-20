@@ -72,7 +72,7 @@ public class CustomerController {
     ResponseEntity<Customer> createPDFInvoiceForCustomersOrder(@PathVariable int customerId,
                                                                @PathVariable int orderId) throws FileNotFoundException {
         invoiceGeneratorService.createCustomersOrderPDFInvoice(customerId, orderId);
-        logger.info("Customer's order with id: " + " invoice in PDF created!");
+        logger.info("Customer's order with id: " + orderId + " invoice in PDF created!");
         return ResponseEntity.ok().build();
     }
 
