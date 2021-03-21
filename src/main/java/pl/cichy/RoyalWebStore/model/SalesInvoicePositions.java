@@ -37,4 +37,13 @@ public class SalesInvoicePositions implements Serializable {
 
     public SalesInvoicePositions() {
     }
+
+    public SalesInvoicePositions(SalesInvoice salesInvoice, Copy copy,
+                                 BigDecimal sellNettPrice, BigDecimal sellGrossPrice, BigDecimal sellVatPercent) {
+        this.salesInvoice = salesInvoice;
+        this.copy = copy;
+        this.sellNettPrice = sellNettPrice;
+        this.sellGrossPrice = sellGrossPrice;
+        this.sellVatPercent = sellVatPercent;
+    }
 }

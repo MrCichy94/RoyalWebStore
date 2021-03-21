@@ -14,5 +14,5 @@ public interface SalesInvoiceService {
 
     SalesInvoice getById(Integer id);
 
-    void createNewSalesInvoice(int customerId, SalesInvoice salesInvoiceToAdd);
+    void createNewSalesInvoice(int orderId, SalesInvoice salesInvoiceToAdd);
 }

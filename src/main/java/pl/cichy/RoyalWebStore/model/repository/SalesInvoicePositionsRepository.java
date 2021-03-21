@@ -17,4 +17,7 @@ public interface SalesInvoicePositionsRepository {
 
     SalesInvoicePositions getById(Integer id);
 
+    SalesInvoicePositions save(SalesInvoicePositions entity);
+
+    List<Integer> getCopiesIdOfSalesInvoiceWithGivenId(Integer invoiceNumber);
 }

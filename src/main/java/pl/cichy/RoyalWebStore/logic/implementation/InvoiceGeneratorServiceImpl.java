@@ -4,19 +4,19 @@ import com.itextpdf.kernel.geom.PageSize;
 import com.itextpdf.kernel.pdf.PdfDocument;
 import com.itextpdf.kernel.pdf.PdfWriter;
 import com.itextpdf.layout.Document;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
-import pl.cichy.RoyalWebStore.exception.CustomerNotFoundException;
 import pl.cichy.RoyalWebStore.logic.InvoiceGeneratorService;
-import pl.cichy.RoyalWebStore.model.*;
-import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
-import pl.cichy.RoyalWebStore.model.repository.OrderRepository;
+import pl.cichy.RoyalWebStore.model.Copy;
+import pl.cichy.RoyalWebStore.model.Product;
+import pl.cichy.RoyalWebStore.model.SalesInvoice;
+import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
+import pl.cichy.RoyalWebStore.model.repository.SalesInvoicePositionsRepository;
+import pl.cichy.RoyalWebStore.model.repository.SalesInvoiceRepository;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static pl.cichy.RoyalWebStore.model.InvoiceGenerator.*;
@@ -25,67 +25,79 @@ import static pl.cichy.RoyalWebStore.model.InvoiceGenerator.*;
 @RequestScope
 public class InvoiceGeneratorServiceImpl implements InvoiceGeneratorService {
 
-    private final CustomerRepository customerRepository;
+    private final CopyRepository copyRepository;
     private final ProductRepository productRepository;
-    private final OrderRepository orderRepository;
+    private final SalesInvoiceRepository salesInvoiceRepository;
+    private final SalesInvoicePositionsRepository salesInvoicePositionsRepository;
 
-    public InvoiceGeneratorServiceImpl(final CustomerRepository customerRepository,
+
+    public InvoiceGeneratorServiceImpl(final CopyRepository copyRepository,
                                        final ProductRepository productRepository,
-                                       final OrderRepository orderRepository) {
-        this.customerRepository = customerRepository;
+                                       final SalesInvoiceRepository salesInvoiceRepository,
+                                       final SalesInvoicePositionsRepository salesInvoicePositionsRepository) {
+        this.copyRepository = copyRepository;
         this.productRepository = productRepository;
-        this.orderRepository = orderRepository;
+        this.salesInvoiceRepository = salesInvoiceRepository;
+        this.salesInvoicePositionsRepository = salesInvoicePositionsRepository;
     }
 
     @Override
-    public void createCustomersOrderPDFInvoice(int customerId, int orderId) throws FileNotFoundException {
+    public void createCustomersOrderPDFInvoice(long invoiceNumber) throws FileNotFoundException {
 
         PdfDocument pdfDocument = new PdfDocument(new PdfWriter("MyInvoice.pdf"));
         PageSize ps = PageSize.A4;
         Document layoutDocument = new Document(pdfDocument, ps);
 
-        try {
-            Order result = customerRepository.getById(customerId).getOrders().get(orderId - 1);
-            List<Copy> copies = result.getCopies();
-            List<InvoiceGenerator.Article> positionsList = new ArrayList<>();
-            for(Copy a : copies) {
-                Product p = productRepository.getById(a.getProductId());
-                Article art = new InvoiceGenerator.Article(1,
-                        p.getProductName(),
-                        1,
-                        a.getSellCurrentGrossPrice(),
-                        a.getBuyVatPercentage()
-                );
-                positionsList.add(art);
-            }
-            addTitle(layoutDocument);
-            addInvoiceDetails(layoutDocument);
-            addPositionsTable(layoutDocument, positionsList);
-            addSummTable(layoutDocument);
+        int salesInvoiceNumber = getSalesInvoiceNumber(invoiceNumber);
 
-            addSign(layoutDocument);
-            layoutDocument.close();
+        List<Integer> invoiceCopiesNumbers = getCopiesIdIntegersFromSalesInvoice(salesInvoiceNumber);
 
-        } catch (RuntimeException e) {
-            throw new CustomerNotFoundException(HttpStatus.NOT_FOUND,
-                    "No customer found with id: " + customerId,
-                    new RuntimeException(),
-                    customerId);
-        }
-/*
+        List<Copy> positionsOnInvoice = findAndAddCopiesByCopiesId(invoiceCopiesNumbers);
+
+        List<Article> positionsList = createArticleRowsForTable(positionsOnInvoice);
+
         addTitle(layoutDocument);
-
         addInvoiceDetails(layoutDocument);
-        addPositionsTable(layoutDocument, Arrays.asList(
-                new InvoiceGenerator.Article(1, "Revolotion 5", 8, new BigDecimal("169.99"), new BigDecimal("0.23")),
-                new InvoiceGenerator.Article(2, "Galaxy 5", 5, new BigDecimal("179.99"), new BigDecimal("0.23"))));
-
+        addPositionsTable(layoutDocument, positionsList);
         addSummTable(layoutDocument);
 
         addSign(layoutDocument);
         layoutDocument.close();
 
- */
+    }
 
+    private int getSalesInvoiceNumber(long invoiceNumber) {
+        SalesInvoice result = salesInvoiceRepository.getSalesInvoiceByInvoiceNumber(invoiceNumber);
+        return result.getSalesInvoiceId();
+    }
+
+    private List<Integer> getCopiesIdIntegersFromSalesInvoice(int salesInvoiceNumber) {
+        return salesInvoicePositionsRepository
+                .getCopiesIdOfSalesInvoiceWithGivenId(salesInvoiceNumber);
+    }
+
+    private List<Copy> findAndAddCopiesByCopiesId(List<Integer> invoiceCopiesNumbers) {
+        List<Copy> positionsOnInvoice = new ArrayList<>();
+        for (int x : invoiceCopiesNumbers) {
+            positionsOnInvoice.add(copyRepository.getById(x));
+        }
+        return positionsOnInvoice;
+    }
+
+    private List<Article> createArticleRowsForTable(List<Copy> positionsOnInvoice) {
+        List<Article> positionsList = new ArrayList<>();
+        int lineInTableNumber = 1;
+        for (Copy a : positionsOnInvoice) {
+            Product p = productRepository.getById(a.getProductId());
+            Article art = new Article(lineInTableNumber,
+                    p.getProductName(),
+                    1,
+                    a.getSellCurrentGrossPrice(),
+                    a.getBuyVatPercentage()
+            );
+            positionsList.add(art);
+            lineInTableNumber++;
+        }
+        return positionsList;
     }
 }

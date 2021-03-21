@@ -8,6 +8,7 @@ import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.SalesInvoice;
 import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 import pl.cichy.RoyalWebStore.model.repository.OrderRepository;
+import pl.cichy.RoyalWebStore.model.repository.SalesInvoicePositionsRepository;
 import pl.cichy.RoyalWebStore.model.repository.SalesInvoiceRepository;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -28,11 +29,14 @@ class SalesInvoiceServiceImplTest {
         var mockCustomerRepository = mock(CustomerRepository.class);
         when(mockCustomerRepository.existsById(mockCustomer.getCustomerId())).thenReturn(false);
         //and
+        var mockSalesInvoicePositionsRepository = mock(SalesInvoicePositionsRepository.class);
+        //and
         var mockSalesInvoiceRepository = mock(SalesInvoiceRepository.class);
         //and
         var mockOrderRepository = mock(OrderRepository.class);
         //system under test
-        var toTest = new SalesInvoiceServiceImpl(mockSalesInvoiceRepository, mockCustomerRepository, mockOrderRepository);
+        var toTest = new SalesInvoiceServiceImpl(mockSalesInvoicePositionsRepository,
+                mockSalesInvoiceRepository, mockCustomerRepository, mockOrderRepository);
         //when
         var exception = catchThrowable(() -> toTest.createNewSalesInvoice(
                 mockCustomer.getCustomerId(), mockSalesInvoice));
@@ -52,11 +56,14 @@ class SalesInvoiceServiceImplTest {
         var mockCustomerRepository = mock(CustomerRepository.class);
         when(mockCustomerRepository.existsById(mockCustomer.getCustomerId())).thenReturn(true);
         //and
+        var mockSalesInvoicePositionsRepository = mock(SalesInvoicePositionsRepository.class);
+        //and
         var mockSalesInvoiceRepository = mock(SalesInvoiceRepository.class);
         //and
         var mockOrderRepository = mock(OrderRepository.class);
         //system under test
-        var toTest = new SalesInvoiceServiceImpl(mockSalesInvoiceRepository, mockCustomerRepository, mockOrderRepository);
+        var toTest = new SalesInvoiceServiceImpl(mockSalesInvoicePositionsRepository,
+                mockSalesInvoiceRepository, mockCustomerRepository, mockOrderRepository);
         //when
         var exception = catchThrowable(() -> toTest.createNewSalesInvoice(
                 mockCustomer.getCustomerId(), mockSalesInvoice));

@@ -15,4 +15,6 @@ public interface SalesInvoiceRepository {
     SalesInvoice getById(Integer id);
 
     SalesInvoice save(SalesInvoice entity);
+
+    SalesInvoice getSalesInvoiceByInvoiceNumber(long invoiceNumber);
 }

@@ -13,4 +13,9 @@ public interface SqlSalesInvoiceRepository extends SalesInvoiceRepository, JpaRe
     @Override
     @Query(nativeQuery = true, value = "SELECT * from SALESINVOICE where SALES_INVOICE_ID=:id")
     SalesInvoice getById(@Param("id") Integer id);
+
+    @Override
+    @Query(nativeQuery = true, value = "SELECT * from SALESINVOICE where SALES_INVOICE_NUMBER=:id")
+    SalesInvoice getSalesInvoiceByInvoiceNumber(@Param("id") long id);
+
 }
