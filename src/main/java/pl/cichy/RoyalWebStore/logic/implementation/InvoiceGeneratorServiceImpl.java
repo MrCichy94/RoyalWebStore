@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.logic.InvoiceGeneratorService;
 import pl.cichy.RoyalWebStore.model.Copy;
+import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.Product;
 import pl.cichy.RoyalWebStore.model.SalesInvoice;
 import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
@@ -15,8 +16,11 @@ import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
 import pl.cichy.RoyalWebStore.model.repository.SalesInvoicePositionsRepository;
 import pl.cichy.RoyalWebStore.model.repository.SalesInvoiceRepository;
 
+import javax.validation.constraints.Digits;
 import java.io.FileNotFoundException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static pl.cichy.RoyalWebStore.model.InvoiceGenerator.*;
@@ -45,21 +49,29 @@ public class InvoiceGeneratorServiceImpl implements InvoiceGeneratorService {
     public void createCustomersOrderPDFInvoice(long invoiceNumber) throws FileNotFoundException {
 
         PdfDocument pdfDocument = new PdfDocument(new PdfWriter("MyInvoice.pdf"));
-        PageSize ps = PageSize.A4;
-        Document layoutDocument = new Document(pdfDocument, ps);
+        PageSize pageSize = PageSize.A4;
+        Document layoutDocument = new Document(pdfDocument, pageSize);
+
+
+
 
         int salesInvoiceNumber = getSalesInvoiceNumber(invoiceNumber);
-
         List<Integer> invoiceCopiesNumbers = getCopiesIdIntegersFromSalesInvoice(salesInvoiceNumber);
-
         List<Copy> positionsOnInvoice = findAndAddCopiesByCopiesId(invoiceCopiesNumbers);
-
         List<Article> positionsList = createArticleRowsForTable(positionsOnInvoice);
 
-        addTitle(layoutDocument);
-        addInvoiceDetails(layoutDocument);
-        addPositionsTable(layoutDocument, positionsList);
-        addSummTable(layoutDocument);
+        Customer customer = salesInvoiceRepository.getSalesInvoiceByInvoiceNumber(invoiceNumber).getCustomer();
+
+        BigDecimal alreadyPaid = BigDecimal.ZERO;
+        List<BigDecimal> grossAndNett = countOrderPrice(positionsOnInvoice, BigDecimal.ZERO, BigDecimal.ZERO);
+        BigDecimal fullOrderGrossPrice = grossAndNett.get(0);
+        BigDecimal fullOrderNetPrice = grossAndNett.get(1);
+        BigDecimal toPay = fullOrderGrossPrice.subtract(alreadyPaid);
+
+        addTitle(layoutDocument, invoiceNumber);
+        addInvoiceDetails(layoutDocument, customer);
+        addPositionsTable(layoutDocument, positionsList, fullOrderGrossPrice, fullOrderNetPrice);
+        addSummTable(layoutDocument, alreadyPaid, fullOrderGrossPrice, toPay);
 
         addSign(layoutDocument);
         layoutDocument.close();
@@ -99,5 +111,16 @@ public class InvoiceGeneratorServiceImpl implements InvoiceGeneratorService {
             lineInTableNumber++;
         }
         return positionsList;
+    }
+
+    private List<BigDecimal> countOrderPrice(List<Copy> positionsOnInvoice,
+                                       BigDecimal fullOrderGrossPrice,
+                                       BigDecimal fullOrderNettPrice) {
+        for (Copy a : positionsOnInvoice) {
+            Product p = productRepository.getById(a.getProductId());
+            fullOrderGrossPrice= fullOrderGrossPrice.add(p.getSellBaseGrossPrice());
+            fullOrderNettPrice= fullOrderNettPrice.add(p.getSellBaseNetPrice());
+        }
+        return Arrays.asList(fullOrderGrossPrice,fullOrderNettPrice);
     }
 }

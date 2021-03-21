@@ -48,27 +48,34 @@ public class InvoiceGenerator {
         }
     }
 
-    public static void addTitle(Document layoutDocument) {
+    public static void addTitle(Document layoutDocument, long invoiceNumber) {
         layoutDocument.add(new Paragraph("FAKTURA DETALICZNA")
+                .setBold().setUnderline()
+                .setTextAlignment(TextAlignment.CENTER));
+        layoutDocument.add(new Paragraph("nr " + invoiceNumber)
                 .setBold().setUnderline()
                 .setTextAlignment(TextAlignment.CENTER));
         separate(layoutDocument, 5);
     }
 
-    public static void addInvoiceDetails(Document layoutDocument) {
+    public static void addInvoiceDetails(Document layoutDocument, Customer customer) {
 
         Table table = new Table(2, true).setFontSize(10);
 
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Sprzedawca").setBold()));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Nabywca").setBold()));
-        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Nazwa firmy")));
-        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Nazwa firmy/imie")));
-        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Nazwaulicy 3, 33-333 Miasto")));
-        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Nazwaulicy 7, 77-777 Wioska")));
+        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Royal Enterprises")));
+        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph(customer.getFirstName()+" "+customer.getLastName())));
+        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Krakowska 1, 30-100 Kraków")));
+        table.addCell(new Cell().setBorder(Border.NO_BORDER)
+                .add(new Paragraph(customer.getAddress().getStreetName()+" "+
+                        customer.getAddress().getDoorNumber()+", "+
+                        customer.getAddress().getZipCode()+" "+
+                        customer.getAddress().getCity()))); //todo TRY MAKE TEMPLATE OR ENUM
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("NIP 0000000000")));
-        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("NIP 1111111111")));
+        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph(""+customer.getCompanyName())));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Numer konta")));
-        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
+        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("NIP " + customer.getNIP())));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("48 4444 4444 4444 4444 0000 1111")));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
 
@@ -77,7 +84,8 @@ public class InvoiceGenerator {
 
     }
 
-    public static void addPositionsTable(Document layoutDocument, List<Article> articleList) {
+    public static void addPositionsTable(Document layoutDocument, List<Article> articleList,
+                                         BigDecimal fullOrderGrossPrice, BigDecimal fullOrderNetPrice) {
         Table table = new Table(UnitValue.createPointArray(new float[]{30f, 145f, 30f, 40f, 65f, 45f, 80f, 85f}))
                 .setFontSize(10);
 
@@ -109,13 +117,14 @@ public class InvoiceGenerator {
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
-        table.addCell(new Paragraph(("SUMA zl"))).setTextAlignment(TextAlignment.RIGHT);
-        table.addCell(new Paragraph(("SUMA zl"))).setTextAlignment(TextAlignment.RIGHT);
+        table.addCell(new Paragraph((fullOrderNetPrice + " zl")).setBold().setTextAlignment(TextAlignment.RIGHT));
+        table.addCell(new Paragraph((fullOrderGrossPrice + " zl")).setBold().setTextAlignment(TextAlignment.RIGHT));
 
         layoutDocument.add(table);
     }
 
-    public static void addSummTable(Document layoutDocument) {
+    public static void addSummTable(Document layoutDocument, BigDecimal alreadyPaid,
+                                    BigDecimal fullOrderPrice, BigDecimal toPay) {
         separate(layoutDocument, 1);
         Table table = new Table(5, true).setFontSize(10);
 
@@ -123,19 +132,19 @@ public class InvoiceGenerator {
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Zaplacono: ")));
-        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
+        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph(alreadyPaid+" zl")).setBold().setTextAlignment(TextAlignment.RIGHT));
 
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Do zaplaty: ")));
-        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
+        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph(fullOrderPrice+" zl")).setBold().setTextAlignment(TextAlignment.RIGHT));
 
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
         table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("Razem: ")));
-        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph("")));
+        table.addCell(new Cell().setBorder(Border.NO_BORDER).add(new Paragraph(toPay+" zl")).setBold().setTextAlignment(TextAlignment.RIGHT));
 
         layoutDocument.add(table);
     }
