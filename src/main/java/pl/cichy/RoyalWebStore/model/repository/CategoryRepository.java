@@ -8,4 +8,5 @@ public interface CategoryRepository {
 
     List<Category> findAll();
 
+    Category save(Category entity);
 }

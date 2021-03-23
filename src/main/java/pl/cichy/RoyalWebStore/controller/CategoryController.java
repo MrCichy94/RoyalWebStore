@@ -26,13 +26,13 @@ public class CategoryController {
     }
 
     @GetMapping("/categories")
-    ResponseEntity<List<Category>> readAllCategoriesAndManufacturers() {
+    ResponseEntity<List<Category>> readAllCategories() {
         logger.info("Read all the products!");
         return ResponseEntity.ok(categoryService.findAll());
     }
 
     @PostMapping("/{productId}/category/add")
-    ResponseEntity<Category> setNewManufacturerForProduct(@PathVariable("productId") Integer productId,
+    ResponseEntity<Category> setNewCategoryForProduct(@PathVariable("productId") Integer productId,
                                                           @RequestBody @Valid Category categoryToSet) {
         categoryService.setCategoryForProduct(productId, categoryToSet);
         return ResponseEntity.created(URI.create("/" + categoryToSet.getCategoryId())).body(categoryToSet);
