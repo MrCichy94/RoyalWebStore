@@ -80,13 +80,13 @@ class ContactControllerTest {
     @DisplayName("should post contact")
     void addContact() throws Exception {
         //given
-        Contact adr = new Contact(
+        Contact contact = new Contact(
                 7,
                 "775115866",
                 "noel@onet.pl");
         //when+then
         mockMvc.perform(MockMvcRequestBuilders.post("/contacts/add")
-                .content(asJsonString(adr))
+                .content(asJsonString(contact))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(201))

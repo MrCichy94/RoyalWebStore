@@ -69,7 +69,7 @@ class AddressControllerTest {
                 "1");
         Address second = new Address(
                 2,
-                "Warszawa",
+                "Lublin",
                 "Mazowieckie",
                 "39-900",
                 "Warszawka",
@@ -80,7 +80,7 @@ class AddressControllerTest {
         this.mockMvc.perform(MockMvcRequestBuilders.get("/addresses"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(200))
-                .andExpect(MockMvcResultMatchers.jsonPath("$[1].city", Matchers.is("Warszawa")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].city", Matchers.is("Lublin")));
 
     }
 
@@ -89,7 +89,7 @@ class AddressControllerTest {
     @DisplayName("should post address")
     void addAddress() throws Exception {
         //given
-        Address adr = new Address(
+        Address address = new Address(
                 3,
                 "Gdansk",
                 "Pomorskie",
@@ -98,7 +98,7 @@ class AddressControllerTest {
                 "3");
         //when+then
         mockMvc.perform(MockMvcRequestBuilders.post("/addresses/add")
-                .content(asJsonString(adr))
+                .content(asJsonString(address))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(201))

@@ -48,10 +48,10 @@ class CategoryControllerTest {
     @DisplayName("should post category")
     void addCategory() throws Exception {
         //given
-        Category cat = new Category("TestCategory");
+        Category category = new Category("TestCategory");
         //when+then
         mockMvc.perform(MockMvcRequestBuilders.post("/products/1/category/add")
-                .content(asJsonString(cat))
+                .content(asJsonString(category))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(201))

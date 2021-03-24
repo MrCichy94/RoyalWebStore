@@ -64,7 +64,8 @@ public class CopyServiceImpl implements CopyService {
     }
 
     private Copy assignDataForCopy(Integer productId, Copy copyToSet) {
-        Copy newCopyToAdd = new Copy(copyToSet.getMerchandisingCode(),
+        Copy newCopyToAdd = new Copy(copyToSet.getCopyId(),
+                copyToSet.getMerchandisingCode(),
                 copyToSet.getBuyGrossPrice(),
                 copyToSet.getBuyVatPercentage());
 

@@ -38,7 +38,7 @@ public class CopyController {
     }
 
     @PostMapping("/{productId}")
-    ResponseEntity<Copy> createNewCopyOfProduct(@PathVariable int productId,
+    ResponseEntity<Copy> createNewCopyOfProduct(@PathVariable Integer productId,
                                                 @RequestBody @Valid Copy copyOfProductToAdd) {
         copyService.setCopyForProduct(productId, copyOfProductToAdd);
         logger.info("New copy was created!");
