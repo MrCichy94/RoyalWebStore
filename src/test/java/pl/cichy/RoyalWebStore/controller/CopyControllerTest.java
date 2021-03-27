@@ -9,25 +9,20 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import pl.cichy.RoyalWebStore.logic.CopyService;
-import pl.cichy.RoyalWebStore.model.Address;
 import pl.cichy.RoyalWebStore.model.Copy;
 import pl.cichy.RoyalWebStore.model.Product;
 import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
 
 import javax.transaction.Transactional;
-
 import java.math.BigDecimal;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
+@Transactional
 @AutoConfigureMockMvc
 class CopyControllerTest {
 
@@ -72,7 +67,7 @@ class CopyControllerTest {
     void readAllCopiesForProductId_shouldGetAllCopiesForWithGiveProductId() throws Exception {
         //given
         Product p1 = new Product(
-                2,
+                5,
                 "TESTOWY",
                 new BigDecimal("19.99"),
                 new BigDecimal("0.20"));
@@ -82,17 +77,17 @@ class CopyControllerTest {
                 "BEA111-006-11",
                 new BigDecimal("119.99"),
                 new BigDecimal("0.12"));
-        first.setProductId(2);
+        first.setProductId(p1.getProductId());
         Copy second = new Copy(
                 2,
                 "BEA222-006-11",
                 new BigDecimal("129.99"),
                 new BigDecimal("0.14"));
-        second.setProductId(2);
+        second.setProductId(p1.getProductId());
         copyRepository.save(first);
         copyRepository.save(second);
         //when+then
-        this.mockMvc.perform(MockMvcRequestBuilders.get("/products/"+p1.getProductId()+"/copies"))
+        this.mockMvc.perform(MockMvcRequestBuilders.get("/products/" + p1.getProductId() + "/copies"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(200))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].merchandisingCode", Matchers.is("BEA222-006-11")));
@@ -101,20 +96,38 @@ class CopyControllerTest {
     @Test
     @Transactional
     @DisplayName("should post copy")
-    void addCopy() throws Exception {
+    void createNewCopyOfProduct_shouldPostACopyOfProductWithGivenId() throws Exception {
         //given
-        Copy copy = new Copy(
-                100,
-                "BEA111-006-11",
-                new BigDecimal("119.99"),
-                new BigDecimal("0.12"));
+        Product p2 = new Product(
+                1,
+                "TESTOWY",
+                new BigDecimal("19.99"),
+                new BigDecimal("0.20"));
+
+        Copy copy = new Copy();
+        copy.setMerchandisingCode("BEA111-006-11");
+        copy.setBuyGrossPrice(new BigDecimal("119.99"));
+        copy.setBuyVatPercentage(new BigDecimal("0.12"));
         //when+then
-        mockMvc.perform(MockMvcRequestBuilders.post("/products/1")
+        mockMvc.perform(MockMvcRequestBuilders.post("/products/" + p2.getProductId())
                 .content(asJsonString(copy))
                 .contentType(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().is(201))
                 .andExpect(MockMvcResultMatchers.content().contentType("application/json"));
+
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("should delete copy")
+    void deleteCopy_shouldDeleteACopyWithGivenId() throws Exception {
+        //given
+        //when+then
+        this.mockMvc.perform(MockMvcRequestBuilders.delete("/products/copies/1"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().is(200));
+
     }
 
     public String asJsonString(final Object obj) {
