@@ -26,13 +26,13 @@ public class OrderContorller {
     }
 
     @GetMapping("/orders")
-    ResponseEntity<List<Order>> readAllCopies() {
+    ResponseEntity<List<Order>> readAllOrders() {
         logger.info("Read all orders!");
         return ResponseEntity.ok(orderService.findAll());
     }
 
     @GetMapping("/{id}/orders")
-    ResponseEntity<List<Order>> readAllCopiesForProductId(@PathVariable int id) {
+    ResponseEntity<List<Order>> readAllOrdersByClientId(@PathVariable int id) {
         logger.info("Read all of the orders of this customer!");
         return ResponseEntity.ok(orderService.getOrdersByClientId(id));
     }
