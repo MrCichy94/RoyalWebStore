@@ -115,7 +115,7 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Order> deleteOrder(@PathVariable int id) {
+    ResponseEntity<Order> deleteProduct(@PathVariable int id) {
         productService.deleteById(id);
         logger.info("Product was deleted!");
         return ResponseEntity.ok().build();

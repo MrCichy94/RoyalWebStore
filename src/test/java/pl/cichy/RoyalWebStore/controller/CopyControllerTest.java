@@ -32,8 +32,6 @@ class CopyControllerTest {
     @Autowired
     private CopyRepository copyRepository;
     @Autowired
-    private CopyService copyService;
-    @Autowired
     private ProductRepository productRepository;
 
     @Test
