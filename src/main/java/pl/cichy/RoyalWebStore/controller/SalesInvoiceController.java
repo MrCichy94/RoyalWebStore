@@ -25,7 +25,7 @@ public class SalesInvoiceController {
     @Autowired
     private InvoiceGeneratorService invoiceGeneratorService;
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+    private static final Logger logger = LoggerFactory.getLogger(SalesInvoiceController.class);
 
     public SalesInvoiceController() {
     }

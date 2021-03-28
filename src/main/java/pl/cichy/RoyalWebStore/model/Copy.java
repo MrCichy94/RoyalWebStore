@@ -61,6 +61,7 @@ public class Copy implements Serializable {
     @JsonIgnore
     LocalDate buyDate;
 
+    @JsonIgnore
     LocalDate sellDate;
 
     public Copy() {

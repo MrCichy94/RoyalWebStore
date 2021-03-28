@@ -9,6 +9,7 @@ import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.exception.OrderNotFoundException;
 import pl.cichy.RoyalWebStore.logic.SalesInvoiceService;
 import pl.cichy.RoyalWebStore.model.Copy;
+import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.SalesInvoice;
 import pl.cichy.RoyalWebStore.model.SalesInvoicePositions;
 import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
@@ -16,6 +17,7 @@ import pl.cichy.RoyalWebStore.model.repository.OrderRepository;
 import pl.cichy.RoyalWebStore.model.repository.SalesInvoicePositionsRepository;
 import pl.cichy.RoyalWebStore.model.repository.SalesInvoiceRepository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -67,6 +69,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
                     salesInvoiceToAdd.getTypeOfDocument());
 
             newSalesInvoice.setCustomer(customerRepository.getById(orderRepository.getById(orderId).getCustomerId()));
+
             salesInvoiceRepository.save(newSalesInvoice);
 
             List<Copy> copiesInOrder = orderRepository.getById(orderId).getCopies();

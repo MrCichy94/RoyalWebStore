@@ -16,6 +16,7 @@ import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 import pl.cichy.RoyalWebStore.model.repository.OrderRepository;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequestScope
@@ -40,13 +41,18 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
+    public Set<Order> findAllUnique() {
+        return orderRepository.findAllUnique();
+    }
+
+    @Override
     public Page<Order> findAll(Pageable page) {
         return orderRepository.findAll(page);
     }
 
 
     @Override
-    public List<Order> getOrdersByClientId(Integer id) {
+    public Set<Order> getOrdersByClientId(Integer id) {
         return orderRepository.getOrdersByClientId(id);
     }
 
@@ -55,7 +61,7 @@ public class OrderServiceImpl implements OrderService {
 
         try {
             Customer customerToActualizeOrder = customerRepository.getById(customerId);
-            List<Order> listOfOrdersToRefresh = customerRepository.getById(customerId).getOrders();
+            Set<Order> listOfOrdersToRefresh = customerRepository.getById(customerId).getOrders();
 
             assignDataToOrderObject(customerId, customerOrderToAdd);
 

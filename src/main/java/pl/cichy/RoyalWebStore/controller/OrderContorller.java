@@ -11,7 +11,7 @@ import pl.cichy.RoyalWebStore.model.Order;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/customers")
@@ -26,13 +26,13 @@ public class OrderContorller {
     }
 
     @GetMapping("/orders")
-    ResponseEntity<List<Order>> readAllOrders() {
+    ResponseEntity<Set<Order>> readAllOrders() {
         logger.info("Read all orders!");
-        return ResponseEntity.ok(orderService.findAll());
+        return ResponseEntity.ok(orderService.findAllUnique());
     }
 
     @GetMapping("/{id}/orders")
-    ResponseEntity<List<Order>> readAllOrdersByClientId(@PathVariable int id) {
+    ResponseEntity<Set<Order>> readAllOrdersByClientId(@PathVariable int id) {
         logger.info("Read all of the orders of this customer!");
         return ResponseEntity.ok(orderService.getOrdersByClientId(id));
     }

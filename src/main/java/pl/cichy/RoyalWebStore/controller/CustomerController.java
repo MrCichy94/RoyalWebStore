@@ -25,7 +25,7 @@ public class CustomerController {
     @Autowired
     private CustomerService customerService;
 
-    private static final Logger logger = LoggerFactory.getLogger(ProductController.class);
+    private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
 
     public CustomerController() {
     }

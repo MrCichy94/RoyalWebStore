@@ -1,5 +1,6 @@
 package pl.cichy.RoyalWebStore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -27,6 +28,7 @@ public class SalesInvoice implements Serializable {
 
     String salesInvoiceNumber;
 
+    @JsonIgnore
     LocalDate soldDate;
 
     BigDecimal netValue;
