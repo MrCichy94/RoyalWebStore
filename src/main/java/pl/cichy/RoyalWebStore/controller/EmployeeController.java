@@ -53,14 +53,14 @@ public class EmployeeController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Customer> deleteCustomer(@PathVariable int id) {
+    ResponseEntity<Customer> deleteEmployee(@PathVariable int id) {
         employeeService.deleteById(id);
         logger.info("Employee was deleted!");
         return ResponseEntity.ok().build();
     }
 
     @PatchMapping("/{employeeId}")
-    ResponseEntity<Customer> updateCustomer(@PathVariable int employeeId,
+    ResponseEntity<Customer> updateEmployee(@PathVariable int employeeId,
                                             @RequestBody JsonPatch employeeToUpdate) {
         try {
             employeeService.updateEmployeesData(employeeId, employeeToUpdate);

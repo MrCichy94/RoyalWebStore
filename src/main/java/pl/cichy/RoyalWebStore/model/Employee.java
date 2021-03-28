@@ -1,5 +1,6 @@
 package pl.cichy.RoyalWebStore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -43,8 +44,10 @@ public class Employee implements Serializable {
 
     private boolean accountActive;
 
+    @JsonIgnore
     private LocalDate hireDate;
 
+    @JsonIgnore
     private LocalDate releaseDate;
 
     public Employee() {
