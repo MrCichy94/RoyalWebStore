@@ -87,7 +87,7 @@ class AddressControllerTest {
     @Test
     @Transactional
     @DisplayName("should post address")
-    void addAddress() throws Exception {
+    void addNewAddress_shouldAddAddress() throws Exception {
         //given
         Address address = new Address(
                 3,

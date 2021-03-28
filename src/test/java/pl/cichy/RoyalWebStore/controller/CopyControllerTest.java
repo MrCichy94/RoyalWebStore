@@ -22,7 +22,6 @@ import javax.transaction.Transactional;
 import java.math.BigDecimal;
 
 @SpringBootTest
-@Transactional
 @AutoConfigureMockMvc
 class CopyControllerTest {
 
