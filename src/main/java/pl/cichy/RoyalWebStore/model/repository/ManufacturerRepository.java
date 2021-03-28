@@ -8,4 +8,6 @@ public interface ManufacturerRepository {
 
     List<Manufacturer> findAll();
 
+    Manufacturer save(Manufacturer entity);
+
 }

@@ -26,7 +26,7 @@ public class ManufacturerController {
     }
 
     @GetMapping("/manufacturers")
-    ResponseEntity<List<Manufacturer>> readAllCategoriesAndManufacturers() {
+    ResponseEntity<List<Manufacturer>> readAllManufacturers() {
         logger.info("Read all the products!");
         return ResponseEntity.ok(manufacturerService.findAll());
     }
