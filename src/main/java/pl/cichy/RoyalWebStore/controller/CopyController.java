@@ -11,7 +11,7 @@ import pl.cichy.RoyalWebStore.model.Copy;
 
 import javax.validation.Valid;
 import java.net.URI;
-import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/products")
@@ -26,13 +26,13 @@ public class CopyController {
     }
 
     @GetMapping("/copies")
-    ResponseEntity<List<Copy>> readAllCopies() {
+    ResponseEntity<Set<Copy>> readAllCopies() {
         logger.info("Read all copies!");
-        return ResponseEntity.ok(copyService.findAll());
+        return ResponseEntity.ok(copyService.findAllUnique());
     }
 
     @GetMapping("/{id}/copies")
-    ResponseEntity<List<Copy>> readAllCopiesForProductId(@PathVariable int id) {
+    ResponseEntity<Set<Copy>> readAllCopiesForProductId(@PathVariable int id) {
         logger.info("Read all of the copies of this product!");
         return ResponseEntity.ok(copyService.getCopiesByProductId(id));
     }

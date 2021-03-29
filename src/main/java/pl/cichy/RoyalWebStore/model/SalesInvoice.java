@@ -1,5 +1,6 @@
 package pl.cichy.RoyalWebStore.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,7 +29,7 @@ public class SalesInvoice implements Serializable {
 
     String salesInvoiceNumber;
 
-    @JsonIgnore
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate soldDate;
 
     BigDecimal netValue;

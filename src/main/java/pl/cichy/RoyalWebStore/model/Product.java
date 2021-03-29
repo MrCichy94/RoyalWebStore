@@ -10,8 +10,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -25,7 +24,7 @@ public class Product implements Serializable {
     int productId;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<Copy> copies;
+    Set<Copy> copies;
 
     /*
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

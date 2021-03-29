@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequestScope
@@ -72,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
             result.setVatValue(priceToSet.add(newNetPrice.negate())
                     .setScale(2, RoundingMode.DOWN));
 
-            List<Copy> items = result.getCopies();
+            Set<Copy> items = result.getCopies();
             for (Copy it : items) {
                 it.setSellCurrentGrossPrice(priceToSet);
                 it.setSellCurrentNetPrice(result.getSellBaseNetPrice());
@@ -168,7 +169,7 @@ public class ProductServiceImpl implements ProductService {
             BigDecimal newVatValue = newGrossPrice.add(newNetPrice.negate())
                     .setScale(2, RoundingMode.DOWN);
 
-            List<Copy> items = result.getCopies();
+            Set<Copy> items = result.getCopies();
 
             for (Copy it : items) {
                 it.setDiscoutValue(discountPercentageValue);

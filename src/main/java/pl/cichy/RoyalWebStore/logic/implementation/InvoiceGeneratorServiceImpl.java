@@ -16,7 +16,6 @@ import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
 import pl.cichy.RoyalWebStore.model.repository.SalesInvoicePositionsRepository;
 import pl.cichy.RoyalWebStore.model.repository.SalesInvoiceRepository;
 
-import javax.validation.constraints.Digits;
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -51,8 +50,6 @@ public class InvoiceGeneratorServiceImpl implements InvoiceGeneratorService {
         PdfDocument pdfDocument = new PdfDocument(new PdfWriter("MyInvoice.pdf"));
         PageSize pageSize = PageSize.A4;
         Document layoutDocument = new Document(pdfDocument, pageSize);
-
-
 
 
         int salesInvoiceNumber = getSalesInvoiceNumber(invoiceNumber);
@@ -114,13 +111,13 @@ public class InvoiceGeneratorServiceImpl implements InvoiceGeneratorService {
     }
 
     private List<BigDecimal> countOrderPrice(List<Copy> positionsOnInvoice,
-                                       BigDecimal fullOrderGrossPrice,
-                                       BigDecimal fullOrderNettPrice) {
+                                             BigDecimal fullOrderGrossPrice,
+                                             BigDecimal fullOrderNettPrice) {
         for (Copy a : positionsOnInvoice) {
             Product p = productRepository.getById(a.getProductId());
-            fullOrderGrossPrice= fullOrderGrossPrice.add(p.getSellBaseGrossPrice());
-            fullOrderNettPrice= fullOrderNettPrice.add(p.getSellBaseNetPrice());
+            fullOrderGrossPrice = fullOrderGrossPrice.add(p.getSellBaseGrossPrice());
+            fullOrderNettPrice = fullOrderNettPrice.add(p.getSellBaseNetPrice());
         }
-        return Arrays.asList(fullOrderGrossPrice,fullOrderNettPrice);
+        return Arrays.asList(fullOrderGrossPrice, fullOrderNettPrice);
     }
 }

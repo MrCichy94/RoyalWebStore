@@ -1,6 +1,6 @@
 package pl.cichy.RoyalWebStore.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -27,13 +27,13 @@ public class Order implements Serializable {
 
     int customerId;
 
-    @JsonIgnore
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate orderAcceptanceDate;
 
-    @JsonIgnore
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate shippingDate;
 
-    @JsonIgnore
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate orderFulfillmentDate;
 
     @Size(min = 1, max = 25)

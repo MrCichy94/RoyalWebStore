@@ -50,7 +50,6 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAll(page);
     }
 
-
     @Override
     public Set<Order> getOrdersByClientId(Integer id) {
         return orderRepository.getOrdersByClientId(id);

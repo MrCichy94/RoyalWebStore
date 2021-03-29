@@ -13,6 +13,8 @@ import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
 import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 
 @Service
 @RequestScope
@@ -32,34 +34,52 @@ public class CopyServiceImpl implements CopyService {
     }
 
     @Override
+    public Set<Copy> findAllUnique() {
+        return copyRepository.findAllUnique();
+    }
+
+    @Override
     public Page<Copy> findAll(Pageable page) {
         return copyRepository.findAll(page);
     }
 
     @Override
-    public List<Copy> getCopiesByProductId(Integer id) {
+    public Set<Copy> getCopiesByProductId(Integer id) {
         return copyRepository.getCopiesByProductId(id);
     }
 
     @Override
     public void setCopyForProduct(Integer productId, Copy copyToSet) {
 
-        try {
+        //try {
             Product productToActualizeCopy = productRepository.getById(productId);
-            List<Copy> listOfCopiesToRefresh = productRepository.getById(productId).getCopies();
+            Set<Copy> listOfCopiesToRefresh = productRepository.getById(productId).getCopies();
 
-            Copy newCopyToAdd = assignDataForCopy(productId, copyToSet);
+            Stream<Copy> filteredCopy = listOfCopiesToRefresh.stream()
+                    .filter(c-> c.getMerchandisingCode().equals(copyToSet.getMerchandisingCode()))
+                    .filter(c-> c.getBuyGrossPrice().equals(copyToSet.getBuyGrossPrice()))
+                    .filter(c-> c.getBuyVatPercentage().equals(copyToSet.getBuyVatPercentage()));
+            Stream<Object> namesCopy = filteredCopy.map(Copy::getCopyId);
+            //System.out.println(namesCopy.count());
 
-            listOfCopiesToRefresh.add(newCopyToAdd);
+            if(namesCopy.count() != 0) {
+                copyRepository.getByMerchandisingCode(copyToSet.getMerchandisingCode()).increaseQuantity();
+            } else {
+                Copy newCopyToAdd = assignDataForCopy(productId, copyToSet);
+                listOfCopiesToRefresh.add(newCopyToAdd);
+            }
 
             productToActualizeCopy.setCopies(listOfCopiesToRefresh);
             productRepository.save(productToActualizeCopy);
+            /*
         } catch (RuntimeException noProduct) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
                     "No product found with id: " + productId,
                     new RuntimeException(),
                     productId);
         }
+
+             */
 
     }
 
@@ -70,6 +90,7 @@ public class CopyServiceImpl implements CopyService {
                 copyToSet.getBuyVatPercentage());
 
         newCopyToAdd.setProductId(productId);
+        newCopyToAdd.setQuantity(1);
         newCopyToAdd.setSellCurrentGrossPrice(productRepository.getById(productId).getSellBaseGrossPrice());
         newCopyToAdd.setSellCurrentNetPrice(productRepository.getById(productId).getSellBaseNetPrice());
         return newCopyToAdd;

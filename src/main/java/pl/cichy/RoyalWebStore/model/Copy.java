@@ -1,6 +1,6 @@
 package pl.cichy.RoyalWebStore.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -28,6 +28,8 @@ public class Copy implements Serializable {
     int copyId;
 
     private int productId;
+
+    private int quantity;
 
     @Size(min = 1, max = 25)
     String merchandisingCode;
@@ -58,21 +60,21 @@ public class Copy implements Serializable {
 
     boolean isAlreadySold;
 
-    @JsonIgnore
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate buyDate;
 
-    @JsonIgnore
+    @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate sellDate;
 
     public Copy() {
     }
-
 
     public Copy(int copyId, String merchandisingCode, BigDecimal buyGrossPrice, BigDecimal buyVatPercentage) {
         this.copyId = copyId;
         this.merchandisingCode = merchandisingCode;
         this.buyGrossPrice = buyGrossPrice;
         this.buyVatPercentage = buyVatPercentage;
+        quantity = 0;
 
         BigDecimal point = (BigDecimal.ONE).negate();
         buyNetPrice = countBuyNetPrice(buyGrossPrice, buyVatPercentage, point);
@@ -95,5 +97,7 @@ public class Copy implements Serializable {
                 .abs())).setScale(2, RoundingMode.DOWN);
     }
 
-
+    public void increaseQuantity() {
+        quantity++;
+    }
 }
