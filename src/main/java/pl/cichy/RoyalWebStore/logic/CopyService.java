@@ -23,4 +23,5 @@ public interface CopyService {
 
     Copy save(Copy entity);
 
+    Copy getById(Integer id);
 }

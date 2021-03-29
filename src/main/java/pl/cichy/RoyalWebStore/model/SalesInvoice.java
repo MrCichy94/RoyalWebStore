@@ -1,7 +1,6 @@
 package pl.cichy.RoyalWebStore.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
@@ -24,8 +23,8 @@ public class SalesInvoice implements Serializable {
     @GenericGenerator(name = "inc", strategy = "increment")
     int salesInvoiceId;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    Customer customer;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    Order order;
 
     String salesInvoiceNumber;
 

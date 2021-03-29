@@ -68,7 +68,7 @@ public class SalesInvoiceServiceImpl implements SalesInvoiceService {
                     salesInvoiceToAdd.getPaymentMethod(),
                     salesInvoiceToAdd.getTypeOfDocument());
 
-            newSalesInvoice.setCustomer(customerRepository.getById(orderRepository.getById(orderId).getCustomerId()));
+            newSalesInvoice.setOrder(orderRepository.getById(orderId));
 
             salesInvoiceRepository.save(newSalesInvoice);
 

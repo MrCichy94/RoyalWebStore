@@ -17,6 +17,10 @@ import java.util.List;
 @Table(name = "orders")
 public class Order implements Serializable {
 
+    //ORDER ENTITY TO RE-WRITE.
+    //WE NEED BUILD THIS FROM CART WITH CART-ITEMS FROM FRONTED
+    //ISSUE: QUANTITY COLISION (PRODUCT'S COPIES WITH COPIES IN ORDER)
+
     @Id
     @GeneratedValue(generator = "inc")
     @GenericGenerator(name = "inc", strategy = "increment")

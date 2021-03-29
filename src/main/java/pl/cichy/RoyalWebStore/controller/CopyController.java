@@ -37,6 +37,12 @@ public class CopyController {
         return ResponseEntity.ok(copyService.getCopiesByProductId(id));
     }
 
+    @GetMapping("/{productId}/copies/{copyId}")
+    ResponseEntity<Copy> readCopyWithGivenIdForProductId(@PathVariable int productId, @PathVariable int copyId) {
+        logger.info("Read all of the copies of this product!");
+        return ResponseEntity.ok(copyService.getById(copyId));
+    }
+
     @PostMapping("/{productId}")
     ResponseEntity<Copy> createNewCopyOfProduct(@PathVariable Integer productId,
                                                 @RequestBody @Valid Copy copyOfProductToAdd) {

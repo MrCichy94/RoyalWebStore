@@ -11,10 +11,7 @@ import pl.cichy.RoyalWebStore.model.Copy;
 import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.Product;
 import pl.cichy.RoyalWebStore.model.SalesInvoice;
-import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
-import pl.cichy.RoyalWebStore.model.repository.ProductRepository;
-import pl.cichy.RoyalWebStore.model.repository.SalesInvoicePositionsRepository;
-import pl.cichy.RoyalWebStore.model.repository.SalesInvoiceRepository;
+import pl.cichy.RoyalWebStore.model.repository.*;
 
 import java.io.FileNotFoundException;
 import java.math.BigDecimal;
@@ -30,16 +27,18 @@ public class InvoiceGeneratorServiceImpl implements InvoiceGeneratorService {
 
     private final CopyRepository copyRepository;
     private final ProductRepository productRepository;
+    private final CustomerRepository customerRepository;
     private final SalesInvoiceRepository salesInvoiceRepository;
     private final SalesInvoicePositionsRepository salesInvoicePositionsRepository;
 
 
     public InvoiceGeneratorServiceImpl(final CopyRepository copyRepository,
                                        final ProductRepository productRepository,
-                                       final SalesInvoiceRepository salesInvoiceRepository,
+                                       CustomerRepository customerRepository, final SalesInvoiceRepository salesInvoiceRepository,
                                        final SalesInvoicePositionsRepository salesInvoicePositionsRepository) {
         this.copyRepository = copyRepository;
         this.productRepository = productRepository;
+        this.customerRepository = customerRepository;
         this.salesInvoiceRepository = salesInvoiceRepository;
         this.salesInvoicePositionsRepository = salesInvoicePositionsRepository;
     }
@@ -57,7 +56,8 @@ public class InvoiceGeneratorServiceImpl implements InvoiceGeneratorService {
         List<Copy> positionsOnInvoice = findAndAddCopiesByCopiesId(invoiceCopiesNumbers);
         List<Article> positionsList = createArticleRowsForTable(positionsOnInvoice);
 
-        Customer customer = salesInvoiceRepository.getSalesInvoiceByInvoiceNumber(invoiceNumber).getCustomer();
+        int customerId = salesInvoiceRepository.getSalesInvoiceByInvoiceNumber(invoiceNumber).getOrder().getCustomerId();
+        Customer customer = customerRepository.getById(customerId);
 
         BigDecimal alreadyPaid = BigDecimal.ZERO;
         List<BigDecimal> grossAndNett = countOrderPrice(positionsOnInvoice, BigDecimal.ZERO, BigDecimal.ZERO);

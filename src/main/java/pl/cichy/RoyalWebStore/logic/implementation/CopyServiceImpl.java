@@ -105,4 +105,9 @@ public class CopyServiceImpl implements CopyService {
     public Copy save(Copy entity) {
         return copyRepository.save(entity);
     }
+
+    @Override
+    public Copy getById(Integer id) {
+        return copyRepository.getById(id);
+    }
 }
