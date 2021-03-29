@@ -172,7 +172,7 @@ public class ProductServiceImpl implements ProductService {
             Set<Copy> items = result.getCopies();
 
             for (Copy it : items) {
-                it.setDiscoutValue(discountPercentageValue);
+                it.setDiscountValue(discountPercentageValue);
                 it.setSellCurrentGrossPrice(newGrossPrice);
                 it.setSellCurrentNetPrice(newNetPrice);
             }

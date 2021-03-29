@@ -53,10 +53,10 @@ public class Copy implements Serializable {
     BigDecimal sellCurrentGrossPrice;
 
     @Digits(integer = 8, fraction = 2)
-    BigDecimal discoutValue;
+    BigDecimal discountValue;
 
     @Digits(integer = 8, fraction = 2)
-    BigDecimal percentageDiscoutValue;
+    BigDecimal percentageDiscountValue;
 
     boolean isAlreadySold;
 
@@ -80,8 +80,8 @@ public class Copy implements Serializable {
         buyNetPrice = countBuyNetPrice(buyGrossPrice, buyVatPercentage, point);
         buyVatValue = countBuyVatValue(buyGrossPrice);
 
-        discoutValue = BigDecimal.ZERO;
-        percentageDiscoutValue = BigDecimal.ZERO;
+        discountValue = BigDecimal.ZERO;
+        percentageDiscountValue = BigDecimal.ZERO;
 
         buyDate = LocalDate.now();
         sellDate = null;

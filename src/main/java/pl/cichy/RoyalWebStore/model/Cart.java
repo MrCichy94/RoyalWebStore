@@ -22,7 +22,7 @@ public class Cart implements Serializable {
     int cartId;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<Copy> copies;
+    List<CartItem> cartItems;
 
     @Digits(integer = 8, fraction = 2)
     private BigDecimal grandTotal;
@@ -30,8 +30,8 @@ public class Cart implements Serializable {
     public Cart() {
     }
 
-    public Cart(List<Copy> copies) {
-        this.copies = copies;
+    public Cart(List<CartItem> cartItems) {
+        this.cartItems = cartItems;
     }
 
     /* TO SERVIS, WITH ADD TO CART METHOD

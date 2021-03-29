@@ -39,13 +39,4 @@ public class CartController {
         return ResponseEntity.created(URI.create("/")).body(null);
     }
 
-    /*
-    @PatchMapping("/{orderId}/{copyId}")
-    ResponseEntity<Cart> addCopyOfGivenProductToOrder(@PathVariable int orderId, @PathVariable int copyId) {
-        cartService.addToOrder(orderId, copyId);
-        logger.info("Copy added to order!");
-        return ResponseEntity.created(URI.create("/" + copyId)).build();
-    }
-
-     */
 }
