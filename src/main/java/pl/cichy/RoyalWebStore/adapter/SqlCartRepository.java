@@ -1,6 +1,7 @@
 package pl.cichy.RoyalWebStore.adapter;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -14,7 +15,7 @@ public interface SqlCartRepository extends CartRepository, JpaRepository<Cart, I
 
     @Override
     @Query(nativeQuery = true, value = "SELECT * from CARTS where CUSTOMER_ID=:id")
-    Set<Cart> getCartsByCustomerId(@Param("id") Integer id);
+    Set<Cart> getCartsByCustomerId(@Param("id") String id);
 
     @Override
     @Query(nativeQuery = true, value = "SELECT * from CARTS where CART_ID=:id")
@@ -23,5 +24,10 @@ public interface SqlCartRepository extends CartRepository, JpaRepository<Cart, I
     @Override
     @Query(nativeQuery = true, value = "SELECT * from CARTS")
     Set<Cart> findAllUnique();
+
+    @Override
+    @Modifying
+    @Query(nativeQuery = true, value = "DELETE FROM CARTS where CART_ID=:id")
+    void deleteById(@Param("id") String id);
 
 }

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import pl.cichy.RoyalWebStore.model.Cart;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface CartRepository {
@@ -17,9 +18,10 @@ public interface CartRepository {
 
     Cart getById(String id);
 
-    Set<Cart> getCartsByCustomerId(Integer id);
+    Set<Cart> getCartsByCustomerId(String id);
 
-    void deleteById(Integer id);
+    void deleteById(String cartId);
 
     Cart save(Cart entity);
+
 }

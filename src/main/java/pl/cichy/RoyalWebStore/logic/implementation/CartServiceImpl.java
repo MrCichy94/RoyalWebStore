@@ -16,7 +16,9 @@ import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
 import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import javax.transaction.Transactional;
+import java.util.List;
+import java.util.Set;
 
 @Service
 @RequestScope
@@ -53,7 +55,7 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Set<Cart> getCartsByCustomerId(Integer id) {
+    public Set<Cart> getCartsByCustomerId(String id) {
         return cartRepository.getCartsByCustomerId(id);
     }
 
@@ -86,10 +88,16 @@ public class CartServiceImpl implements CartService {
 
     }
 
+    @Transactional
     @Override
-    public void removeItem(int productId, int copyId, HttpServletRequest request) {
+    public void removeItem(int copyId, HttpServletRequest request) {
         String sessionId = request.getSession(true).getId();
         Cart cart = cartRepository.getById(sessionId);
+
+        //BOTH LINE WILL WORK WHEN START USIGN OAUTH2
+        //Principal principal = request.getUserPrincipal();
+        //Customer customer = customerRepository.getByEmailLogin(principal.getName());
+        //->customer.getCustomerId();
 
         if (cart == null) {
             cart = cartRepository.save(new Cart(1, sessionId));
@@ -102,15 +110,21 @@ public class CartServiceImpl implements CartService {
                     new RuntimeException(),
                     copyId);
         }
-
         int key = cartItemRepository.getCartItemByValue(copy.getCopyId());
-        if(cart.getCartItems().get(key).getQuantity() > 1) {
+        int dtID = cart.getCartItems().get(key).getCopy().getCopyId();
+        if (cart.getCartItems().get(key).getQuantity() > 1) {
             int quantityBefore = cart.getCartItems().get(key).getQuantity();
-            cart.getCartItems().get(key).setQuantity(quantityBefore-1);
+            cart.getCartItems().get(key).setQuantity(quantityBefore - 1);
+            cartRepository.save(cart);
         } else {
             cart.removeCartItem(new CartItem(copy));
+            cartRepository.save(cart);
         }
-        cartRepository.save(cart);
+
+        if (cart.getCartItems().isEmpty()) {
+            cartRepository.deleteById(cart.getCartId());
+        }
+        cartItemRepository.deleteById(dtID);
     }
 
 }

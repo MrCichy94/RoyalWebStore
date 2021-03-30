@@ -16,10 +16,11 @@ public interface CartService {
 
     Page<Cart> findAll(Pageable page);
 
-    Set<Cart> getCartsByCustomerId(Integer id);
+    Set<Cart> getCartsByCustomerId(String id);
 
     void addToCart(int productId, int copyId, HttpServletRequest request);
 
-    void removeItem(int productId, int copyId, HttpServletRequest request);
+    void removeItem(int copyId, HttpServletRequest request);
 
+    //void removeCart(int copyId, HttpServletRequest request);
 }

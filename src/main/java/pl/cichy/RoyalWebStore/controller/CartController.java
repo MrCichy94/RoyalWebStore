@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import pl.cichy.RoyalWebStore.logic.CartService;
 import pl.cichy.RoyalWebStore.model.Cart;
@@ -44,7 +45,8 @@ public class CartController {
     ResponseEntity<CartItem> removeCopyOfProductFromCart(@PathVariable int productId,
                                                          @PathVariable int copyId,
                                                          HttpServletRequest request) {
-        cartService.removeItem(productId, copyId, request);
+        cartService.removeItem(copyId, request);
+        //cartService.removeCart(copyId, request);
         logger.info("Remove copy from cart.");
         return ResponseEntity.created(URI.create("/")).body(null);
     }
