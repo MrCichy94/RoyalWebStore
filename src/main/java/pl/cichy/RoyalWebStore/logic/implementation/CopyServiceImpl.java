@@ -51,18 +51,17 @@ public class CopyServiceImpl implements CopyService {
     @Override
     public void setCopyForProduct(Integer productId, Copy copyToSet) {
 
-        //try {
+        try {
             Product productToActualizeCopy = productRepository.getById(productId);
             Set<Copy> listOfCopiesToRefresh = productRepository.getById(productId).getCopies();
 
             Stream<Copy> filteredCopy = listOfCopiesToRefresh.stream()
-                    .filter(c-> c.getMerchandisingCode().equals(copyToSet.getMerchandisingCode()))
-                    .filter(c-> c.getBuyGrossPrice().equals(copyToSet.getBuyGrossPrice()))
-                    .filter(c-> c.getBuyVatPercentage().equals(copyToSet.getBuyVatPercentage()));
+                    .filter(c -> c.getMerchandisingCode().equals(copyToSet.getMerchandisingCode()))
+                    .filter(c -> c.getBuyGrossPrice().equals(copyToSet.getBuyGrossPrice()))
+                    .filter(c -> c.getBuyVatPercentage().equals(copyToSet.getBuyVatPercentage()));
             Stream<Object> namesCopy = filteredCopy.map(Copy::getCopyId);
-            //System.out.println(namesCopy.count());
 
-            if(namesCopy.count() != 0) {
+            if (namesCopy.count() != 0) {
                 copyRepository.getByMerchandisingCode(copyToSet.getMerchandisingCode()).increaseQuantity();
             } else {
                 Copy newCopyToAdd = assignDataForCopy(productId, copyToSet);
@@ -71,16 +70,13 @@ public class CopyServiceImpl implements CopyService {
 
             productToActualizeCopy.setCopies(listOfCopiesToRefresh);
             productRepository.save(productToActualizeCopy);
-            /*
+
         } catch (RuntimeException noProduct) {
             throw new ProductNotFoundException(HttpStatus.NOT_FOUND,
                     "No product found with id: " + productId,
                     new RuntimeException(),
                     productId);
         }
-
-             */
-
     }
 
     private Copy assignDataForCopy(Integer productId, Copy copyToSet) {

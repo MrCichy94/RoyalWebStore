@@ -110,21 +110,19 @@ public class CartServiceImpl implements CartService {
                     new RuntimeException(),
                     copyId);
         }
-        int key = cartItemRepository.getCartItemByValue(copy.getCopyId());
-        int dtID = cart.getCartItems().get(key).getCopy().getCopyId();
+        int key = cartItemRepository.getCartItemBySession(sessionId);
+        int dtID = cart.getCartItems().get(key).getCartItemId();
         if (cart.getCartItems().get(key).getQuantity() > 1) {
             int quantityBefore = cart.getCartItems().get(key).getQuantity();
             cart.getCartItems().get(key).setQuantity(quantityBefore - 1);
-            cartRepository.save(cart);
         } else {
             cart.removeCartItem(new CartItem(copy));
-            cartRepository.save(cart);
         }
+        cartRepository.save(cart);
 
         if (cart.getCartItems().isEmpty()) {
             cartRepository.deleteById(cart.getCartId());
+            cartItemRepository.deleteById(dtID);
         }
-        cartItemRepository.deleteById(dtID);
     }
-
 }

@@ -2,14 +2,12 @@ package pl.cichy.RoyalWebStore.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Getter
@@ -48,9 +46,9 @@ public class Cart implements Serializable {
         if (cartItems.containsKey(copyId)) {
             CartItem existingCartItem = cartItems.get(copyId);
             existingCartItem.setQuantity(existingCartItem.getQuantity() + item.getQuantity());
-            cartItems.put(copyId,existingCartItem);
+            cartItems.put(copyId, existingCartItem);
         } else {
-            cartItems.put(copyId,item);
+            cartItems.put(copyId, item);
         }
 
         updateGrandTotal();
@@ -58,7 +56,7 @@ public class Cart implements Serializable {
 
     public void updateGrandTotal() {
         grandTotal = new BigDecimal(0);
-        for(CartItem item : cartItems.values()) {
+        for (CartItem item : cartItems.values()) {
             grandTotal = grandTotal.add(item.getTotalPrice());
         }
     }
@@ -68,14 +66,4 @@ public class Cart implements Serializable {
         cartItems.remove(copyId);
         updateGrandTotal();
     }
-
-    /* TO SERVIS, WITH ADD TO CART METHOD
-    public void updateGrandTotal() {
-        grandTotal = new BigDecimal(0);
-        for(Copy item : copies) {
-            grandTotal = grandTotal.add(item.sellCurrentGrossPrice);
-        }
-    }
-    */
-
 }

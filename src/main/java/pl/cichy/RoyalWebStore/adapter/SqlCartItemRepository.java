@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import pl.cichy.RoyalWebStore.model.Cart;
 import pl.cichy.RoyalWebStore.model.CartItem;
 import pl.cichy.RoyalWebStore.model.repository.CartItemRepository;
 
@@ -23,8 +22,8 @@ public interface SqlCartItemRepository extends CartItemRepository, JpaRepository
     Set<CartItem> findAllUnique();
 
     @Override
-    @Query(nativeQuery = true, value = "SELECT CART_ITEMS_KEY from CARTS_CART_ITEMS where CART_ITEMS_CART_ITEM_ID=:id")
-    int getCartItemByValue(@Param("id") Integer id);
+    @Query(nativeQuery = true, value = "SELECT CART_ITEMS_KEY from CARTS_CART_ITEMS where CART_CART_ID=:id")
+    int getCartItemBySession(@Param("id") String id);
 
     @Override
     @Modifying

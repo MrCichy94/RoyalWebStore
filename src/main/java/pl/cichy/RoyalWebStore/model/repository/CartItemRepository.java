@@ -21,5 +21,6 @@ public interface CartItemRepository {
 
     CartItem getById(Integer id);
 
-    int getCartItemByValue(Integer copyId);
+    int getCartItemBySession(String copyId);
+
 }
