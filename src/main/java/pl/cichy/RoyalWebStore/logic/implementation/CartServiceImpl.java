@@ -10,16 +10,13 @@ import pl.cichy.RoyalWebStore.logic.CartService;
 import pl.cichy.RoyalWebStore.model.Cart;
 import pl.cichy.RoyalWebStore.model.CartItem;
 import pl.cichy.RoyalWebStore.model.Copy;
-import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.repository.CartItemRepository;
 import pl.cichy.RoyalWebStore.model.repository.CartRepository;
 import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
 import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 
 import javax.servlet.http.HttpServletRequest;
-import java.security.Principal;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequestScope
@@ -67,6 +64,7 @@ public class CartServiceImpl implements CartService {
         //BOTH LINE WILL WORK WHEN START USIGN OAUTH2
         //Principal principal = request.getUserPrincipal();
         //Customer customer = customerRepository.getByEmailLogin(principal.getName());
+        //->customer.getCustomerId();
 
         //todo: try reduce shot to repo to 1.
         Cart cart = cartRepository.getById(sessionId);
@@ -80,12 +78,39 @@ public class CartServiceImpl implements CartService {
             throw new CopyNotFoundException(HttpStatus.NOT_FOUND,
                     "No copy found with id: " + copyId,
                     new RuntimeException(),
-                    productId);
+                    copyId);
         }
 
         cart.addCartItem(new CartItem(copy));
         cartRepository.save(cart);
 
+    }
+
+    @Override
+    public void removeItem(int productId, int copyId, HttpServletRequest request) {
+        String sessionId = request.getSession(true).getId();
+        Cart cart = cartRepository.getById(sessionId);
+
+        if (cart == null) {
+            cart = cartRepository.save(new Cart(1, sessionId));
+        }
+
+        Copy copy = copyRepository.getById(copyId);
+        if (copy == null) {
+            throw new CopyNotFoundException(HttpStatus.NOT_FOUND,
+                    "No copy found with id: " + copyId,
+                    new RuntimeException(),
+                    copyId);
+        }
+
+        int key = cartItemRepository.getCartItemByValue(copy.getCopyId());
+        if(cart.getCartItems().get(key).getQuantity() > 1) {
+            int quantityBefore = cart.getCartItems().get(key).getQuantity();
+            cart.getCartItems().get(key).setQuantity(quantityBefore-1);
+        } else {
+            cart.removeCartItem(new CartItem(copy));
+        }
+        cartRepository.save(cart);
     }
 
 }

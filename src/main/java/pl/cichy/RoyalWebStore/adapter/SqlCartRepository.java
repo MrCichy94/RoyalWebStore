@@ -23,4 +23,5 @@ public interface SqlCartRepository extends CartRepository, JpaRepository<Cart, I
     @Override
     @Query(nativeQuery = true, value = "SELECT * from CARTS")
     Set<Cart> findAllUnique();
+
 }

@@ -20,4 +20,6 @@ public interface CartService {
 
     void addToCart(int productId, int copyId, HttpServletRequest request);
 
+    void removeItem(int productId, int copyId, HttpServletRequest request);
+
 }

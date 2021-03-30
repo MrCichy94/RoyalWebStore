@@ -64,8 +64,8 @@ public class Cart implements Serializable {
     }
 
     public void removeCartItem(CartItem item) {
-        int productId = item.getCopy().getCopyId();
-        cartItems.remove(productId);
+        int copyId = item.getCopy().getCopyId();
+        cartItems.remove(copyId);
         updateGrandTotal();
     }
 
