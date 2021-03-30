@@ -5,16 +5,19 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
-import pl.cichy.RoyalWebStore.exception.CartAlreadyExistException;
+import pl.cichy.RoyalWebStore.exception.CopyNotFoundException;
 import pl.cichy.RoyalWebStore.logic.CartService;
 import pl.cichy.RoyalWebStore.model.Cart;
 import pl.cichy.RoyalWebStore.model.CartItem;
 import pl.cichy.RoyalWebStore.model.Copy;
+import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.repository.CartItemRepository;
 import pl.cichy.RoyalWebStore.model.repository.CartRepository;
 import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
+import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 
-import java.util.Collections;
+import javax.servlet.http.HttpServletRequest;
+import java.security.Principal;
 import java.util.List;
 import java.util.Set;
 
@@ -23,13 +26,16 @@ import java.util.Set;
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
+    private final CustomerRepository customerRepository;
     private final CopyRepository copyRepository;
     private final CartItemRepository cartItemRepository;
 
     public CartServiceImpl(final CartRepository cartRepository,
+                           final CustomerRepository customerRepository,
                            final CopyRepository copyRepository,
                            final CartItemRepository cartItemRepository) {
         this.cartRepository = cartRepository;
+        this.customerRepository = customerRepository;
         this.copyRepository = copyRepository;
         this.cartItemRepository = cartItemRepository;
     }
@@ -55,48 +61,30 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void addToCart(int cartId, int copyId) {
+    public void addToCart(int productId, int copyId, HttpServletRequest request) {
+        String sessionId = request.getSession(true).getId();
 
-    }
+        //BOTH LINE WILL WORK WHEN START USIGN OAUTH2
+        //Principal principal = request.getUserPrincipal();
+        //Customer customer = customerRepository.getByEmailLogin(principal.getName());
 
-    @Override
-    public void createNewCart(int productId, int copyId) {
-        try {
-            //DO SOMETHING WITH IT! IT IS TERRIBLE IN 21 CENTURY!
-            Copy alreadyExistingCopy = copyRepository.getById(copyId);
-            CartItem copyInCart = new CartItem();
-            copyInCart.setCopyId(alreadyExistingCopy.getCopyId());
-            copyInCart.setQuantity(alreadyExistingCopy.getQuantity());
-            copyInCart.setMerchandisingCode(alreadyExistingCopy.getMerchandisingCode());
-            copyInCart.setBuyNetPrice(alreadyExistingCopy.getBuyNetPrice());
-            copyInCart.setBuyGrossPrice(alreadyExistingCopy.getBuyGrossPrice());
-            copyInCart.setBuyVatPercentage(alreadyExistingCopy.getBuyVatPercentage());
-            copyInCart.setBuyVatValue(alreadyExistingCopy.getBuyVatValue());
-            copyInCart.setSellCurrentNetPrice(alreadyExistingCopy.getSellCurrentNetPrice());
-            copyInCart.setSellCurrentGrossPrice(alreadyExistingCopy.getSellCurrentGrossPrice());
-            copyInCart.setDiscoutValue(alreadyExistingCopy.getDiscountValue());
-            copyInCart.setPercentageDiscoutValue(alreadyExistingCopy.getDiscountValue());
-            cartItemRepository.save(copyInCart);
-
-            Cart cartToAdd = new Cart();
-            //CART SHOULD BE CREATED WITH DATA FROM LOGGED WITH JWT USER
-            //CART SHOULD BE ACTIVE FOR A SPECIFIED TIME, THEN DISAPEAR IF NO PROCCESSED.
-            //CART SHOULD BE PROCESSED IN THE OFFICIAL ORDER AND THEN SUMM QUANTITY CARTITEMS : COPIES.
-            //TODO AFTER TESTING WHEN I CAN GET USER DATA FROM CONTROLLER FROM OAUTH2.
-            //WORK TEMPORARILY SUSPENDED HERE. NEED MORE KNOWLEDGE AND FRESH VIEWS.
-
-            if (cartToAdd.getCartItems() == null) {
-                cartToAdd.setCartItems(Collections.singletonList(copyInCart));
-            } else {
-                cartToAdd.getCartItems().add(copyInCart);
-            }
-            cartRepository.save(cartToAdd);
-
-        } catch (RuntimeException noCustomer) {
-            throw new CartAlreadyExistException(HttpStatus.BAD_REQUEST,
-                    "Cart with given id already exist!",
-                    new RuntimeException());
+        //todo: try reduce shot to repo to 1.
+        Cart cart = cartRepository.getById(sessionId);
+        if (cart == null) {
+            //customerId hardcoded
+            cart = cartRepository.save(new Cart(1, sessionId));
         }
+
+        Copy copy = copyRepository.getById(copyId);
+        if (copy == null) {
+            throw new CopyNotFoundException(HttpStatus.NOT_FOUND,
+                    "No copy found with id: " + copyId,
+                    new RuntimeException(),
+                    productId);
+        }
+
+        cart.addCartItem(new CartItem(copy));
+        cartRepository.save(cart);
 
     }
 

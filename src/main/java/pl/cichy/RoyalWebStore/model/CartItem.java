@@ -4,10 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
@@ -19,48 +16,42 @@ import java.math.BigDecimal;
 @Table(name = "cartitems")
 public class CartItem implements Serializable {
 
-    //TODO - REDUCE THIS VARIABLE WHEN BACK AGAIN!
-
     @Id
     @GeneratedValue(generator = "inc")
     @GenericGenerator(name = "inc", strategy = "increment")
     int cartItemId;
 
-    private int copyId;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Copy copy;
+
+    @Digits(integer = 8, fraction = 2)
+    private BigDecimal totalPrice;
 
     private int quantity;
 
-    @Size(min = 1, max = 25)
-    String merchandisingCode;
-
-    @Digits(integer = 8, fraction = 2)
-    BigDecimal buyNetPrice;
-
-    @Digits(integer = 8, fraction = 2)
-    BigDecimal buyGrossPrice;
-
-    @Digits(integer = 8, fraction = 2)
-    BigDecimal buyVatPercentage;
-
-    @Digits(integer = 8, fraction = 2)
-    BigDecimal buyVatValue;
-
-    @Digits(integer = 8, fraction = 2)
-    BigDecimal sellCurrentNetPrice;
-
-    @Digits(integer = 8, fraction = 2)
-    BigDecimal sellCurrentGrossPrice;
-
-    @Digits(integer = 8, fraction = 2)
-    BigDecimal discoutValue;
-
-    @Digits(integer = 8, fraction = 2)
-    BigDecimal percentageDiscoutValue;
+    private static final long serialVersionUID = 6355555334140807514L;
 
     public CartItem() {
     }
 
-    public void increaseQuantity() {
-        quantity++;
+    public CartItem(Copy copy) {
+        super();
+        this.copy = copy;
+        this.quantity = 1;
+        this.totalPrice = copy.getSellCurrentGrossPrice();
+    }
+
+    public void setCopy(Copy copy) {
+        this.copy = copy;
+        this.updateTotalPrice();
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+        this.updateTotalPrice();
+    }
+
+    public void updateTotalPrice() {
+        totalPrice = this.copy.getSellCurrentGrossPrice().multiply(new BigDecimal(this.quantity));
     }
 }

@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pl.cichy.RoyalWebStore.model.Cart;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Set;
 
@@ -17,7 +18,6 @@ public interface CartService {
 
     Set<Cart> getCartsByCustomerId(Integer id);
 
-    void addToCart(int cartId, int copyId);
+    void addToCart(int productId, int copyId, HttpServletRequest request);
 
-    void createNewCart(int productId, int copyId);
 }

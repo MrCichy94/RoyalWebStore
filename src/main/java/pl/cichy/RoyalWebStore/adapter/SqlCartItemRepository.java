@@ -13,7 +13,7 @@ import java.util.Set;
 public interface SqlCartItemRepository extends CartItemRepository, JpaRepository<CartItem, Integer> {
 
     @Override
-    @Query(nativeQuery = true, value = "SELECT * from CARTITEMS where CARTITEM_ID=:id")
+    @Query(nativeQuery = true, value = "SELECT * from CARTITEMS where CART_ITEM_ID=:id")
     CartItem getById(@Param("id") Integer id);
 
     @Override

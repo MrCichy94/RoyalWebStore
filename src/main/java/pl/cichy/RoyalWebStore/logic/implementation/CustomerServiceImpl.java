@@ -73,7 +73,7 @@ public class CustomerServiceImpl implements CustomerService {
 
         try {
             Customer result = new Customer(newCustomer.getCustomerId(),
-                    newCustomer.getLogin(),
+                    newCustomer.getEmailLogin(),
                     passwordEncoder.encode(newCustomer.getPassword()),
                     newCustomer.getFirstName(),
                     newCustomer.getLastName(),
@@ -84,7 +84,7 @@ public class CustomerServiceImpl implements CustomerService {
             result.getContact().setPhoneNumber1(newCustomer.getContact().getPhoneNumber1());
             result.getContact().setEmailAddress(newCustomer.getContact().getEmailAddress());
 
-            User u = new User(newCustomer.getLogin(),
+            User u = new User(newCustomer.getEmailLogin(),
                     passwordEncoder.encode(newCustomer.getPassword()),
                     newCustomer.getRole());
 

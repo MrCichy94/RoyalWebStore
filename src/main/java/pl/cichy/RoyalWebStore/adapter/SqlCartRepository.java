@@ -18,7 +18,7 @@ public interface SqlCartRepository extends CartRepository, JpaRepository<Cart, I
 
     @Override
     @Query(nativeQuery = true, value = "SELECT * from CARTS where CART_ID=:id")
-    Cart getById(@Param("id") Integer id);
+    Cart getById(@Param("id") String id);
 
     @Override
     @Query(nativeQuery = true, value = "SELECT * from CARTS")

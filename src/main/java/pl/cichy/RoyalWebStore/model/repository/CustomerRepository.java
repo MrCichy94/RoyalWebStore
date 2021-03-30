@@ -23,4 +23,5 @@ public interface CustomerRepository {
 
     Customer save(Customer entity);
 
+    Customer getByEmailLogin(String name);
 }

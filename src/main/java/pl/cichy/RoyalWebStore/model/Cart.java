@@ -8,7 +8,9 @@ import javax.persistence.*;
 import javax.validation.constraints.Digits;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Getter
 @Setter
@@ -17,21 +19,54 @@ import java.util.List;
 public class Cart implements Serializable {
 
     @Id
-    @GeneratedValue(generator = "inc")
-    @GenericGenerator(name = "inc", strategy = "increment")
-    int cartId;
+    String cartId;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    List<CartItem> cartItems;
+    Map<Integer, CartItem> cartItems;
 
     @Digits(integer = 8, fraction = 2)
     private BigDecimal grandTotal;
 
+    private static final long serialVersionUID = 6350930334141111514L;
+
+    int customerId;
+
     public Cart() {
+        cartItems = new HashMap<Integer, CartItem>();
+        grandTotal = new BigDecimal(0);
     }
 
-    public Cart(List<CartItem> cartItems) {
-        this.cartItems = cartItems;
+    public Cart(int customerId, String cartId) {
+        this();
+        this.cartId = cartId;
+        this.customerId = customerId;
+    }
+
+    public void addCartItem(CartItem item) {
+        int copyId = item.getCopy().getCopyId();
+
+        if (cartItems.containsKey(copyId)) {
+            CartItem existingCartItem = cartItems.get(copyId);
+            existingCartItem.setQuantity(existingCartItem.getQuantity() + item.getQuantity());
+            cartItems.put(copyId,existingCartItem);
+        } else {
+            cartItems.put(copyId,item);
+        }
+
+        updateGrandTotal();
+    }
+
+    public void updateGrandTotal() {
+        grandTotal = new BigDecimal(0);
+        for(CartItem item : cartItems.values()) {
+            grandTotal = grandTotal.add(item.getTotalPrice());
+        }
+    }
+
+    public void removeCartItem(CartItem item) {
+        int productId = item.getCopy().getCopyId();
+        cartItems.remove(productId);
+        updateGrandTotal();
     }
 
     /* TO SERVIS, WITH ADD TO CART METHOD

@@ -15,13 +15,11 @@ public interface CartRepository {
 
     Page<Cart> findAll(Pageable page);
 
-    Cart getById(Integer id);
+    Cart getById(String id);
 
     Set<Cart> getCartsByCustomerId(Integer id);
 
     void deleteById(Integer id);
-
-    boolean existsById(Integer id);
 
     Cart save(Cart entity);
 }

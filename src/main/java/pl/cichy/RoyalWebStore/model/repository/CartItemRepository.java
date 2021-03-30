@@ -15,10 +15,6 @@ public interface CartItemRepository {
 
     Page<CartItem> findAll(Pageable page);
 
-    //Set<CartItem> getCartItemsByCartId(Integer id);
-
-    //void setCartItemForCart(Integer cartId, CartItem cartItemToSet);
-
     void deleteById(Integer id);
 
     CartItem save(CartItem entity);

@@ -22,7 +22,7 @@ class CustomerTest {
         Customer eg2 = new Customer(1, "sky", "labamba", "Przemek",
                 "C", "buisness", "USER");
 
-        assertEquals("sky", eg2.getLogin());
+        assertEquals("sky", eg2.getEmailLogin());
     }
 
 }

@@ -30,8 +30,8 @@ public class Customer implements Serializable {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     Contact contact;
 
-    @Size(min = 3, max = 25)
-    String login;
+    @Size(min = 3, max = 50)
+    String emailLogin;
 
     @Size(min = 3, max = 85)
     String password;
@@ -62,10 +62,10 @@ public class Customer implements Serializable {
     public Customer() {
     }
 
-    public Customer(int customerId, String login, String password, String firstName,
+    public Customer(int customerId, String emailLogin, String password, String firstName,
                     String lastName, String typeOfClient, String role) {
         this.customerId = customerId;
-        this.login = login;
+        this.emailLogin = emailLogin;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
