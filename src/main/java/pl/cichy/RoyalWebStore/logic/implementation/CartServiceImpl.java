@@ -69,19 +69,9 @@ public class CartServiceImpl implements CartService {
         //->customer.getCustomerId();
 
         //todo: try reduce shot to repo to 1.
-        Cart cart = cartRepository.getById(sessionId);
-        if (cart == null) {
-            //customerId hardcoded
-            cart = cartRepository.save(new Cart(1, sessionId));
-        }
+        Cart cart = getCartByThisSessionIdIfExistsOrCreateNew(sessionId);
 
-        Copy copy = copyRepository.getById(copyId);
-        if (copy == null) {
-            throw new CopyNotFoundException(HttpStatus.NOT_FOUND,
-                    "No copy found with id: " + copyId,
-                    new RuntimeException(),
-                    copyId);
-        }
+        Copy copy = getCopyByCopyIdIfExistsOrThrowException(copyId);
 
         cart.addCartItem(new CartItem(copy));
         cartRepository.save(cart);
@@ -92,17 +82,48 @@ public class CartServiceImpl implements CartService {
     @Override
     public void removeItem(int copyId, HttpServletRequest request) {
         String sessionId = request.getSession(true).getId();
-        Cart cart = cartRepository.getById(sessionId);
 
         //BOTH LINE WILL WORK WHEN START USIGN OAUTH2
         //Principal principal = request.getUserPrincipal();
         //Customer customer = customerRepository.getByEmailLogin(principal.getName());
         //->customer.getCustomerId();
 
-        if (cart == null) {
-            cart = cartRepository.save(new Cart(1, sessionId));
-        }
+        Cart cart = getCartByThisSessionIdIfExistsOrCreateNew(sessionId);
 
+        Copy copy = getCopyByCopyIdIfExistsOrThrowException(copyId);
+
+        removeSingleCartItemFromCartOrIfThisIsLastDeleteCartAndCartItem(sessionId, cart, copy);
+    }
+
+    private void removeSingleCartItemFromCartOrIfThisIsLastDeleteCartAndCartItem(String sessionId,
+                                                                                 Cart cart, Copy copy) {
+        int key = cartItemRepository.getCartItemBySession(sessionId);
+        int deleteCartItemById = cart.getCartItems().get(key).getCartItemId();
+
+        removeSingleCartItemFromCart(cart, copy, key);
+
+        cartRepository.save(cart);
+
+        deleteCartAndCleanUpDB(cart, deleteCartItemById);
+    }
+
+    private void deleteCartAndCleanUpDB(Cart cart, int deleteCartItemById) {
+        if (cart.getCartItems().isEmpty()) {
+            cartRepository.deleteById(cart.getCartId());
+            cartItemRepository.deleteById(deleteCartItemById);
+        }
+    }
+
+    private void removeSingleCartItemFromCart(Cart cart, Copy copy, int key) {
+        if (cart.getCartItems().get(key).getQuantity() > 1) {
+            int quantityBefore = cart.getCartItems().get(key).getQuantity();
+            cart.getCartItems().get(key).setQuantity(quantityBefore - 1);
+        } else {
+            cart.removeCartItem(new CartItem(copy));
+        }
+    }
+
+    private Copy getCopyByCopyIdIfExistsOrThrowException(int copyId) {
         Copy copy = copyRepository.getById(copyId);
         if (copy == null) {
             throw new CopyNotFoundException(HttpStatus.NOT_FOUND,
@@ -110,19 +131,14 @@ public class CartServiceImpl implements CartService {
                     new RuntimeException(),
                     copyId);
         }
-        int key = cartItemRepository.getCartItemBySession(sessionId);
-        int dtID = cart.getCartItems().get(key).getCartItemId();
-        if (cart.getCartItems().get(key).getQuantity() > 1) {
-            int quantityBefore = cart.getCartItems().get(key).getQuantity();
-            cart.getCartItems().get(key).setQuantity(quantityBefore - 1);
-        } else {
-            cart.removeCartItem(new CartItem(copy));
-        }
-        cartRepository.save(cart);
+        return copy;
+    }
 
-        if (cart.getCartItems().isEmpty()) {
-            cartRepository.deleteById(cart.getCartId());
-            cartItemRepository.deleteById(dtID);
+    private Cart getCartByThisSessionIdIfExistsOrCreateNew(String sessionId) {
+        Cart cart = cartRepository.getById(sessionId);
+        if (cart == null) {
+            cart = cartRepository.save(new Cart(1, sessionId));
         }
+        return cart;
     }
 }

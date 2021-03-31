@@ -76,20 +76,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public void registerNewEmployeeAccount(Employee newEmployeeToAdd) {
 
         try {
-            Employee result = new Employee(newEmployeeToAdd.getEmployeeId(),
-                    newEmployeeToAdd.getLogin(),
-                    passwordEncoder.encode(newEmployeeToAdd.getPassword()),
-                    newEmployeeToAdd.getFirstName(),
-                    newEmployeeToAdd.getLastName(),
-                    newEmployeeToAdd.getRole());
-
-            result.getContact().setContactId(newEmployeeToAdd.getContact().getContactId());
-            result.getContact().setPhoneNumber1(newEmployeeToAdd.getContact().getPhoneNumber1());
-            result.getContact().setEmailAddress(newEmployeeToAdd.getContact().getEmailAddress());
-
-            User u = new User(newEmployeeToAdd.getLogin(),
-                    passwordEncoder.encode(newEmployeeToAdd.getPassword()),
-                    newEmployeeToAdd.getRole());
+            Employee result = createEmployeeAccount(newEmployeeToAdd);
+            User u = createUserAccount(newEmployeeToAdd);
 
             userRepository.save(u);
             employeeRepository.save(result);
@@ -98,6 +86,26 @@ public class EmployeeServiceImpl implements EmployeeService {
                     "Account with this email already exist!",
                     new RuntimeException());
         }
+    }
+
+    private Employee createEmployeeAccount(Employee newEmployeeToAdd) {
+        Employee result = new Employee(newEmployeeToAdd.getEmployeeId(),
+                newEmployeeToAdd.getLogin(),
+                passwordEncoder.encode(newEmployeeToAdd.getPassword()),
+                newEmployeeToAdd.getFirstName(),
+                newEmployeeToAdd.getLastName(),
+                newEmployeeToAdd.getRole());
+
+        result.getContact().setContactId(newEmployeeToAdd.getContact().getContactId());
+        result.getContact().setPhoneNumber1(newEmployeeToAdd.getContact().getPhoneNumber1());
+        result.getContact().setEmailAddress(newEmployeeToAdd.getContact().getEmailAddress());
+        return result;
+    }
+
+    private User createUserAccount(Employee newEmployeeToAdd) {
+        return new User(newEmployeeToAdd.getLogin(),
+                        passwordEncoder.encode(newEmployeeToAdd.getPassword()),
+                        newEmployeeToAdd.getRole());
     }
 
     @Override

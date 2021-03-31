@@ -72,21 +72,8 @@ public class CustomerServiceImpl implements CustomerService {
     public void registerNewCustomerAccount(Customer newCustomer) {
 
         try {
-            Customer result = new Customer(newCustomer.getCustomerId(),
-                    newCustomer.getEmailLogin(),
-                    passwordEncoder.encode(newCustomer.getPassword()),
-                    newCustomer.getFirstName(),
-                    newCustomer.getLastName(),
-                    newCustomer.getTypeOfClient(),
-                    newCustomer.getRole());
-
-            result.getContact().setContactId(newCustomer.getContact().getContactId());
-            result.getContact().setPhoneNumber1(newCustomer.getContact().getPhoneNumber1());
-            result.getContact().setEmailAddress(newCustomer.getContact().getEmailAddress());
-
-            User u = new User(newCustomer.getEmailLogin(),
-                    passwordEncoder.encode(newCustomer.getPassword()),
-                    newCustomer.getRole());
+            Customer result = createCustomerAccount(newCustomer);
+            User u = createUserAccount(newCustomer);
 
             userRepository.save(u);
             customerRepository.save(result);
@@ -96,6 +83,27 @@ public class CustomerServiceImpl implements CustomerService {
                     new RuntimeException());
         }
 
+    }
+
+    private Customer createCustomerAccount(Customer newCustomer) {
+        Customer result = new Customer(newCustomer.getCustomerId(),
+                newCustomer.getEmailLogin(),
+                passwordEncoder.encode(newCustomer.getPassword()),
+                newCustomer.getFirstName(),
+                newCustomer.getLastName(),
+                newCustomer.getTypeOfClient(),
+                newCustomer.getRole());
+
+        result.getContact().setContactId(newCustomer.getContact().getContactId());
+        result.getContact().setPhoneNumber1(newCustomer.getContact().getPhoneNumber1());
+        result.getContact().setEmailAddress(newCustomer.getContact().getEmailAddress());
+        return result;
+    }
+
+    private User createUserAccount(Customer newCustomer) {
+        return new User(newCustomer.getEmailLogin(),
+                        passwordEncoder.encode(newCustomer.getPassword()),
+                        newCustomer.getRole());
     }
 
     @Override
