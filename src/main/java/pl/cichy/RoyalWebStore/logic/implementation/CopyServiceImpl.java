@@ -55,11 +55,7 @@ public class CopyServiceImpl implements CopyService {
             Product productToActualizeCopy = productRepository.getById(productId);
             Set<Copy> listOfCopiesToRefresh = productRepository.getById(productId).getCopies();
 
-            Stream<Copy> filteredCopy = listOfCopiesToRefresh.stream()
-                    .filter(c -> c.getMerchandisingCode().equals(copyToSet.getMerchandisingCode()))
-                    .filter(c -> c.getBuyGrossPrice().equals(copyToSet.getBuyGrossPrice()))
-                    .filter(c -> c.getBuyVatPercentage().equals(copyToSet.getBuyVatPercentage()));
-            Stream<Object> namesCopy = filteredCopy.map(Copy::getCopyId);
+            Stream<Object> namesCopy = findUniqueCopyOfProduct(copyToSet, listOfCopiesToRefresh);
 
             if (namesCopy.count() != 0) {
                 copyRepository.getByMerchandisingCode(copyToSet.getMerchandisingCode()).increaseQuantity();
@@ -77,6 +73,14 @@ public class CopyServiceImpl implements CopyService {
                     new RuntimeException(),
                     productId);
         }
+    }
+
+    private Stream<Object> findUniqueCopyOfProduct(Copy copyToSet, Set<Copy> listOfCopiesToRefresh) {
+        Stream<Copy> filteredCopy = listOfCopiesToRefresh.stream()
+                .filter(c -> c.getMerchandisingCode().equals(copyToSet.getMerchandisingCode()))
+                .filter(c -> c.getBuyGrossPrice().equals(copyToSet.getBuyGrossPrice()))
+                .filter(c -> c.getBuyVatPercentage().equals(copyToSet.getBuyVatPercentage()));
+        return filteredCopy.map(Copy::getCopyId);
     }
 
     private Copy assignDataForCopy(Integer productId, Copy copyToSet) {
