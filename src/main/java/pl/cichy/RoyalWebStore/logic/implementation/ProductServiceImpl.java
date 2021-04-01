@@ -65,20 +65,8 @@ public class ProductServiceImpl implements ProductService {
 
         try {
             Product result = productRepository.getById(productId);
-            result.setSellBaseGrossPrice(priceToSet);
-            BigDecimal point = (BigDecimal.ONE).negate();
-            BigDecimal newNetPrice = (priceToSet.multiply((point.add(result.getVatPercentage()))
-                    .abs())).setScale(2, RoundingMode.DOWN);
-            result.setSellBaseNetPrice(newNetPrice);
-            result.setVatValue(priceToSet.add(newNetPrice.negate())
-                    .setScale(2, RoundingMode.DOWN));
 
-            Set<Copy> items = result.getCopies();
-            for (Copy it : items) {
-                it.setSellCurrentGrossPrice(priceToSet);
-                it.setSellCurrentNetPrice(result.getSellBaseNetPrice());
-            }
-            result.setCopies(items);
+            changeProductDataIfThePriceChanges(priceToSet, result);
 
             productRepository.save(result);
         } catch (RuntimeException noProduct) {
@@ -160,27 +148,7 @@ public class ProductServiceImpl implements ProductService {
         try {
             Product result = productRepository.getById(productId);
 
-            BigDecimal point = (BigDecimal.ONE).negate();
-            BigDecimal oldGrossPrice = result.getSellBaseGrossPrice();
-            BigDecimal newGrossPrice = (oldGrossPrice.multiply((point.add(discountPercentageValue))
-                    .abs())).setScale(2, RoundingMode.DOWN);
-            BigDecimal newNetPrice = ((newGrossPrice.multiply((point.add(result.getVatPercentage()))
-                    .abs())).setScale(2, RoundingMode.DOWN));
-            BigDecimal newVatValue = newGrossPrice.add(newNetPrice.negate())
-                    .setScale(2, RoundingMode.DOWN);
-
-            Set<Copy> items = result.getCopies();
-
-            for (Copy it : items) {
-                it.setDiscountValue(discountPercentageValue);
-                it.setSellCurrentGrossPrice(newGrossPrice);
-                it.setSellCurrentNetPrice(newNetPrice);
-            }
-
-            result.setCopies(items);
-            result.setSellBaseGrossPrice(newGrossPrice);
-            result.setSellBaseNetPrice(newNetPrice);
-            result.setVatValue(newVatValue);
+            discountTheProductAndSetNewValueAfterThat(discountPercentageValue, result);
 
             productRepository.save(result);
         } catch (RuntimeException noProduct) {
@@ -198,6 +166,47 @@ public class ProductServiceImpl implements ProductService {
         productRepository.save(productRepository.getById(productId));
 
         copyRepository.deleteById(copyId);
+    }
+
+    private void changeProductDataIfThePriceChanges(BigDecimal priceToSet, Product result) {
+        result.setSellBaseGrossPrice(priceToSet);
+        BigDecimal point = (BigDecimal.ONE).negate();
+        BigDecimal newNetPrice = (priceToSet.multiply((point.add(result.getVatPercentage()))
+                .abs())).setScale(2, RoundingMode.DOWN);
+        result.setSellBaseNetPrice(newNetPrice);
+        result.setVatValue(priceToSet.add(newNetPrice.negate())
+                .setScale(2, RoundingMode.DOWN));
+
+        Set<Copy> items = result.getCopies();
+        for (Copy it : items) {
+            it.setSellCurrentGrossPrice(priceToSet);
+            it.setSellCurrentNetPrice(result.getSellBaseNetPrice());
+        }
+        result.setCopies(items);
+    }
+
+    private void discountTheProductAndSetNewValueAfterThat(BigDecimal discountPercentageValue, Product result) {
+        BigDecimal point = (BigDecimal.ONE).negate();
+        BigDecimal oldGrossPrice = result.getSellBaseGrossPrice();
+        BigDecimal newGrossPrice = (oldGrossPrice.multiply((point.add(discountPercentageValue))
+                .abs())).setScale(2, RoundingMode.DOWN);
+        BigDecimal newNetPrice = ((newGrossPrice.multiply((point.add(result.getVatPercentage()))
+                .abs())).setScale(2, RoundingMode.DOWN));
+        BigDecimal newVatValue = newGrossPrice.add(newNetPrice.negate())
+                .setScale(2, RoundingMode.DOWN);
+
+        Set<Copy> items = result.getCopies();
+
+        for (Copy it : items) {
+            it.setDiscountValue(discountPercentageValue);
+            it.setSellCurrentGrossPrice(newGrossPrice);
+            it.setSellCurrentNetPrice(newNetPrice);
+        }
+
+        result.setCopies(items);
+        result.setSellBaseGrossPrice(newGrossPrice);
+        result.setSellBaseNetPrice(newNetPrice);
+        result.setVatValue(newVatValue);
     }
 
 }
