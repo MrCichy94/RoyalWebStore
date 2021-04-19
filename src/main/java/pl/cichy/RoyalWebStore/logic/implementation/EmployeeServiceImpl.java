@@ -15,7 +15,6 @@ import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.exception.AccountAlreadyExistException;
 import pl.cichy.RoyalWebStore.exception.CustomerNotFoundException;
 import pl.cichy.RoyalWebStore.logic.EmployeeService;
-import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.Employee;
 import pl.cichy.RoyalWebStore.model.User;
 import pl.cichy.RoyalWebStore.model.repository.ContactRepository;
@@ -74,43 +73,34 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void registerNewEmployeeAccount(Employee newEmployeeToAdd) {
-
-        try {
-            Employee result = createEmployeeAccount(newEmployeeToAdd);
-            User u = createUserAccount(newEmployeeToAdd);
-
-            userRepository.save(u);
-            employeeRepository.save(result);
-        } catch (RuntimeException noAccount) {
+        if (contactRepository.findByEmail(newEmployeeToAdd.getContact().getEmailAddress()).isPresent()) {
             throw new AccountAlreadyExistException(HttpStatus.BAD_REQUEST,
                     "Account with this email already exist!",
                     new RuntimeException());
+        } else {
+            Employee result = new Employee(newEmployeeToAdd.getEmployeeId(),
+                    newEmployeeToAdd.getLogin(),
+                    passwordEncoder.encode(newEmployeeToAdd.getPassword()),
+                    newEmployeeToAdd.getFirstName(),
+                    newEmployeeToAdd.getLastName(),
+                    newEmployeeToAdd.getRole());
+
+            result.getContact().setContactId(newEmployeeToAdd.getContact().getContactId());
+            result.getContact().setPhoneNumber1(newEmployeeToAdd.getContact().getPhoneNumber1());
+            result.getContact().setEmailAddress(newEmployeeToAdd.getContact().getEmailAddress());
+
+            User u = new User(newEmployeeToAdd.getLogin(),
+                    passwordEncoder.encode(newEmployeeToAdd.getPassword()),
+                    newEmployeeToAdd.getRole());
+
+            userRepository.save(u);
+            employeeRepository.save(result);
         }
-    }
-
-    private Employee createEmployeeAccount(Employee newEmployeeToAdd) {
-        Employee result = new Employee(newEmployeeToAdd.getEmployeeId(),
-                newEmployeeToAdd.getLogin(),
-                passwordEncoder.encode(newEmployeeToAdd.getPassword()),
-                newEmployeeToAdd.getFirstName(),
-                newEmployeeToAdd.getLastName(),
-                newEmployeeToAdd.getRole());
-
-        result.getContact().setContactId(newEmployeeToAdd.getContact().getContactId());
-        result.getContact().setPhoneNumber1(newEmployeeToAdd.getContact().getPhoneNumber1());
-        result.getContact().setEmailAddress(newEmployeeToAdd.getContact().getEmailAddress());
-        return result;
-    }
-
-    private User createUserAccount(Employee newEmployeeToAdd) {
-        return new User(newEmployeeToAdd.getLogin(),
-                        passwordEncoder.encode(newEmployeeToAdd.getPassword()),
-                        newEmployeeToAdd.getRole());
     }
 
     @Override
     public void updateEmployeesData(int employeeId, JsonPatch employeeToUpdate)
-            throws JsonPatchException, JsonProcessingException{
+            throws JsonPatchException, JsonProcessingException {
 
         try {
             Employee employee = employeeRepository.getById(employeeId);
