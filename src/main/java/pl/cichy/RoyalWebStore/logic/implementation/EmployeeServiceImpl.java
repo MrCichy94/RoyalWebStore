@@ -83,7 +83,7 @@ public class EmployeeServiceImpl implements EmployeeService {
                     passwordEncoder.encode(newEmployeeToAdd.getPassword()),
                     newEmployeeToAdd.getFirstName(),
                     newEmployeeToAdd.getLastName(),
-                    newEmployeeToAdd.getRole());
+                    "USER");
 
             result.getContact().setContactId(newEmployeeToAdd.getContact().getContactId());
             result.getContact().setPhoneNumber1(newEmployeeToAdd.getContact().getPhoneNumber1());
@@ -91,7 +91,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
             User u = new User(newEmployeeToAdd.getLogin(),
                     passwordEncoder.encode(newEmployeeToAdd.getPassword()),
-                    newEmployeeToAdd.getRole());
+                    "USER");
 
             userRepository.save(u);
             employeeRepository.save(result);

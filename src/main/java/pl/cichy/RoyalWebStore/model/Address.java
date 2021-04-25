@@ -10,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 @Getter
 @Setter

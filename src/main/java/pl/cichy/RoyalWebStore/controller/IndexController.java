@@ -16,4 +16,5 @@ public class IndexController {
                 .location(URI.create("http://localhost:8080/products"))
                 .build();
     }
+
 }

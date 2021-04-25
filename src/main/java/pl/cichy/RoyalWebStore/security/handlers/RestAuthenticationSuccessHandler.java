@@ -20,6 +20,8 @@ public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
     private final long expirationTime;
     private final String secret;
 
+    public static String tokenStr;
+
     public RestAuthenticationSuccessHandler(
             @Value("${jwt.expirationTime}") long expirationTime,
             @Value("${jwt.secret}") String secret) {
@@ -35,6 +37,7 @@ public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
                 .withSubject(principal.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime))
                 .sign(Algorithm.HMAC256(secret));
+        response.addHeader("Access-Control-Expose-Headers", "*");
         response.addHeader("Authorization", "Bearer " + token);
     }
 }

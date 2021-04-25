@@ -1,11 +1,9 @@
 package pl.cichy.RoyalWebStore.configuration;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import pl.cichy.RoyalWebStore.model.repository.EmployeeRepository;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -15,7 +13,7 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**").allowedMethods("*");
+        registry.addMapping("/**").allowedMethods("*").allowedOrigins("http://localhost:4200");
     }
 
     @Override
@@ -29,6 +27,6 @@ public class MvcConfig implements WebMvcConfigurer {
 
         if (dirName.startsWith("../")) dirName = dirName.replace("../", "");
 
-        registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/"+ uploadPath + "/");
+        registry.addResourceHandler("/" + dirName + "/**").addResourceLocations("file:/" + uploadPath + "/");
     }
 }
