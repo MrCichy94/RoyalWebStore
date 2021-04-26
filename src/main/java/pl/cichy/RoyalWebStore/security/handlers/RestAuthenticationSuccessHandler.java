@@ -7,6 +7,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import pl.cichy.RoyalWebStore.logic.CustomerService;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -20,13 +21,15 @@ public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
     private final long expirationTime;
     private final String secret;
 
-    public static String tokenStr;
+    private final CustomerService customerService;
 
     public RestAuthenticationSuccessHandler(
             @Value("${jwt.expirationTime}") long expirationTime,
-            @Value("${jwt.secret}") String secret) {
+            @Value("${jwt.secret}") String secret,
+            final CustomerService customerService) {
         this.expirationTime = expirationTime;
         this.secret = secret;
+        this.customerService = customerService;
     }
 
     @Override
@@ -37,7 +40,12 @@ public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
                 .withSubject(principal.getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + expirationTime))
                 .sign(Algorithm.HMAC256(secret));
+        System.out.println(new Date(System.currentTimeMillis() + expirationTime));
+        String loggedUserID = String.valueOf(
+                customerService.getCustomerIdByUsername(principal.getUsername()).getCustomerId());
+        System.out.println(loggedUserID);
         response.addHeader("Access-Control-Expose-Headers", "*");
         response.addHeader("Authorization", "Bearer " + token);
+        response.addHeader("Principal-ID", loggedUserID);
     }
 }

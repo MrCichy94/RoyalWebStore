@@ -15,6 +15,10 @@ public interface SqlCustomerRepository extends CustomerRepository, JpaRepository
     Customer getById(@Param("id") Integer id);
 
     @Override
+    @Query(nativeQuery = true, value = "SELECT * from CUSTOMERS where EMAIL_LOGIN=:username")
+    Customer getCustomerIdByUsername(@Param("username") String username);
+
+    @Override
     @Query(nativeQuery = true, value = "SELECT * from CUSTOMERS where EMAIL_LOGIN=:name")
     Customer getByEmailLogin(@Param("name") String name);
 

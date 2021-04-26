@@ -17,6 +17,8 @@ public interface CustomerRepository {
 
     Customer getById(Integer id);
 
+    Customer getCustomerIdByUsername(String username);
+
     void deleteById(Integer id);
 
     boolean existsById(Integer id);

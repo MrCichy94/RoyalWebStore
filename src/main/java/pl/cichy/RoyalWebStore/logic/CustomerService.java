@@ -17,6 +17,8 @@ public interface CustomerService {
 
     Customer getById(Integer id);
 
+    Customer getCustomerIdByUsername(String username);
+
     void deleteById(Integer id);
 
     void registerNewCustomerAccount(Customer newCustomer);

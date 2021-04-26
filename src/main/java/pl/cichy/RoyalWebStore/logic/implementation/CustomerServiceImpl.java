@@ -65,6 +65,11 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
+    public Customer getCustomerIdByUsername(String username) {
+        return customerRepository.getCustomerIdByUsername(username);
+    }
+
+    @Override
     public void deleteById(Integer id) {
         customerRepository.deleteById(id);
     }
