@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import pl.cichy.RoyalWebStore.logic.CartService;
 import pl.cichy.RoyalWebStore.model.Cart;
 import pl.cichy.RoyalWebStore.model.CartItem;
+import pl.cichy.RoyalWebStore.model.Order;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
@@ -32,6 +33,12 @@ public class CartController {
     ResponseEntity<Set<Cart>> readAllCarts() {
         logger.info("Read all carts.");
         return ResponseEntity.ok(cartService.findAllUnique());
+    }
+
+    @GetMapping("/customers/{id}/cart")
+    ResponseEntity<Cart> readCartByClientId(@PathVariable int id) {
+        logger.info("Read cart of this customer!");
+        return ResponseEntity.ok(cartService.getCartByCustomerId(id));
     }
 
     @PostMapping("/products/{productId}/copies/{copyId}")

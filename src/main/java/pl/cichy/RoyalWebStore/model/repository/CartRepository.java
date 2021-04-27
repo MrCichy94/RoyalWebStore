@@ -17,7 +17,7 @@ public interface CartRepository {
 
     Cart getById(String id);
 
-    Set<Cart> getCartsByCustomerId(String id);
+    Cart getCartByCustomerId(Integer id);
 
     void deleteById(String cartId);
 

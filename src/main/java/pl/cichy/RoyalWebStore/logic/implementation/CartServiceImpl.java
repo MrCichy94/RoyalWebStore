@@ -55,8 +55,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public Set<Cart> getCartsByCustomerId(String id) {
-        return cartRepository.getCartsByCustomerId(id);
+    public Cart getCartByCustomerId(int id) {
+        return cartRepository.getCartByCustomerId(id);
     }
 
     @Override
