@@ -28,7 +28,7 @@ public class Employee implements Serializable {
     private Contact contact;
 
     @Size(min = 3, max = 25)
-    private String login;
+    private String emailLogin;
 
     @Size(min = 3, max = 85)
     private String password;
@@ -53,10 +53,10 @@ public class Employee implements Serializable {
     public Employee() {
     }
 
-    public Employee(int employeeId, String login, String password, String firstName, String lastName,
+    public Employee(int employeeId, String emailLogin, String password, String firstName, String lastName,
                     String role) {
         this.employeeId = employeeId;
-        this.login = login;
+        this.emailLogin = emailLogin;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;

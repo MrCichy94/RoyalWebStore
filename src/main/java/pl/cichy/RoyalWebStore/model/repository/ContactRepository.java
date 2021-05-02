@@ -15,7 +15,7 @@ public interface ContactRepository {
 
     Optional<Contact> findById(Integer id);
 
-    Optional<Contact> findByEmail(String email);
+    Optional<Contact> findByEmailLogin(String email);
 
     Contact save(Contact entity);
 

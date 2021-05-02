@@ -75,7 +75,7 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     public void registerNewCustomerAccount(Customer newCustomer) {
-        if (contactRepository.findByEmail(newCustomer.getContact().getEmailAddress()).isPresent()) {
+        if (contactRepository.findByEmailLogin(newCustomer.getEmailLogin()).isPresent()) {
             throw new AccountAlreadyExistException(HttpStatus.BAD_REQUEST,
                     "Account with this email already exist!",
                     new RuntimeException());

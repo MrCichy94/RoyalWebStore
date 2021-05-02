@@ -22,7 +22,7 @@ class ContactServiceImplTest {
         var mockContact = mock(Contact.class);
         //and
         var mockContactRepository = mock(ContactRepository.class);
-        when(mockContactRepository.findByEmail(mockContact.getEmailAddress()))
+        when(mockContactRepository.findByEmailLogin(mockContact.getEmailAddress()))
                 .thenReturn(Optional.of(mockContact));
         //system under test
         var toTest = new ContactServiceImpl(mockContactRepository);

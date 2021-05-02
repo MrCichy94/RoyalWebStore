@@ -14,6 +14,6 @@ public interface SqlContactRepository extends ContactRepository, JpaRepository<C
 
     @Override
     @Query(nativeQuery = true, value = "SELECT * from CONTACTS where EMAIL_ADDRESS=:email")
-    Optional<Contact> findByEmail(@Param("email") String email);
+    Optional<Contact> findByEmailLogin(@Param("email") String email);
 
 }
