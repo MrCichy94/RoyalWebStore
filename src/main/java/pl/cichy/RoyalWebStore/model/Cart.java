@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 @Getter
 @Setter
@@ -34,10 +35,10 @@ public class Cart implements Serializable {
         grandTotal = new BigDecimal(0);
     }
 
-    public Cart(int customerId, String cartId) {
+    public Cart(int customerId) {
         this();
-        this.cartId = cartId;
         this.customerId = customerId;
+        cartId = numberGenerator(4);
     }
 
     public void addCartItem(CartItem item) {
@@ -65,5 +66,14 @@ public class Cart implements Serializable {
         int copyId = item.getCopy().getCopyId();
         cartItems.remove(copyId);
         updateGrandTotal();
+    }
+
+    private String numberGenerator(int length) {
+        Random random = new Random();
+        StringBuilder number = new StringBuilder("1");
+        for (int i = 0; i < length - 1; i++) {
+            number.append(random.nextInt(10));
+        }
+        return number.toString();
     }
 }

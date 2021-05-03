@@ -2,6 +2,7 @@ package pl.cichy.RoyalWebStore.logic;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import pl.cichy.RoyalWebStore.model.Cart;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,9 +19,9 @@ public interface CartService {
 
     Cart getCartByCustomerId(int id);
 
-    void addToCart(int productId, int copyId, HttpServletRequest request);
+    void addToCart(int productId, int copyId, Authentication authentication);
 
-    void removeItem(int copyId, HttpServletRequest request);
+    void removeItem(int copyId, Authentication authentication);
 
 
     //void removeCart(int copyId, HttpServletRequest request);

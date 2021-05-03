@@ -3,6 +3,8 @@ package pl.cichy.RoyalWebStore.logic.implementation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.exception.CopyNotFoundException;
@@ -10,6 +12,7 @@ import pl.cichy.RoyalWebStore.logic.CartService;
 import pl.cichy.RoyalWebStore.model.Cart;
 import pl.cichy.RoyalWebStore.model.CartItem;
 import pl.cichy.RoyalWebStore.model.Copy;
+import pl.cichy.RoyalWebStore.model.Customer;
 import pl.cichy.RoyalWebStore.model.repository.CartItemRepository;
 import pl.cichy.RoyalWebStore.model.repository.CartRepository;
 import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
@@ -17,7 +20,9 @@ import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
+import java.security.Principal;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -60,16 +65,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public void addToCart(int productId, int copyId, HttpServletRequest request) {
-        String sessionId = request.getSession(true).getId();
+    public void addToCart(int productId, int copyId, Authentication authentication) {
 
-        //BOTH LINE WILL WORK WHEN START USIGN OAUTH2
-        //Principal principal = request.getUserPrincipal();
-        //Customer customer = customerRepository.getByEmailLogin(principal.getName());
-        //->customer.getCustomerId();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        Customer customer = customerRepository.getByEmailLogin(principal.getUsername());
+        int customerId = customer.getCustomerId();
 
-        //todo: try reduce shot to repo to 1.
-        Cart cart = getCartByThisSessionIdIfExistsOrCreateNew(sessionId);
+        Cart cart = getCartByThisSessionIdIfExistsOrCreateNew(customerId);
 
         Copy copy = getCopyByCopyIdIfExistsOrThrowException(copyId);
 
@@ -80,24 +82,22 @@ public class CartServiceImpl implements CartService {
 
     @Transactional
     @Override
-    public void removeItem(int copyId, HttpServletRequest request) {
-        String sessionId = request.getSession(true).getId();
+    public void removeItem(int copyId, Authentication authentication) {
 
-        //BOTH LINE WILL WORK WHEN START USIGN OAUTH2
-        //Principal principal = request.getUserPrincipal();
-        //Customer customer = customerRepository.getByEmailLogin(principal.getName());
-        //->customer.getCustomerId();
+        UserDetails principal = (UserDetails) authentication.getPrincipal();
+        Customer customer = customerRepository.getByEmailLogin(principal.getUsername());
+        int customerId = customer.getCustomerId();
 
-        Cart cart = getCartByThisSessionIdIfExistsOrCreateNew(sessionId);
+        Cart cart = getCartByThisSessionIdIfExistsOrCreateNew(customerId);
 
         Copy copy = getCopyByCopyIdIfExistsOrThrowException(copyId);
 
-        removeSingleCartItemFromCartOrIfThisIsLastDeleteCartAndCartItem(sessionId, cart, copy);
+        removeSingleCartItemFromCartOrIfThisIsLastDeleteCartAndCartItem(customerId, cart, copy);
     }
 
-    private void removeSingleCartItemFromCartOrIfThisIsLastDeleteCartAndCartItem(String sessionId,
+    private void removeSingleCartItemFromCartOrIfThisIsLastDeleteCartAndCartItem(int customerId,
                                                                                  Cart cart, Copy copy) {
-        int key = cartItemRepository.getCartItemBySession(sessionId);
+        int key = cartItemRepository.getCartItemByCustomerId(customerId);
         int deleteCartItemById = cart.getCartItems().get(key).getCartItemId();
 
         removeSingleCartItemFromCart(cart, copy, key);
@@ -134,10 +134,10 @@ public class CartServiceImpl implements CartService {
         return copy;
     }
 
-    private Cart getCartByThisSessionIdIfExistsOrCreateNew(String sessionId) {
-        Cart cart = cartRepository.getById(sessionId);
+    private Cart getCartByThisSessionIdIfExistsOrCreateNew(int customerId) {
+        Cart cart = cartRepository.getCartByCustomerId(customerId);
         if (cart == null) {
-            cart = cartRepository.save(new Cart(1, sessionId));
+            cart = cartRepository.save(new Cart(customerId));
         }
         return cart;
     }

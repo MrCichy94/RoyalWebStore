@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -44,8 +45,8 @@ public class CartController {
     @PostMapping("/products/{productId}/copies/{copyId}")
     ResponseEntity<CartItem> addCopyOfProductToCart(@PathVariable int productId,
                                                     @PathVariable int copyId,
-                                                    HttpServletRequest request) {
-        cartService.addToCart(productId, copyId, request);
+                                                    Authentication authentication) {
+        cartService.addToCart(productId, copyId, authentication);
         logger.info("New cart was created.");
         return ResponseEntity.created(URI.create("/")).body(null);
     }
@@ -53,9 +54,8 @@ public class CartController {
     @PatchMapping("/products/{productId}/copies/{copyId}")
     ResponseEntity<CartItem> removeCopyOfProductFromCart(@PathVariable int productId,
                                                          @PathVariable int copyId,
-                                                         HttpServletRequest request) {
-        cartService.removeItem(copyId, request);
-        //cartService.removeCart(copyId, request);
+                                                         Authentication authentication) {
+        cartService.removeItem(copyId, authentication);
         logger.info("Remove copy from cart.");
         return ResponseEntity.created(URI.create("/")).body(null);
     }

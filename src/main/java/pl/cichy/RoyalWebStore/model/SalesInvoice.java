@@ -57,11 +57,11 @@ public class SalesInvoice implements Serializable {
 
     private String numberGenerator(int length) {
         Random random = new Random();
-        String number = "1";
+        StringBuilder number = new StringBuilder("1");
         for (int i = 0; i < length - 1; i++) {
-            number += random.nextInt(10);
+            number.append(random.nextInt(10));
         }
-        return number;
+        return number.toString();
     }
 }
 

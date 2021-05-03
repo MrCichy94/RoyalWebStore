@@ -23,7 +23,7 @@ public interface SqlCartItemRepository extends CartItemRepository, JpaRepository
 
     @Override
     @Query(nativeQuery = true, value = "SELECT CART_ITEMS_KEY from CARTS_CART_ITEMS where CART_CART_ID=:id")
-    int getCartItemBySession(@Param("id") String id);
+    int getCartItemByCustomerId(@Param("id") Integer id);
 
     @Override
     @Modifying
