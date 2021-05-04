@@ -21,6 +21,9 @@ public interface CartItemRepository {
 
     CartItem getById(Integer id);
 
-    int getCartItemByCustomerId(Integer id);
+    Integer getCartItemByCustomerId(Integer id);
 
+    Integer getCartItemIdByCopyId(Integer copyId);
+
+    Integer getCartItemKeyByCartItemID(Integer cartItemID);
 }

@@ -4,6 +4,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.annotation.RequestScope;
@@ -20,9 +22,7 @@ import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.security.Principal;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -67,11 +67,11 @@ public class CartServiceImpl implements CartService {
     @Override
     public void addToCart(int productId, int copyId, Authentication authentication) {
 
-        UserDetails principal = (UserDetails) authentication.getPrincipal();
-        Customer customer = customerRepository.getByEmailLogin(principal.getUsername());
+        String username = authentication.getPrincipal().toString();
+        Customer customer = customerRepository.getByEmailLogin(username);
         int customerId = customer.getCustomerId();
 
-        Cart cart = getCartByThisSessionIdIfExistsOrCreateNew(customerId);
+        Cart cart = getCartByThisCustomerIdIfExistsOrCreateNew(customerId);
 
         Copy copy = getCopyByCopyIdIfExistsOrThrowException(copyId);
 
@@ -84,42 +84,41 @@ public class CartServiceImpl implements CartService {
     @Override
     public void removeItem(int copyId, Authentication authentication) {
 
-        UserDetails principal = (UserDetails) authentication.getPrincipal();
-        Customer customer = customerRepository.getByEmailLogin(principal.getUsername());
+        String username = authentication.getPrincipal().toString();
+        Customer customer = customerRepository.getByEmailLogin(username);
         int customerId = customer.getCustomerId();
 
-        Cart cart = getCartByThisSessionIdIfExistsOrCreateNew(customerId);
+        Cart cart = getCartByThisCustomerIdIfExistsOrCreateNew(customerId);
 
         Copy copy = getCopyByCopyIdIfExistsOrThrowException(copyId);
 
-        removeSingleCartItemFromCartOrIfThisIsLastDeleteCartAndCartItem(customerId, cart, copy);
+        removeSingleCartItemFromCartOrIfThisIsLastDeleteCartAndCartItem(cart, copy);
     }
 
-    private void removeSingleCartItemFromCartOrIfThisIsLastDeleteCartAndCartItem(int customerId,
-                                                                                 Cart cart, Copy copy) {
-        int key = cartItemRepository.getCartItemByCustomerId(customerId);
-        int deleteCartItemById = cart.getCartItems().get(key).getCartItemId();
+    private void removeSingleCartItemFromCartOrIfThisIsLastDeleteCartAndCartItem(Cart cart, Copy copy) {
+        int cartItemID = cartItemRepository.getCartItemIdByCopyId(copy.getCopyId());
+        int cartItemKey = cartItemRepository.getCartItemKeyByCartItemID(cartItemID);
 
-        removeSingleCartItemFromCart(cart, copy, key);
+        removeSingleCartItemFromCart(cart, copy, cartItemID, cartItemKey);
 
         cartRepository.save(cart);
 
-        deleteCartAndCleanUpDB(cart, deleteCartItemById);
+        deleteCartAndCleanUpDB(cart);
     }
 
-    private void deleteCartAndCleanUpDB(Cart cart, int deleteCartItemById) {
+    private void deleteCartAndCleanUpDB(Cart cart) {
         if (cart.getCartItems().isEmpty()) {
             cartRepository.deleteById(cart.getCartId());
-            cartItemRepository.deleteById(deleteCartItemById);
         }
     }
 
-    private void removeSingleCartItemFromCart(Cart cart, Copy copy, int key) {
-        if (cart.getCartItems().get(key).getQuantity() > 1) {
-            int quantityBefore = cart.getCartItems().get(key).getQuantity();
-            cart.getCartItems().get(key).setQuantity(quantityBefore - 1);
+    private void removeSingleCartItemFromCart(Cart cart, Copy copy, int cartItemID, int cartItemKey) {
+        if (cart.getCartItems().get(cartItemKey).getQuantity() > 1) {
+            int quantityBefore = cart.getCartItems().get(cartItemKey).getQuantity();
+            cart.getCartItems().get(cartItemKey).setQuantity(quantityBefore - 1);
         } else {
             cart.removeCartItem(new CartItem(copy));
+            cartItemRepository.deleteById(cartItemID);
         }
     }
 
@@ -134,7 +133,7 @@ public class CartServiceImpl implements CartService {
         return copy;
     }
 
-    private Cart getCartByThisSessionIdIfExistsOrCreateNew(int customerId) {
+    private Cart getCartByThisCustomerIdIfExistsOrCreateNew(int customerId) {
         Cart cart = cartRepository.getCartByCustomerId(customerId);
         if (cart == null) {
             cart = cartRepository.save(new Cart(customerId));

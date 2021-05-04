@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,6 +18,7 @@ import pl.cichy.RoyalWebStore.model.Order;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URI;
+import java.security.Principal;
 import java.util.Set;
 
 @Controller
@@ -47,7 +49,7 @@ public class CartController {
                                                     @PathVariable int copyId,
                                                     Authentication authentication) {
         cartService.addToCart(productId, copyId, authentication);
-        logger.info("New cart was created.");
+        logger.info("Item added to cart!");
         return ResponseEntity.created(URI.create("/")).body(null);
     }
 
@@ -56,7 +58,7 @@ public class CartController {
                                                          @PathVariable int copyId,
                                                          Authentication authentication) {
         cartService.removeItem(copyId, authentication);
-        logger.info("Remove copy from cart.");
+        logger.info("Remove item from cart.");
         return ResponseEntity.created(URI.create("/")).body(null);
     }
 
