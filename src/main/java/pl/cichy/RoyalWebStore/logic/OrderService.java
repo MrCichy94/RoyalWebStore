@@ -17,6 +17,8 @@ public interface OrderService {
 
     Set<Order> getOrdersByClientId(Integer id);
 
+    void proccessCartToOrder(String cartId);
+
     void setOrderForCustomer(int customerId, Order customerOrderToAdd);
 
     void addToOrder(int orderId, int copyId);

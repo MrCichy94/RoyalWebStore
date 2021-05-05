@@ -8,15 +8,15 @@ import org.springframework.web.context.annotation.RequestScope;
 import pl.cichy.RoyalWebStore.exception.CustomerNotFoundException;
 import pl.cichy.RoyalWebStore.exception.OrderNotFoundException;
 import pl.cichy.RoyalWebStore.logic.OrderService;
-import pl.cichy.RoyalWebStore.model.Copy;
-import pl.cichy.RoyalWebStore.model.Customer;
-import pl.cichy.RoyalWebStore.model.Order;
+import pl.cichy.RoyalWebStore.model.*;
+import pl.cichy.RoyalWebStore.model.repository.CartRepository;
 import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
 import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
 import pl.cichy.RoyalWebStore.model.repository.OrderRepository;
 
-import java.util.List;
-import java.util.Set;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Service
 @RequestScope
@@ -25,13 +25,16 @@ public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
     private final CustomerRepository customerRepository;
     private final CopyRepository copyRepository;
+    private final CartRepository cartRepository;
 
     public OrderServiceImpl(final OrderRepository orderRepository,
                             final CustomerRepository customerRepository,
-                            final CopyRepository copyRepository) {
+                            final CopyRepository copyRepository,
+                            final CartRepository cartRepository) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.copyRepository = copyRepository;
+        this.cartRepository = cartRepository;
     }
 
 
@@ -53,6 +56,30 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public Set<Order> getOrdersByClientId(Integer id) {
         return orderRepository.getOrdersByClientId(id);
+    }
+
+    @Override
+    public void proccessCartToOrder(String cartId) {
+        Cart cart = cartRepository.getById(cartId);
+        Collection<CartItem> cartItemInCart = cart.getCartItems().values();
+        List<Copy> copiesInCart = new ArrayList<>();
+
+        for(CartItem c: cartItemInCart) {
+            copiesInCart.add(c.getCopy());
+            //mamy listę egzemplarzy z koszyka- czas zrobić z nich zamówienie
+        }
+
+        Order order = new Order("NO");
+        order.setCopies(copiesInCart);
+        order.setCustomerId(cart.getCustomerId());
+
+        //a teraz podepnij ten order pod customersa
+        Customer customer = customerRepository.getById(cart.getCustomerId());
+        Set<Order> customerOrders = customer.getOrders();
+        customerOrders.add(order);
+
+        customerRepository.save(customer);
+
     }
 
     @Override

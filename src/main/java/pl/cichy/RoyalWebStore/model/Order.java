@@ -10,6 +10,7 @@ import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 
 @Getter
 @Setter
@@ -50,11 +51,28 @@ public class Order implements Serializable {
     public Order() {
     }
 
+    public Order(String paid) {
+        orderId = Integer.parseInt(numberGenerator(4));
+        orderFulfillmentDate = LocalDate.now();
+        isAccepted = true;
+        isFulfill = false;
+        this.paid = paid;
+    }
+
     public Order(int orderId, String paid) {
         this.orderId = orderId;
         this.paid = paid;
 
         isAccepted = true;
         isFulfill = false;
+    }
+
+    private String numberGenerator(int length) {
+        Random random = new Random();
+        StringBuilder number = new StringBuilder("1");
+        for (int i = 0; i < length - 1; i++) {
+            number.append(random.nextInt(10));
+        }
+        return number.toString();
     }
 }
