@@ -27,7 +27,7 @@ public class Order implements Serializable {
     @GenericGenerator(name = "inc", strategy = "increment")
     int orderId;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     List<Copy> copies;
 
     int customerId;

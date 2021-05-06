@@ -26,7 +26,7 @@ public interface SqlCartItemRepository extends CartItemRepository, JpaRepository
     Integer getCartItemByCustomerId(@Param("id") Integer id);
 
     @Override
-    @Query(nativeQuery = true, value = "SELECT CART_ITEM_ID from CARTITEóMS where COPY_COPY_ID=:id")
+    @Query(nativeQuery = true, value = "SELECT CART_ITEM_ID from CARTITEMS where COPY_COPY_ID=:id")
     Integer getCartItemIdByCopyId(@Param("id") Integer copyId);
 
     @Override
