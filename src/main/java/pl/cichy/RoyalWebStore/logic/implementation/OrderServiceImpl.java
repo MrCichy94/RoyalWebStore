@@ -9,13 +9,9 @@ import pl.cichy.RoyalWebStore.exception.CustomerNotFoundException;
 import pl.cichy.RoyalWebStore.exception.OrderNotFoundException;
 import pl.cichy.RoyalWebStore.logic.OrderService;
 import pl.cichy.RoyalWebStore.model.*;
-import pl.cichy.RoyalWebStore.model.repository.CartRepository;
-import pl.cichy.RoyalWebStore.model.repository.CopyRepository;
-import pl.cichy.RoyalWebStore.model.repository.CustomerRepository;
-import pl.cichy.RoyalWebStore.model.repository.OrderRepository;
+import pl.cichy.RoyalWebStore.model.repository.*;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
@@ -26,15 +22,18 @@ public class OrderServiceImpl implements OrderService {
     private final CustomerRepository customerRepository;
     private final CopyRepository copyRepository;
     private final CartRepository cartRepository;
+    private final CartItemRepository cartItemRepository;
 
     public OrderServiceImpl(final OrderRepository orderRepository,
                             final CustomerRepository customerRepository,
                             final CopyRepository copyRepository,
-                            final CartRepository cartRepository) {
+                            final CartRepository cartRepository,
+                            final CartItemRepository cartItemRepository) {
         this.orderRepository = orderRepository;
         this.customerRepository = customerRepository;
         this.copyRepository = copyRepository;
         this.cartRepository = cartRepository;
+        this.cartItemRepository = cartItemRepository;
     }
 
 
@@ -58,14 +57,17 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.getOrdersByClientId(id);
     }
 
+    @Transactional
     @Override
     public void proccessCartToOrder(String cartId) {
         Cart cart = cartRepository.getById(cartId);
         Collection<CartItem> cartItemInCart = cart.getCartItems().values();
+        List<Integer> cartItemIds = new ArrayList<>();
         List<Copy> copiesInCart = new ArrayList<>();
 
         for(CartItem c: cartItemInCart) {
             copiesInCart.add(c.getCopy());
+            cartItemIds.add(c.getCartItemId());
             //mamy listę egzemplarzy z koszyka- czas zrobić z nich zamówienie
         }
 
@@ -80,6 +82,21 @@ public class OrderServiceImpl implements OrderService {
 
         customerRepository.save(customer);
 
+        //a teraz wyczysc cart z caritemsow
+        Iterator<CartItem> iter = cartItemInCart.iterator();
+        while (iter.hasNext()) {
+            CartItem c = iter.next();
+            iter.remove();
+        }
+        //pamiętaj o DB
+        for (Integer itemId : cartItemIds) {
+            cartItemRepository.deleteById(itemId);
+        }
+        cartRepository.save(cart);
+
+        if (cart.getCartItems().isEmpty()) {
+            cartRepository.deleteById(cart.getCartId());
+        }
     }
 
     @Override

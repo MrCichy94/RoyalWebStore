@@ -31,7 +31,7 @@ class OrderServiceImplTest {
         //and
         var mockOrderRepository = mock(OrderRepository.class);
         //system under test
-        var toTest = new OrderServiceImpl(mockOrderRepository, mockCustomerRepository, null, null);
+        var toTest = new OrderServiceImpl(mockOrderRepository, mockCustomerRepository, null, null, null);
         //when
         var exception = catchThrowable(() -> toTest.setOrderForCustomer(mockCustomer.getCustomerId(), mockOrder));
         //then
@@ -52,7 +52,7 @@ class OrderServiceImplTest {
         //and
         var mockCopyRepository = mock(CopyRepository.class);
         //system under test
-        var toTest = new OrderServiceImpl(mockOrderRepository, null, mockCopyRepository, null);
+        var toTest = new OrderServiceImpl(mockOrderRepository, null, mockCopyRepository, null, null);
         //when
         var exception = catchThrowable(() -> toTest.addToOrder(mockOrder.getOrderId(), mockCopy.getCopyId()));
         //then
