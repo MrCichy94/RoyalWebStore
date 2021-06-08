@@ -65,38 +65,16 @@ public class OrderServiceImpl implements OrderService {
         List<Integer> cartItemIds = new ArrayList<>();
         List<Copy> copiesInCart = new ArrayList<>();
 
-        for(CartItem c: cartItemInCart) {
+        for (CartItem c : cartItemInCart) {
             copiesInCart.add(c.getCopy());
             cartItemIds.add(c.getCartItemId());
-            //mamy listę egzemplarzy z koszyka- czas zrobić z nich zamówienie
         }
 
-        Order order = new Order("NO");
-        order.setCopies(copiesInCart);
-        order.setCustomerId(cart.getCustomerId());
-
-        //a teraz podepnij ten order pod customersa
-        Customer customer = customerRepository.getById(cart.getCustomerId());
-        Set<Order> customerOrders = customer.getOrders();
-        customerOrders.add(order);
-
+        Order order = createOrderAndAssignCopiesForThisOrderFromCart(cart, copiesInCart);
+        Customer customer = assignCreatedOrderForCustomerWithID(cart, order);
         customerRepository.save(customer);
 
-        //a teraz wyczysc cart z caritemsow
-        Iterator<CartItem> iter = cartItemInCart.iterator();
-        while (iter.hasNext()) {
-            CartItem c = iter.next();
-            iter.remove();
-        }
-        //pamiętaj o DB
-        for (Integer itemId : cartItemIds) {
-            cartItemRepository.deleteById(itemId);
-        }
-        cartRepository.save(cart);
-
-        if (cart.getCartItems().isEmpty()) {
-            cartRepository.deleteById(cart.getCartId());
-        }
+        clearCustomersCartFromOrderedItemsAndClearDB(cart, cartItemInCart, cartItemIds);
     }
 
     @Override
@@ -118,7 +96,6 @@ public class OrderServiceImpl implements OrderService {
                     new RuntimeException(),
                     customerId);
         }
-
     }
 
     @Override
@@ -142,11 +119,41 @@ public class OrderServiceImpl implements OrderService {
     }
 
     private void assignDataToOrderObject(int customerId, Order customerOrderToAdd) {
-
         customerOrderToAdd.setOrderId(customerOrderToAdd.getOrderId());
         customerOrderToAdd.setCustomerId(customerId);
         customerOrderToAdd.setPaid(customerOrderToAdd.getPaid());
+    }
 
+    private void clearCustomersCartFromOrderedItemsAndClearDB(Cart cart,
+                                                              Collection<CartItem> cartItemInCart,
+                                                              List<Integer> cartItemIds) {
+        Iterator<CartItem> iter = cartItemInCart.iterator();
+        while (iter.hasNext()) {
+            CartItem c = iter.next();
+            iter.remove();
+        }
+        for (Integer itemId : cartItemIds) {
+            cartItemRepository.deleteById(itemId);
+        }
+        cartRepository.save(cart);
+
+        if (cart.getCartItems().isEmpty()) {
+            cartRepository.deleteById(cart.getCartId());
+        }
+    }
+
+    private Order createOrderAndAssignCopiesForThisOrderFromCart(Cart cart, List<Copy> copiesInCart) {
+        Order order = new Order("NO");
+        order.setCopies(copiesInCart);
+        order.setCustomerId(cart.getCustomerId());
+        return order;
+    }
+
+    private Customer assignCreatedOrderForCustomerWithID(Cart cart, Order order) {
+        Customer customer = customerRepository.getById(cart.getCustomerId());
+        Set<Order> customerOrders = customer.getOrders();
+        customerOrders.add(order);
+        return customer;
     }
 }
 
