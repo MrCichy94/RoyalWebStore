@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import pl.cichy.RoyalWebStore.model.Order;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 public interface OrderService {
@@ -22,4 +23,6 @@ public interface OrderService {
     void setOrderForCustomer(int customerId, Order customerOrderToAdd);
 
     void addToOrder(int orderId, int copyId);
+
+    Order getCustomersOrderById(int customerId, int orderId);
 }

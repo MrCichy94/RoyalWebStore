@@ -118,6 +118,11 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
+    @Override
+    public Order getCustomersOrderById(int customerId, int orderId) {
+        return orderRepository.getCustomersOrderById(customerId,orderId);
+    }
+
     private void assignDataToOrderObject(int customerId, Order customerOrderToAdd) {
         customerOrderToAdd.setOrderId(customerOrderToAdd.getOrderId());
         customerOrderToAdd.setCustomerId(customerId);

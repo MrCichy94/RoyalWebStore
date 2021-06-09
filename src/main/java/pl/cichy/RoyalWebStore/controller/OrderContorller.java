@@ -37,7 +37,14 @@ public class OrderContorller {
         return ResponseEntity.ok(orderService.getOrdersByClientId(id));
     }
 
-    @PostMapping("/customers/cart/{cartId}")
+    @GetMapping("/{customerId}/orders/{orderId}")
+    ResponseEntity<Order> readCustomersOrderById(@PathVariable int customerId,
+                                                      @PathVariable int orderId) {
+        logger.info("Read single order of this customer!");
+        return ResponseEntity.ok(orderService.getCustomersOrderById(customerId, orderId));
+    }
+
+    @PostMapping("/cart/{cartId}")
     ResponseEntity<Order> createOrderFromExistingCart(@PathVariable String cartId) {
         orderService.proccessCartToOrder(cartId);
         logger.info("New order was created!");

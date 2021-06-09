@@ -24,4 +24,8 @@ public interface SqlOrderRepository extends OrderRepository, JpaRepository<Order
     @Query(nativeQuery = true, value = "SELECT * from ORDERS")
     Set<Order> findAllUnique();
 
+    @Override
+    @Query(nativeQuery = true, value = "SELECT * from ORDERS where CUSTOMER_ID=:customerId AND ORDER_ID=:orderId")
+    Order getCustomersOrderById(@Param("customerId") Integer customerId, @Param("orderId") Integer orderId);
+
 }

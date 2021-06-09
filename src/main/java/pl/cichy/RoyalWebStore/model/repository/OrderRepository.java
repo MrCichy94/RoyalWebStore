@@ -25,4 +25,5 @@ public interface OrderRepository {
 
     Order save(Order entity);
 
+    Order getCustomersOrderById(Integer customerId, Integer orderId);
 }
