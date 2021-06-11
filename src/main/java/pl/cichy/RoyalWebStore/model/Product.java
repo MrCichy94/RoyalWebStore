@@ -73,6 +73,8 @@ public class Product implements Serializable {
         version = "";
         productDescription = "";
         categoryAndManufacturer = new CategoryAndManufacturer();
+        categoryAndManufacturer.setManufacturer(new Manufacturer("undefined"));
+        categoryAndManufacturer.setCategory(new Category("undefined"));
     }
 
     private BigDecimal countVatValue(BigDecimal sellBaseGrossPrice) {
