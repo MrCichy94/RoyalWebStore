@@ -40,11 +40,15 @@ class ProductControllerTest {
         Product first = new Product(
                 1,
                 "Revolution 5",
+                "Nike",
+                "Obuwie",
                 new BigDecimal("119.99"),
                 new BigDecimal("0.12"));
         Product second = new Product(
                 2,
                 "Galaxy 5",
+                "Nike",
+                "Obuwie",
                 new BigDecimal("129.99"),
                 new BigDecimal("0.14"));
         productRepository.save(first);
@@ -65,6 +69,8 @@ class ProductControllerTest {
         Product first = new Product(
                 1,
                 "Revolution 6",
+                "Nike",
+                "Obuwie",
                 new BigDecimal("119.99"),
                 new BigDecimal("0.12"));
         productRepository.save(first);
@@ -88,6 +94,8 @@ class ProductControllerTest {
         Product product = new Product(
                 1,
                 "Revolution 6",
+                "Nike",
+                "Obuwie",
                 new BigDecimal("119.99"),
                 new BigDecimal("0.12"));
         //when+then

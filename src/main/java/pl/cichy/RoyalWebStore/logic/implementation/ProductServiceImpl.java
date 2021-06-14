@@ -55,6 +55,8 @@ public class ProductServiceImpl implements ProductService {
     public void addNewProduct(Product newProductToAdd) {
         Product result = new Product(newProductToAdd.getProductId(),
                 newProductToAdd.getProductName(),
+                newProductToAdd.getProductManufacturer(),
+                newProductToAdd.getProductCategory(),
                 newProductToAdd.getSellBaseGrossPrice(),
                 newProductToAdd.getVatPercentage());
         productRepository.save(result);

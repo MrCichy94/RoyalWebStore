@@ -58,7 +58,9 @@ public class Copy implements Serializable {
     @Digits(integer = 8, fraction = 2)
     BigDecimal percentageDiscountValue;
 
-    boolean isAlreadySold;
+    boolean isAlreadySold = false;
+
+    boolean isOnTheStore = false;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     LocalDate buyDate;

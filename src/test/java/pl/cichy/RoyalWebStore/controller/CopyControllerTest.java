@@ -66,6 +66,8 @@ class CopyControllerTest {
         Product p1 = new Product(
                 5,
                 "TESTOWY",
+                "Nike",
+                "Obuwie",
                 new BigDecimal("19.99"),
                 new BigDecimal("0.20"));
         productRepository.save(p1);
@@ -98,6 +100,8 @@ class CopyControllerTest {
         Product p2 = new Product(
                 1,
                 "TESTOWY",
+                "Nike",
+                "Obuwie",
                 new BigDecimal("19.99"),
                 new BigDecimal("0.20"));
 

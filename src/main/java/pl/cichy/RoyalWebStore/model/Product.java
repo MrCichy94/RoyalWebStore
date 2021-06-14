@@ -31,11 +31,14 @@ public class Product implements Serializable {
     Set<Photo> photos;
     */
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    CategoryAndManufacturer categoryAndManufacturer;
-
     @Size(min = 1, max = 25)
     String productName;
+
+    @Size(min = 1, max = 25)
+    String productCategory;
+
+    @Size(min = 1, max = 25)
+    String productManufacturer;
 
     @Size(max = 25)
     String type;
@@ -59,9 +62,12 @@ public class Product implements Serializable {
     public Product() {
     }
 
-    public Product(int productId, String productName, BigDecimal sellBaseGrossPrice, BigDecimal vatPercentage) {
+    public Product(int productId, String productName, String productManufacturer, String productCategory,
+                   BigDecimal sellBaseGrossPrice, BigDecimal vatPercentage) {
         this.productId = productId;
         this.productName = productName;
+        this.productManufacturer = productManufacturer;
+        this.productCategory = productCategory;
         this.sellBaseGrossPrice = sellBaseGrossPrice;
         this.vatPercentage = vatPercentage;
 
@@ -72,9 +78,6 @@ public class Product implements Serializable {
         type = "";
         version = "";
         productDescription = "";
-        categoryAndManufacturer = new CategoryAndManufacturer();
-        categoryAndManufacturer.setManufacturer(new Manufacturer("undefined"));
-        categoryAndManufacturer.setCategory(new Category("undefined"));
     }
 
     private BigDecimal countVatValue(BigDecimal sellBaseGrossPrice) {
