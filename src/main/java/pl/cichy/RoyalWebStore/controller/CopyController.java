@@ -51,7 +51,7 @@ public class CopyController {
         return ResponseEntity.created(URI.create("/" + copyOfProductToAdd.getCopyId())).body(copyOfProductToAdd);
     }
 
-    @PatchMapping
+    @PostMapping("/{productId}/{copyId}")
     ResponseEntity<Copy> changeStatusOfCopy(@PathVariable Integer productId,
                                             @PathVariable Integer copyId) {
         copyService.changeStatus(productId, copyId);
