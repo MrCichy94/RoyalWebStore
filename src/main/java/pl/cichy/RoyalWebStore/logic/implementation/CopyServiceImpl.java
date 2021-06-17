@@ -110,4 +110,14 @@ public class CopyServiceImpl implements CopyService {
     public Copy getById(Integer id) {
         return copyRepository.getById(id);
     }
+
+    @Override
+    public void changeStatus(Integer productId, Integer copyId) {
+        Set<Copy> copies = copyRepository.getCopiesByProductId(productId);
+        for (Copy c : copies) {
+            if (c.getCopyId() == copyId) {
+                c.changeStatus();
+            }
+        }
+    }
 }

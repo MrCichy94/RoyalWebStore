@@ -51,6 +51,14 @@ public class CopyController {
         return ResponseEntity.created(URI.create("/" + copyOfProductToAdd.getCopyId())).body(copyOfProductToAdd);
     }
 
+    @PatchMapping
+    ResponseEntity<Copy> changeStatusOfCopy(@PathVariable Integer productId,
+                                            @PathVariable Integer copyId) {
+        copyService.changeStatus(productId, copyId);
+        logger.info("Copy status changed!");
+        return ResponseEntity.ok().build();
+    }
+
     @DeleteMapping("/copies/{id}")
     ResponseEntity<Copy> deleteCopy(@PathVariable int id) {
         copyService.deleteById(id);

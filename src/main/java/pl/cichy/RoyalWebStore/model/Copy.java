@@ -102,4 +102,8 @@ public class Copy implements Serializable {
     public void increaseQuantity() {
         quantity++;
     }
+
+    public void changeStatus() {
+        isOnTheStore = !isOnTheStore;
+    }
 }
