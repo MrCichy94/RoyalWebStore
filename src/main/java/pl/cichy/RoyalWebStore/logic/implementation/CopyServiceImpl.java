@@ -97,8 +97,37 @@ public class CopyServiceImpl implements CopyService {
     }
 
     @Override
-    public void deleteById(Integer id) {
-        copyRepository.deleteById(id);
+    public void deleteOneCopyByProductWithGivenId(Integer productId, Integer copyId) {
+        Product toChange = productRepository.getById(productId);
+        Set<Copy> copies = toChange.getCopies();
+        for (Copy c : copies) {
+            if (c.getCopyId() == copyId) {
+                int quantity = c.getQuantity();
+                if (quantity > 0) {
+                    quantity--;
+                    c.setQuantity(quantity);
+                } else {
+                    c.setQuantity(0);
+                }
+            }
+        }
+        toChange.setCopies(copies);
+        productRepository.save(toChange);
+    }
+
+    @Override
+    public void addOneCopyByProductWithGivenId(Integer productId, Integer copyId) {
+        Product toChange = productRepository.getById(productId);
+        Set<Copy> copies = toChange.getCopies();
+        for (Copy c : copies) {
+            if (c.getCopyId() == copyId) {
+                int quantity = c.getQuantity();
+                quantity++;
+                c.setQuantity(quantity);
+            }
+        }
+        toChange.setCopies(copies);
+        productRepository.save(toChange);
     }
 
     @Override

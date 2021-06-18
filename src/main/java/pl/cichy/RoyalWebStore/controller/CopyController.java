@@ -51,7 +51,7 @@ public class CopyController {
         return ResponseEntity.created(URI.create("/" + copyOfProductToAdd.getCopyId())).body(copyOfProductToAdd);
     }
 
-    @PostMapping("/{productId}/{copyId}")
+    @PatchMapping("/{productId}/{copyId}")
     ResponseEntity<Copy> changeStatusOfCopy(@PathVariable Integer productId,
                                             @PathVariable Integer copyId) {
         copyService.changeStatus(productId, copyId);
@@ -59,10 +59,19 @@ public class CopyController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/copies/{id}")
-    ResponseEntity<Copy> deleteCopy(@PathVariable int id) {
-        copyService.deleteById(id);
+    @DeleteMapping("/{productId}/{copyId}")
+    ResponseEntity<Copy> deleteCopy(@PathVariable Integer productId,
+                                    @PathVariable Integer copyId) {
+        copyService.deleteOneCopyByProductWithGivenId(productId, copyId);
         logger.info("Copy was deleted!");
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{productId}/{copyId}")
+    ResponseEntity<Copy> addCopy(@PathVariable Integer productId,
+                                    @PathVariable Integer copyId) {
+        copyService.addOneCopyByProductWithGivenId(productId, copyId);
+        logger.info("Copy was added!");
         return ResponseEntity.ok().build();
     }
 }

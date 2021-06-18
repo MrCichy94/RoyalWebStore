@@ -19,7 +19,9 @@ public interface CopyService {
 
     void setCopyForProduct(Integer productId, Copy copyToSet);
 
-    void deleteById(Integer id);
+    void deleteOneCopyByProductWithGivenId(Integer productId, Integer copyId);
+
+    void addOneCopyByProductWithGivenId(Integer productId, Integer copyId);
 
     Copy save(Copy entity);
 
