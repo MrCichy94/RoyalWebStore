@@ -17,7 +17,7 @@ public interface CustomerService {
 
     Customer getById(Integer id);
 
-    Customer getCustomerIdByUsername(String username);
+    Customer getCustomerByUsername(String username);
 
     void deleteById(Integer id);
 
@@ -26,4 +26,5 @@ public interface CustomerService {
     void deleteCustomersOrder(int customerId, int orderId);
 
     void updateCustomersData(int customerId, JsonPatch customerToUpdate) throws JsonPatchException, JsonProcessingException;
+
 }

@@ -42,6 +42,12 @@ public class CustomerController {
         return ResponseEntity.ok(customerService.getById(id));
     }
 
+    @GetMapping("/{username}")
+    ResponseEntity<Customer> readCustomerByUsername(@PathVariable String username) {
+        logger.info("Read customer with id: " + username + "!");
+        return ResponseEntity.ok(customerService.getCustomerByUsername(username));
+    }
+
     @PostMapping("/add")
     ResponseEntity<Customer> createNewCustomer(@RequestBody @Valid Customer newCustomerToAdd) {
         customerService.registerNewCustomerAccount(newCustomerToAdd);

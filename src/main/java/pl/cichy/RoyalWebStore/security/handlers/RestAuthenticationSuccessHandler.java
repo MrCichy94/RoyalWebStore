@@ -42,7 +42,7 @@ public class RestAuthenticationSuccessHandler extends SimpleUrlAuthenticationSuc
                 .sign(Algorithm.HMAC256(secret));
         System.out.println(new Date(System.currentTimeMillis() + expirationTime));
         String loggedUserID = String.valueOf(
-                customerService.getCustomerIdByUsername(principal.getUsername()).getCustomerId());
+                customerService.getCustomerByUsername(principal.getUsername()).getCustomerId());
         System.out.println(loggedUserID);
         response.addHeader("Access-Control-Expose-Headers", "*");
         response.addHeader("Authorization", "Bearer " + token);

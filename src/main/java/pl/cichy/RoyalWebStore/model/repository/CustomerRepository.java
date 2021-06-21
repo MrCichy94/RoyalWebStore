@@ -17,7 +17,7 @@ public interface CustomerRepository {
 
     Customer getById(Integer id);
 
-    Customer getCustomerIdByUsername(String username);
+    Customer getCustomerByUsername(String username);
 
     void deleteById(Integer id);
 
@@ -26,4 +26,5 @@ public interface CustomerRepository {
     Customer save(Customer entity);
 
     Customer getByEmailLogin(String name);
+
 }
